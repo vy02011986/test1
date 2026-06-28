@@ -1044,6 +1044,13 @@ class AgriSmartController {
             filteredProduction = this.model.data.production.filter(p => farmerIds.has(p.Farmer_ID));
         }
 
+        const farmIds = new Set(filteredFarms.map(f => f.Farm_ID));
+        const prodIds = new Set(filteredProduction.map(p => p.Production_ID));
+
+        let filteredWeather = (this.model.data.weather || []).filter(w => farmIds.has(w.Farm_ID));
+        let filteredOrders = (this.model.data.marketplace || []).filter(o => prodIds.has(o.Production_ID));
+        let filteredEsg = (this.model.data.esg || []).filter(e => farmIds.has(e.Farm_ID));
+
         // 1. Chuyển đổi View Tab
         const panes = document.querySelectorAll('.tab-pane');
         panes.forEach(pane => pane.classList.remove('active'));
@@ -1144,9 +1151,6 @@ class AgriSmartController {
             let tempData = [24, 26, 29, 31, 32, 30, 28, 26, 25];
             let weatherLabels = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
             
-            const farmIds = new Set(filteredFarms.map(f => f.Farm_ID));
-            const filteredWeather = (this.model.data.weather || []).filter(w => farmIds.has(w.Farm_ID));
-            
             if (filteredWeather && filteredWeather.length > 0) {
                 // Sắp xếp theo ngày tăng dần
                 filteredWeather.sort((a, b) => new Date(a.Date) - new Date(b.Date));
@@ -1184,9 +1188,6 @@ class AgriSmartController {
         }
  
         else if (tabId === 'tab-supply') {
-            const prodIds = new Set(filteredProduction.map(p => p.Production_ID));
-            const filteredOrders = (this.model.data.marketplace || []).filter(o => prodIds.has(o.Production_ID));
-            
             const marketVolume = {};
             const carrierShares = {};
 
@@ -1223,9 +1224,6 @@ class AgriSmartController {
         }
  
         else if (tabId === 'tab-esg') {
-            const farmIds = new Set(filteredFarms.map(f => f.Farm_ID));
-            const filteredEsg = (this.model.data.esg || []).filter(e => farmIds.has(e.Farm_ID));
-
             const provCarbon = { 'Đắk Lắk': 0, 'Tiền Giang': 0, 'Đồng Tháp': 0, 'An Giang': 0, 'Lâm Đồng': 0 };
             const provWater = { 'Đắk Lắk': 0, 'Tiền Giang': 0, 'Đồng Tháp': 0, 'An Giang': 0, 'Lâm Đồng': 0 };
             const esgScores = { 'Đắk Lắk': [], 'Tiền Giang': [], 'Đồng Tháp': [], 'An Giang': [], 'Lâm Đồng': [] };
@@ -1269,6 +1267,210 @@ class AgriSmartController {
 
             this.view.renderEsgCharts(provLabels, carbonVals, waterVals, radarLabels, radarValues);
             this.view.renderEsgTable(filteredEsg);
+        }
+
+        this.updateDynamicBackgrounds(tabId, filteredFarmers, filteredProduction, filteredFarms, filteredWeather, filteredOrders, filteredEsg);
+    }
+
+    updateDynamicBackgrounds(tabId, filteredFarmers, filteredProduction, filteredFarms, filteredWeather, filteredOrders, filteredEsg) {
+        const provinceImages = {
+            'Đắk Lắk': 'dak_lak_farm.jpg',
+            'Lâm Đồng': 'lam_dong_farm.jpg',
+            'Tiền Giang': 'tien_giang_farm.jpg',
+            'Đồng Tháp': 'dong_thap_farm.jpg',
+            'An Giang': 'an_giang_farm.jpg'
+        };
+        const cropImages = {
+            'Sầu riêng': 'crop_durian.jpg',
+            'Lúa': 'crop_rice.jpg',
+            'Cà phê': 'crop_coffee.jpg',
+            'Thanh long': 'crop_dragonfruit.jpg',
+            'Xoài': 'crop_mango.jpg'
+        };
+
+        const farmProvinceMap = {};
+        if (this.model.data.farms) {
+            this.model.data.farms.forEach(f => {
+                if (f.Farm_ID && f.Province) {
+                    farmProvinceMap[f.Farm_ID] = f.Province;
+                }
+            });
+        }
+
+        const provinceProfits = {};
+        filteredFarmers.forEach(f => {
+            const prov = f.Province;
+            if (prov && prov !== 'Khác') {
+                provinceProfits[prov] = (provinceProfits[prov] || 0) + (Number(f.Profit_Million_VND) || 0);
+            }
+        });
+        let highestProfitProvince = 'Đắk Lắk';
+        let maxProvinceProfit = -Infinity;
+        for (const prov in provinceProfits) {
+            if (provinceProfits[prov] > maxProvinceProfit) {
+                maxProvinceProfit = provinceProfits[prov];
+                highestProfitProvince = prov;
+            }
+        }
+        const provinceImg = provinceImages[highestProfitProvince] || 'dak_lak_farm.jpg';
+
+        const cropProfits = {};
+        filteredProduction.forEach(p => {
+            const crop = p.Crop;
+            if (crop) {
+                cropProfits[crop] = (cropProfits[crop] || 0) + (Number(p.Profit_VND) || 0);
+            }
+        });
+        let highestProfitCrop = 'Sầu riêng';
+        let maxCropProfit = -Infinity;
+        for (const crop in cropProfits) {
+            if (cropProfits[crop] > maxCropProfit) {
+                maxCropProfit = cropProfits[crop];
+                highestProfitCrop = crop;
+            }
+        }
+        const cropImg = cropImages[highestProfitCrop] || 'crop_durian.jpg';
+
+        const cropQuantities = {};
+        filteredProduction.forEach(p => {
+            const crop = p.Crop;
+            if (crop) {
+                cropQuantities[crop] = (cropQuantities[crop] || 0) + (Number(p.Quantity_Ton) || 0);
+            }
+        });
+        let highestQtyCrop = 'Sầu riêng';
+        let maxQty = -Infinity;
+        for (const crop in cropQuantities) {
+            if (cropQuantities[crop] > maxQty) {
+                maxQty = cropQuantities[crop];
+                highestQtyCrop = crop;
+            }
+        }
+        const qtyCropImg = cropImages[highestQtyCrop] || 'crop_durian.jpg';
+
+        const cropYieldSum = {};
+        const cropYieldCount = {};
+        filteredFarms.forEach(f => {
+            if (f.Area_Ha > 0 && f.Yield_Ton > 0 && f.Crop) {
+                cropYieldSum[f.Crop] = (cropYieldSum[f.Crop] || 0) + (f.Yield_Ton / f.Area_Ha);
+                cropYieldCount[f.Crop] = (cropYieldCount[f.Crop] || 0) + 1;
+            }
+        });
+        let highestYieldCrop = 'Sầu riêng';
+        let maxAvgYield = -Infinity;
+        for (const crop in cropYieldSum) {
+            const avg = cropYieldSum[crop] / cropYieldCount[crop];
+            if (avg > maxAvgYield) {
+                maxAvgYield = avg;
+                highestYieldCrop = crop;
+            }
+        }
+        const yieldCropImg = cropImages[highestYieldCrop] || 'crop_rice.jpg';
+
+        const provAreas = {};
+        filteredFarms.forEach(f => {
+            const prov = f.Province;
+            if (prov) {
+                provAreas[prov] = (provAreas[prov] || 0) + (Number(f.Area_Ha) || 0);
+            }
+        });
+        let highestAreaProv = 'Lâm Đồng';
+        let maxArea = -Infinity;
+        for (const prov in provAreas) {
+            if (provAreas[prov] > maxArea) {
+                maxArea = provAreas[prov];
+                highestAreaProv = prov;
+            }
+        }
+        const areaProvImg = provinceImages[highestAreaProv] || 'smart_farm_banner.jpg';
+
+        const weatherProvCount = {};
+        filteredWeather.forEach(w => {
+            const prov = farmProvinceMap[w.Farm_ID];
+            if (prov) {
+                weatherProvCount[prov] = (weatherProvCount[prov] || 0) + 1;
+            }
+        });
+        let activeWeatherProv = 'Lâm Đồng';
+        let maxWCount = -Infinity;
+        for (const prov in weatherProvCount) {
+            if (weatherProvCount[prov] > maxWCount) {
+                maxWCount = weatherProvCount[prov];
+                activeWeatherProv = prov;
+            }
+        }
+        const weatherProvImg = provinceImages[activeWeatherProv] || 'ai_weather_station.jpg';
+
+        const esgProvCarbon = {};
+        filteredEsg.forEach(e => {
+            const prov = farmProvinceMap[e.Farm_ID];
+            if (prov) {
+                esgProvCarbon[prov] = (esgProvCarbon[prov] || 0) + (Number(e.Carbon_Reduction_kgCO2) || 0);
+            }
+        });
+        let bestCarbonProv = 'Đắk Lắk';
+        let maxCarbon = -Infinity;
+        for (const prov in esgProvCarbon) {
+            if (esgProvCarbon[prov] > maxCarbon) {
+                maxCarbon = esgProvCarbon[prov];
+                bestCarbonProv = prov;
+            }
+        }
+        const carbonProvImg = provinceImages[bestCarbonProv] || 'esg_eco_farming.jpg';
+
+        const esgProvScore = {};
+        const esgProvCount = {};
+        filteredEsg.forEach(e => {
+            const prov = farmProvinceMap[e.Farm_ID];
+            if (prov && e.ESG_Score) {
+                esgProvScore[prov] = (esgProvScore[prov] || 0) + Number(e.ESG_Score);
+                esgProvCount[prov] = (esgProvCount[prov] || 0) + 1;
+            }
+        });
+        let bestEsgProv = 'Lâm Đồng';
+        let maxEsgScore = -Infinity;
+        for (const prov in esgProvScore) {
+            const avg = esgProvScore[prov] / esgProvCount[prov];
+            if (avg > maxEsgScore) {
+                maxEsgScore = avg;
+                bestEsgProv = prov;
+            }
+        }
+        const esgProvImg = provinceImages[bestEsgProv] || 'esg_eco_farming.jpg';
+
+        let latestTxCrop = 'Sầu riêng';
+        if (filteredProduction.length > 0) {
+            latestTxCrop = filteredProduction[filteredProduction.length - 1].Crop || 'Sầu riêng';
+        }
+        const txCropImg = cropImages[latestTxCrop] || 'crop_durian.jpg';
+
+        const updateImg = (id, src) => {
+            const el = document.getElementById(id);
+            if (el) el.src = src;
+        };
+
+        if (tabId === 'tab-finance') {
+            updateImg('bg-card-revenue-progress', 'money_finance.jpg');
+            updateImg('bg-card-profit-province', provinceImg);
+            updateImg('bg-card-finance-log', cropImg);
+        } else if (tabId === 'tab-yield') {
+            updateImg('bg-card-crop-pie', qtyCropImg);
+            updateImg('bg-card-yield-bar', yieldCropImg);
+            updateImg('bg-card-yield-table', areaProvImg);
+        } else if (tabId === 'tab-ai-weather') {
+            updateImg('bg-card-weather-line', weatherProvImg);
+            updateImg('bg-card-ai-risk', 'ai_weather_station.jpg');
+            updateImg('bg-card-ai-error', qtyCropImg);
+            updateImg('bg-card-weather-table', weatherProvImg);
+        } else if (tabId === 'tab-supply') {
+            updateImg('bg-card-export-bar', qtyCropImg);
+            updateImg('bg-card-logistics-pie', 'logistics_export.jpg');
+            updateImg('bg-card-blockchain-tx', txCropImg);
+            updateImg('bg-card-marketplace-table', cropImg);
+        } else if (tabId === 'tab-esg') {
+            updateImg('bg-card-esg-bar', carbonProvImg);
+            updateImg('bg-card-esg-radar', esgProvImg);
+            updateImg('bg-card-esg-table', esgProvImg);
         }
     }
 }
