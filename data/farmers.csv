@@ -1,0 +1,101 @@
+﻿Farmer_ID,Farmer_Name,Province,Crop,Area_Ha,Revenue_Million_VND,Cost_Million_VND,Profit_Million_VND,Blockchain,IoT_Device
+F001,Nông hộ 1,Đắk Lắk,Thanh long,2.3,280.4,181.5,98.9,Yes,No
+F002,Nông hộ 2,Tiền Giang,Thanh long,3.6,584.4,299.6,284.8,Yes,No
+F003,Nông hộ 3,Đồng Tháp,Cà phê,1.5,170.2,82.0,88.2,No,No
+F004,Nông hộ 4,Đồng Tháp,Thanh long,5.8,1019.3,688.0,331.3,Yes,Yes
+F005,Nông hộ 5,Đắk Lắk,Lúa,3.1,352.2,224.2,128.0,Yes,Yes
+F006,Nông hộ 6,Đắk Lắk,Thanh long,2.2,374.8,190.7,184.1,Yes,Yes
+F007,Nông hộ 7,An Giang,Xoài,2.3,270.0,134.8,135.2,Yes,No
+F008,Nông hộ 8,An Giang,Sầu riêng,2.9,386.1,197.0,189.1,Yes,No
+F009,Nông hộ 9,Đồng Tháp,Sầu riêng,2.9,288.2,132.1,156.1,No,Yes
+F010,Nông hộ 10,An Giang,Xoài,5.3,814.0,424.3,389.7,Yes,Yes
+F011,Nông hộ 11,Đắk Lắk,Xoài,2.0,358.3,214.7,143.6,Yes,No
+F012,Nông hộ 12,An Giang,Thanh long,4.8,398.5,257.5,141.0,Yes,Yes
+F013,Nông hộ 13,Tiền Giang,Thanh long,1.6,268.5,175.7,92.8,Yes,Yes
+F014,Nông hộ 14,Đắk Lắk,Lúa,2.9,455.8,304.4,151.4,Yes,Yes
+F015,Nông hộ 15,Đắk Lắk,Sầu riêng,3.1,459.2,283.9,175.3,Yes,Yes
+F016,Nông hộ 16,Tiền Giang,Thanh long,5.8,475.1,303.7,171.4,Yes,Yes
+F017,Nông hộ 17,Đắk Lắk,Lúa,5.3,545.3,266.9,278.4,No,Yes
+F018,Nông hộ 18,Đắk Lắk,Sầu riêng,1.8,306.4,138.2,168.2,Yes,Yes
+F019,Nông hộ 19,Đắk Lắk,Xoài,2.7,413.3,187.5,225.8,Yes,No
+F020,Nông hộ 20,Tiền Giang,Sầu riêng,1.8,149.9,79.5,70.4,Yes,Yes
+F021,Nông hộ 21,Lâm Đồng,Sầu riêng,3.4,389.4,201.6,187.8,Yes,Yes
+F022,Nông hộ 22,Tiền Giang,Sầu riêng,4.4,565.3,341.7,223.6,Yes,Yes
+F023,Nông hộ 23,Lâm Đồng,Lúa,3.7,485.0,240.8,244.2,Yes,Yes
+F024,Nông hộ 24,Tiền Giang,Xoài,4.7,695.8,388.2,307.6,Yes,No
+F025,Nông hộ 25,Đồng Tháp,Thanh long,3.1,308.7,164.4,144.3,No,No
+F026,Nông hộ 26,Đồng Tháp,Lúa,4.3,646.3,374.4,271.9,Yes,Yes
+F027,Nông hộ 27,Đồng Tháp,Xoài,5.6,728.0,456.7,271.3,Yes,No
+F028,Nông hộ 28,Đắk Lắk,Xoài,2.4,318.4,154.8,163.6,No,Yes
+F029,Nông hộ 29,Đắk Lắk,Xoài,3.4,290.2,169.4,120.8,Yes,Yes
+F030,Nông hộ 30,Tiền Giang,Sầu riêng,3.5,554.5,367.6,186.9,Yes,Yes
+F031,Nông hộ 31,Tiền Giang,Xoài,1.6,180.3,99.8,80.5,Yes,No
+F032,Nông hộ 32,Lâm Đồng,Lúa,3.4,330.3,169.4,160.9,No,Yes
+F033,Nông hộ 33,An Giang,Lúa,3.1,419.6,247.0,172.6,Yes,Yes
+F034,Nông hộ 34,Lâm Đồng,Sầu riêng,3.4,380.0,205.2,174.8,Yes,Yes
+F035,Nông hộ 35,An Giang,Sầu riêng,3.7,633.1,439.2,193.9,Yes,No
+F036,Nông hộ 36,Lâm Đồng,Sầu riêng,5.2,663.1,370.0,293.1,Yes,Yes
+F037,Nông hộ 37,Đắk Lắk,Cà phê,4.9,760.2,398.0,362.2,No,Yes
+F038,Nông hộ 38,Tiền Giang,Cà phê,5.7,627.5,419.4,208.1,No,Yes
+F039,Nông hộ 39,Đồng Tháp,Sầu riêng,3.4,579.4,277.2,302.2,No,Yes
+F040,Nông hộ 40,An Giang,Sầu riêng,3.9,530.7,261.6,269.1,Yes,Yes
+F041,Nông hộ 41,Đắk Lắk,Thanh long,5.2,643.9,354.9,289.0,Yes,No
+F042,Nông hộ 42,Tiền Giang,Cà phê,3.8,425.5,270.6,154.9,No,No
+F043,Nông hộ 43,Đắk Lắk,Lúa,3.6,548.8,305.7,243.1,Yes,Yes
+F044,Nông hộ 44,Đắk Lắk,Xoài,4.0,705.3,321.6,383.7,Yes,Yes
+F045,Nông hộ 45,Tiền Giang,Lúa,2.2,330.3,212.9,117.4,No,Yes
+F046,Nông hộ 46,An Giang,Cà phê,1.9,227.7,133.1,94.6,Yes,No
+F047,Nông hộ 47,Tiền Giang,Cà phê,1.9,183.7,118.9,64.8,Yes,Yes
+F048,Nông hộ 48,Lâm Đồng,Lúa,4.7,723.6,382.6,341.0,No,Yes
+F049,Nông hộ 49,Lâm Đồng,Lúa,2.9,359.4,220.6,138.8,Yes,Yes
+F050,Nông hộ 50,Đắk Lắk,Thanh long,2.4,375.0,187.7,187.3,Yes,Yes
+F051,Nông hộ 51,Lâm Đồng,Cà phê,2.9,311.3,151.5,159.8,No,Yes
+F052,Nông hộ 52,Tiền Giang,Xoài,2.1,331.3,183.9,147.4,Yes,Yes
+F053,Nông hộ 53,Đắk Lắk,Thanh long,5.4,530.8,361.3,169.5,No,No
+F054,Nông hộ 54,Đồng Tháp,Cà phê,3.6,551.8,381.8,170.0,No,Yes
+F055,Nông hộ 55,Đắk Lắk,Xoài,3.6,476.0,301.1,174.9,No,Yes
+F056,Nông hộ 56,Tiền Giang,Cà phê,1.6,270.2,158.0,112.2,Yes,Yes
+F057,Nông hộ 57,Đồng Tháp,Xoài,3.7,446.0,236.3,209.7,No,No
+F058,Nông hộ 58,Đồng Tháp,Cà phê,3.4,330.1,166.9,163.2,Yes,Yes
+F059,Nông hộ 59,Tiền Giang,Thanh long,2.8,457.3,278.2,179.1,Yes,No
+F060,Nông hộ 60,Tiền Giang,Lúa,4.1,673.1,355.8,317.3,Yes,Yes
+F061,Nông hộ 61,Đắk Lắk,Xoài,3.1,523.5,270.4,253.1,Yes,No
+F062,Nông hộ 62,Đắk Lắk,Sầu riêng,5.2,927.5,508.0,419.5,Yes,Yes
+F063,Nông hộ 63,Lâm Đồng,Lúa,3.4,396.1,246.9,149.2,Yes,Yes
+F064,Nông hộ 64,An Giang,Thanh long,1.7,234.4,150.0,84.4,Yes,Yes
+F065,Nông hộ 65,An Giang,Xoài,5.4,519.1,325.3,193.8,Yes,Yes
+F066,Nông hộ 66,Đồng Tháp,Xoài,4.2,657.5,389.5,268.0,Yes,Yes
+F067,Nông hộ 67,Lâm Đồng,Thanh long,4.4,417.7,275.8,141.9,Yes,Yes
+F068,Nông hộ 68,An Giang,Thanh long,4.6,603.9,410.4,193.5,Yes,Yes
+F069,Nông hộ 69,An Giang,Thanh long,2.4,237.1,119.8,117.3,Yes,Yes
+F070,Nông hộ 70,Lâm Đồng,Lúa,4.6,471.8,244.3,227.5,Yes,No
+F071,Nông hộ 71,Tiền Giang,Sầu riêng,1.8,308.2,148.8,159.4,No,No
+F072,Nông hộ 72,Đồng Tháp,Thanh long,2.0,164.9,114.9,50.0,No,No
+F073,Nông hộ 73,Đồng Tháp,Cà phê,2.0,267.8,182.9,84.9,Yes,Yes
+F074,Nông hộ 74,Tiền Giang,Xoài,2.5,351.3,231.9,119.4,Yes,No
+F075,Nông hộ 75,Đồng Tháp,Sầu riêng,5.6,496.2,251.7,244.5,Yes,Yes
+F076,Nông hộ 76,Tiền Giang,Sầu riêng,2.4,356.1,234.2,121.9,Yes,Yes
+F077,Nông hộ 77,Đắk Lắk,Cà phê,5.1,535.7,279.5,256.2,Yes,No
+F078,Nông hộ 78,Tiền Giang,Xoài,5.8,942.0,658.2,283.8,No,Yes
+F079,Nông hộ 79,An Giang,Lúa,4.7,382.3,192.5,189.8,Yes,Yes
+F080,Nông hộ 80,An Giang,Sầu riêng,5.7,637.2,332.2,305.0,Yes,No
+F081,Nông hộ 81,An Giang,Xoài,3.0,461.5,248.7,212.8,Yes,Yes
+F082,Nông hộ 82,Tiền Giang,Lúa,5.9,506.1,248.6,257.5,No,Yes
+F083,Nông hộ 83,Lâm Đồng,Cà phê,4.6,659.1,388.5,270.6,No,Yes
+F084,Nông hộ 84,Đồng Tháp,Sầu riêng,5.9,1059.4,481.9,577.5,Yes,Yes
+F085,Nông hộ 85,Lâm Đồng,Lúa,2.0,250.9,114.5,136.4,Yes,Yes
+F086,Nông hộ 86,An Giang,Cà phê,5.8,616.6,305.3,311.3,No,No
+F087,Nông hộ 87,Đắk Lắk,Thanh long,5.5,707.9,469.2,238.7,Yes,No
+F088,Nông hộ 88,An Giang,Cà phê,5.5,577.1,375.3,201.8,Yes,Yes
+F089,Nông hộ 89,An Giang,Lúa,4.3,496.9,337.2,159.7,Yes,Yes
+F090,Nông hộ 90,Lâm Đồng,Cà phê,5.4,508.9,307.9,201.0,Yes,Yes
+F091,Nông hộ 91,Lâm Đồng,Thanh long,2.1,168.4,94.1,74.3,Yes,Yes
+F092,Nông hộ 92,Đắk Lắk,Thanh long,4.9,738.7,369.9,368.8,Yes,Yes
+F093,Nông hộ 93,Đắk Lắk,Xoài,5.3,926.6,543.5,383.1,Yes,Yes
+F094,Nông hộ 94,Đồng Tháp,Thanh long,3.1,375.3,178.9,196.4,Yes,No
+F095,Nông hộ 95,Đồng Tháp,Sầu riêng,5.3,470.5,312.7,157.8,No,No
+F096,Nông hộ 96,Đồng Tháp,Cà phê,5.6,632.9,347.4,285.5,Yes,Yes
+F097,Nông hộ 97,Lâm Đồng,Thanh long,4.0,643.9,368.5,275.4,Yes,Yes
+F098,Nông hộ 98,An Giang,Cà phê,2.0,302.0,185.8,116.2,Yes,No
+F099,Nông hộ 99,Đắk Lắk,Sầu riêng,3.3,464.1,250.1,214.0,Yes,Yes
+F100,Nông hộ 100,Đắk Lắk,Lúa,2.7,359.5,228.8,130.7,Yes,No

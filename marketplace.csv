@@ -1,0 +1,501 @@
+Order_ID,Production_ID,Buyer_Name,Crop,Quantity_Ton,Unit_Price_VND,Revenue_VND,Order_Status,Destination_Country,Logistics_Provider,Delivery_Time_Days,Customer_Rating
+ORD-00001,P00001,VinMart,Lúa,33.1,27673,915976.3,Completed,Việt Nam,DHL Express,5,4.5
+ORD-00003,P00003,Aeon Vietnam,Cà phê,6.3,32244,203137.2,Completed,Hoa Kỳ,Logistics Nội Bộ,17,4.0
+ORD-00005,P00005,VinMart,Sầu riêng,22.0,82438,1813636.0,Completed,Việt Nam,Viettel Post,5,4.8
+ORD-00007,P00007,Global Food Importer Inc,Thanh long,18.1,42456,768453.6,Completed,Nhật Bản,DHL Express,9,5.0
+ORD-00009,P00009,Singapore AgriTrade,Thanh long,17.6,53800,946880.0,Completed,Singapore,Viettel Post,13,4.7
+ORD-00011,P00011,VinMart,Lúa,19.5,23119,450820.5,Processing,Việt Nam,VNPost,2,
+ORD-00013,P00013,Singapore AgriTrade,Sầu riêng,31.1,50388,1567066.8,Completed,Singapore,VNPost,15,4.5
+ORD-00015,P00015,Aeon Vietnam,Sầu riêng,27.9,38264,1067565.6,Completed,Hoa Kỳ,Viettel Post,19,4.9
+ORD-00017,P00017,Bach Hoa Xanh,Lúa,19.5,27102,528489.0,Completed,Việt Nam,Logistics Nội Bộ,4,4.2
+ORD-00019,P00019,Singapore AgriTrade,Xoài,27.2,50698,1378985.6,Processing,Singapore,VNPost,18,
+ORD-00021,P00021,Korea Harvest,Xoài,5.4,33079,178626.6,Processing,Úc,DHL Express,12,
+ORD-00023,P00023,VinMart,Lúa,3.8,33805,128459.0,Completed,Việt Nam,Viettel Post,3,4.8
+ORD-00025,P00025,Bach Hoa Xanh,Xoài,16.7,20222,337707.4,Cancelled,Việt Nam,DHL Express,5,
+ORD-00027,P00027,Bach Hoa Xanh,Thanh long,4.9,46355,227139.5,Processing,Việt Nam,DHL Express,2,
+ORD-00029,P00029,Singapore AgriTrade,Thanh long,10.4,29218,303867.2,Completed,Singapore,Viettel Post,21,4.4
+ORD-00031,P00031,Singapore AgriTrade,Sầu riêng,10.2,37429,381775.8,Processing,Singapore,VNPost,19,
+ORD-00033,P00033,Tokyo Agro,Cà phê,38.8,39411,1529146.8,Processing,Hàn Quốc,DHL Express,10,
+ORD-00035,P00035,Korea Harvest,Xoài,25.9,75336,1951202.4,Processing,Úc,DHL Express,17,
+ORD-00037,P00037,EU EcoFruit,Sầu riêng,33.7,82369,2775835.3,Processing,Đức,DHL Express,13,
+ORD-00039,P00039,VinMart,Xoài,19.3,59765,1153464.5,Completed,Việt Nam,Giao Hàng Nhanh,2,4.1
+ORD-00041,P00041,Singapore AgriTrade,Lúa,13.7,73715,1009895.5,Completed,Singapore,VNPost,20,4.0
+ORD-00043,P00043,Central Retail,Sầu riêng,28.8,22895,659376.0,Completed,Trung Quốc,FedEx,8,4.5
+ORD-00045,P00045,Tokyo Agro,Lúa,28.6,71041,2031772.6,Completed,Hàn Quốc,Giao Hàng Nhanh,16,4.4
+ORD-00047,P00047,Tokyo Agro,Xoài,17.3,56786,982397.8,Processing,Hàn Quốc,FedEx,20,
+ORD-00049,P00049,EU EcoFruit,Sầu riêng,36.5,16112,588088.0,Processing,Đức,FedEx,19,
+ORD-00051,P00051,VinMart,Lúa,26.1,28276,738003.6,Completed,Việt Nam,VNPost,1,4.1
+ORD-00053,P00053,Tokyo Agro,Thanh long,10.5,16237,170488.5,Processing,Hàn Quốc,VNPost,21,
+ORD-00055,P00055,VinMart,Sầu riêng,35.9,44193,1586528.7,Processing,Việt Nam,Viettel Post,1,
+ORD-00057,P00057,Aeon Vietnam,Cà phê,25.2,59758,1505901.6,Processing,Hoa Kỳ,FedEx,10,
+ORD-00059,P00059,EU EcoFruit,Lúa,28.2,37262,1050788.4,Completed,Đức,DHL Express,7,4.3
+ORD-00061,P00061,Korea Harvest,Lúa,13.8,47921,661309.8,Completed,Úc,Giao Hàng Nhanh,21,4.9
+ORD-00063,P00063,Central Retail,Sầu riêng,24.2,70746,1712053.2,Completed,Trung Quốc,VNPost,7,5.0
+ORD-00065,P00065,EU EcoFruit,Thanh long,28.9,58711,1696747.9,Completed,Đức,Giao Hàng Nhanh,7,4.9
+ORD-00067,P00067,Korea Harvest,Xoài,21.7,26750,580475.0,Completed,Úc,VNPost,21,5.0
+ORD-00069,P00069,Korea Harvest,Cà phê,33.1,39207,1297751.7,Completed,Úc,FedEx,20,4.1
+ORD-00071,P00071,EU EcoFruit,Xoài,3.6,72526,261093.6,Processing,Đức,VNPost,15,
+ORD-00073,P00073,Bach Hoa Xanh,Lúa,39.5,49862,1969549.0,Completed,Việt Nam,Logistics Nội Bộ,5,4.3
+ORD-00075,P00075,VinMart,Sầu riêng,2.8,30423,85184.4,Completed,Việt Nam,Giao Hàng Nhanh,5,4.5
+ORD-00077,P00077,Aeon Vietnam,Thanh long,19.2,34534,663052.8,Completed,Hoa Kỳ,Viettel Post,10,4.2
+ORD-00079,P00079,Aeon Vietnam,Thanh long,9.5,28412,269914.0,Completed,Hoa Kỳ,Logistics Nội Bộ,10,4.1
+ORD-00081,P00081,VinMart,Sầu riêng,11.0,83233,915563.0,Completed,Việt Nam,Viettel Post,1,4.1
+ORD-00083,P00083,Bach Hoa Xanh,Sầu riêng,36.6,52478,1920694.8,Completed,Việt Nam,VNPost,1,4.5
+ORD-00085,P00085,Korea Harvest,Xoài,37.7,33412,1259632.4,Completed,Úc,Viettel Post,10,4.6
+ORD-00087,P00087,Central Retail,Lúa,26.3,84295,2216958.5,Processing,Trung Quốc,Viettel Post,20,
+ORD-00089,P00089,Bach Hoa Xanh,Lúa,18.7,76452,1429652.4,Completed,Việt Nam,VNPost,4,4.7
+ORD-00091,P00091,Central Retail,Thanh long,19.4,73068,1417519.2,Processing,Trung Quốc,FedEx,13,
+ORD-00093,P00093,VinMart,Cà phê,14.1,23772,335185.2,Completed,Việt Nam,FedEx,1,4.3
+ORD-00095,P00095,EU EcoFruit,Thanh long,35.4,54426,1926680.4,Completed,Đức,Giao Hàng Nhanh,13,5.0
+ORD-00097,P00097,VinMart,Lúa,14.3,43328,619590.4,Completed,Việt Nam,FedEx,4,4.9
+ORD-00099,P00099,Tokyo Agro,Cà phê,3.5,54672,191352.0,Processing,Hàn Quốc,FedEx,17,
+ORD-00101,P00101,VinMart,Cà phê,34.4,51831,1782986.4,Completed,Việt Nam,Logistics Nội Bộ,2,4.3
+ORD-00103,P00103,EU EcoFruit,Thanh long,24.4,32179,785167.6,Completed,Đức,Logistics Nội Bộ,21,4.3
+ORD-00105,P00105,Singapore AgriTrade,Thanh long,20.1,19809,398160.9,Completed,Singapore,FedEx,9,4.6
+ORD-00107,P00107,Bach Hoa Xanh,Cà phê,8.6,60120,517032.0,Cancelled,Việt Nam,VNPost,1,
+ORD-00109,P00109,Co.opmart,Thanh long,3.5,35952,125832.0,Completed,Việt Nam,VNPost,3,5.0
+ORD-00111,P00111,Singapore AgriTrade,Sầu riêng,29.5,10877,320871.5,Processing,Singapore,Viettel Post,17,
+ORD-00113,P00113,Co.opmart,Lúa,10.3,63774,656872.2,Completed,Việt Nam,Giao Hàng Nhanh,5,4.9
+ORD-00115,P00115,Aeon Vietnam,Cà phê,6.5,45137,293390.5,Processing,Hoa Kỳ,Logistics Nội Bộ,7,
+ORD-00117,P00117,EU EcoFruit,Xoài,36.4,68719,2501371.6,Processing,Đức,Giao Hàng Nhanh,21,
+ORD-00119,P00119,Bach Hoa Xanh,Lúa,1.8,72530,130554.0,Completed,Việt Nam,Logistics Nội Bộ,1,4.3
+ORD-00121,P00121,EU EcoFruit,Thanh long,12.2,35582,434100.4,Completed,Đức,Viettel Post,15,4.5
+ORD-00123,P00123,Global Food Importer Inc,Cà phê,25.9,62556,1620200.4,Processing,Nhật Bản,Viettel Post,8,
+ORD-00125,P00125,Aeon Vietnam,Lúa,3.0,45329,135987.0,Processing,Hoa Kỳ,DHL Express,13,
+ORD-00127,P00127,VinMart,Lúa,7.9,72034,569068.6,Completed,Việt Nam,Giao Hàng Nhanh,2,4.4
+ORD-00129,P00129,Co.opmart,Lúa,18.0,52652,947736.0,Completed,Việt Nam,FedEx,1,4.1
+ORD-00131,P00131,Singapore AgriTrade,Thanh long,26.4,57393,1515175.2,Processing,Singapore,Logistics Nội Bộ,20,
+ORD-00133,P00133,VinMart,Thanh long,18.5,62759,1161041.5,Completed,Việt Nam,Giao Hàng Nhanh,4,4.1
+ORD-00135,P00135,VinMart,Lúa,25.8,40764,1051711.2,Cancelled,Việt Nam,Giao Hàng Nhanh,4,
+ORD-00137,P00137,Singapore AgriTrade,Cà phê,40.8,17264,704371.2,Completed,Singapore,FedEx,19,4.5
+ORD-00139,P00139,EU EcoFruit,Sầu riêng,11.3,69373,783914.9,Processing,Đức,FedEx,7,
+ORD-00141,P00141,Bach Hoa Xanh,Thanh long,39.8,37557,1494768.6,Completed,Việt Nam,Viettel Post,4,4.1
+ORD-00143,P00143,VinMart,Xoài,11.0,81234,893574.0,Completed,Việt Nam,Giao Hàng Nhanh,1,4.2
+ORD-00145,P00145,Co.opmart,Sầu riêng,15.1,68935,1040918.5,Processing,Việt Nam,Logistics Nội Bộ,5,
+ORD-00147,P00147,EU EcoFruit,Thanh long,13.2,68563,905031.6,Completed,Đức,Logistics Nội Bộ,11,4.7
+ORD-00149,P00149,Korea Harvest,Sầu riêng,7.5,23073,173047.5,Completed,Úc,DHL Express,16,4.4
+ORD-00151,P00151,Central Retail,Cà phê,44.6,84411,3764730.6,Processing,Trung Quốc,VNPost,11,
+ORD-00153,P00153,Co.opmart,Sầu riêng,21.5,72660,1562190.0,Completed,Việt Nam,Viettel Post,4,5.0
+ORD-00155,P00155,Korea Harvest,Thanh long,38.5,22601,870138.5,Completed,Úc,Viettel Post,14,5.0
+ORD-00157,P00157,Tokyo Agro,Thanh long,23.9,37694,900886.6,Processing,Hàn Quốc,FedEx,8,
+ORD-00159,P00159,Singapore AgriTrade,Lúa,33.6,53529,1798574.4,Processing,Singapore,Logistics Nội Bộ,8,
+ORD-00161,P00161,Bach Hoa Xanh,Xoài,3.5,70644,247254.0,Completed,Việt Nam,FedEx,4,4.8
+ORD-00163,P00163,EU EcoFruit,Lúa,26.5,37079,982593.5,Processing,Đức,Viettel Post,7,
+ORD-00165,P00165,Korea Harvest,Lúa,4.2,68516,287767.2,Completed,Úc,DHL Express,12,4.7
+ORD-00167,P00167,EU EcoFruit,Sầu riêng,37.0,64605,2390385.0,Completed,Đức,FedEx,13,4.9
+ORD-00169,P00169,EU EcoFruit,Xoài,9.7,48757,472942.9,Completed,Đức,VNPost,11,4.0
+ORD-00171,P00171,Korea Harvest,Xoài,32.8,14906,488916.8,Processing,Úc,Giao Hàng Nhanh,7,
+ORD-00173,P00173,Singapore AgriTrade,Cà phê,17.5,64420,1127350.0,Processing,Singapore,Giao Hàng Nhanh,20,
+ORD-00175,P00175,Global Food Importer Inc,Thanh long,7.0,20656,144592.0,Processing,Nhật Bản,FedEx,12,
+ORD-00177,P00177,Central Retail,Lúa,16.2,62470,1012014.0,Completed,Trung Quốc,Logistics Nội Bộ,8,4.1
+ORD-00179,P00179,Global Food Importer Inc,Cà phê,22.3,23979,534731.7,Processing,Nhật Bản,VNPost,9,
+ORD-00181,P00181,Tokyo Agro,Sầu riêng,27.9,19912,555544.8,Completed,Hàn Quốc,Viettel Post,19,4.6
+ORD-00183,P00183,Singapore AgriTrade,Sầu riêng,13.3,20708,275416.4,Processing,Singapore,VNPost,7,
+ORD-00185,P00185,Co.opmart,Cà phê,6.4,11114,71129.6,Cancelled,Việt Nam,FedEx,2,
+ORD-00187,P00187,EU EcoFruit,Lúa,22.0,65080,1431760.0,Processing,Đức,Logistics Nội Bộ,15,
+ORD-00189,P00189,EU EcoFruit,Cà phê,19.1,74099,1415290.9,Completed,Đức,FedEx,14,4.0
+ORD-00191,P00191,Central Retail,Cà phê,21.1,18286,385834.6,Completed,Trung Quốc,Logistics Nội Bộ,13,4.4
+ORD-00193,P00193,Korea Harvest,Xoài,33.7,60513,2039288.1,Completed,Úc,DHL Express,7,4.0
+ORD-00195,P00195,Co.opmart,Thanh long,30.9,68566,2118689.4,Completed,Việt Nam,FedEx,4,4.5
+ORD-00197,P00197,Co.opmart,Thanh long,11.9,66145,787125.5,Completed,Việt Nam,DHL Express,1,4.5
+ORD-00199,P00199,Global Food Importer Inc,Cà phê,30.0,44260,1327800.0,Processing,Nhật Bản,FedEx,15,
+ORD-00201,P00201,Singapore AgriTrade,Lúa,29.7,8823,262043.1,Processing,Singapore,FedEx,19,
+ORD-00203,P00203,Korea Harvest,Sầu riêng,25.5,39936,1018368.0,Completed,Úc,DHL Express,7,4.4
+ORD-00205,P00205,VinMart,Sầu riêng,15.0,69749,1046235.0,Completed,Việt Nam,DHL Express,3,4.0
+ORD-00207,P00207,Aeon Vietnam,Xoài,16.9,19637,331865.3,Processing,Hoa Kỳ,VNPost,8,
+ORD-00209,P00209,Bach Hoa Xanh,Lúa,32.2,47193,1519614.6,Completed,Việt Nam,Viettel Post,4,4.5
+ORD-00211,P00211,VinMart,Lúa,28.2,24972,704210.4,Cancelled,Việt Nam,DHL Express,3,
+ORD-00213,P00213,Global Food Importer Inc,Cà phê,36.4,9108,331531.2,Completed,Nhật Bản,DHL Express,17,4.7
+ORD-00215,P00215,Tokyo Agro,Xoài,3.0,84342,253026.0,Completed,Hàn Quốc,VNPost,19,4.0
+ORD-00217,P00217,Korea Harvest,Thanh long,21.0,75247,1580187.0,Completed,Úc,DHL Express,11,4.0
+ORD-00219,P00219,EU EcoFruit,Xoài,9.6,65001,624009.6,Processing,Đức,Logistics Nội Bộ,16,
+ORD-00221,P00221,Global Food Importer Inc,Cà phê,21.6,65405,1412748.0,Processing,Nhật Bản,DHL Express,15,
+ORD-00223,P00223,Bach Hoa Xanh,Cà phê,10.1,80614,814201.4,Processing,Việt Nam,Viettel Post,1,
+ORD-00225,P00225,Korea Harvest,Cà phê,4.4,8097,35626.8,Completed,Úc,VNPost,16,4.2
+ORD-00227,P00227,Aeon Vietnam,Sầu riêng,5.5,69971,384840.5,Completed,Hoa Kỳ,VNPost,17,4.9
+ORD-00229,P00229,Tokyo Agro,Cà phê,22.7,72282,1640801.4,Processing,Hàn Quốc,Viettel Post,9,
+ORD-00231,P00231,EU EcoFruit,Lúa,29.2,75579,2206906.8,Completed,Đức,VNPost,8,4.5
+ORD-00233,P00233,Central Retail,Lúa,31.1,64731,2013134.1,Completed,Trung Quốc,VNPost,10,4.2
+ORD-00235,P00235,VinMart,Cà phê,21.2,72515,1537318.0,Completed,Việt Nam,Viettel Post,1,4.6
+ORD-00237,P00237,EU EcoFruit,Thanh long,14.5,54930,796485.0,Completed,Đức,VNPost,9,4.6
+ORD-00239,P00239,Bach Hoa Xanh,Xoài,26.5,81655,2163857.5,Completed,Việt Nam,Logistics Nội Bộ,1,4.1
+ORD-00241,P00241,Korea Harvest,Sầu riêng,30.1,59926,1803772.6,Processing,Úc,FedEx,16,
+ORD-00243,P00243,Global Food Importer Inc,Sầu riêng,21.6,16217,350287.2,Processing,Nhật Bản,VNPost,7,
+ORD-00245,P00245,Bach Hoa Xanh,Sầu riêng,11.4,55238,629713.2,Cancelled,Việt Nam,Viettel Post,5,
+ORD-00247,P00247,EU EcoFruit,Lúa,8.2,77970,639354.0,Completed,Đức,Giao Hàng Nhanh,19,4.1
+ORD-00249,P00249,Global Food Importer Inc,Lúa,35.9,32665,1172673.5,Processing,Nhật Bản,DHL Express,7,
+ORD-00251,P00251,Global Food Importer Inc,Lúa,17.1,43521,744209.1,Processing,Nhật Bản,Logistics Nội Bộ,16,
+ORD-00253,P00253,Korea Harvest,Xoài,6.5,31578,205257.0,Processing,Úc,Giao Hàng Nhanh,20,
+ORD-00255,P00255,Co.opmart,Lúa,32.7,48064,1571692.8,Completed,Việt Nam,DHL Express,1,4.6
+ORD-00257,P00257,Co.opmart,Lúa,7.9,58762,464219.8,Completed,Việt Nam,Viettel Post,3,4.1
+ORD-00259,P00259,VinMart,Xoài,2.5,38413,96032.5,Completed,Việt Nam,DHL Express,2,4.0
+ORD-00261,P00261,Co.opmart,Sầu riêng,31.0,71485,2216035.0,Processing,Việt Nam,Logistics Nội Bộ,3,
+ORD-00263,P00263,Global Food Importer Inc,Sầu riêng,11.5,18595,213842.5,Completed,Nhật Bản,DHL Express,20,4.4
+ORD-00265,P00265,Tokyo Agro,Xoài,1.5,23185,34777.5,Processing,Hàn Quốc,Logistics Nội Bộ,10,
+ORD-00267,P00267,VinMart,Xoài,26.2,17303,453338.6,Processing,Việt Nam,DHL Express,4,
+ORD-00269,P00269,Singapore AgriTrade,Sầu riêng,26.5,49276,1305814.0,Processing,Singapore,Giao Hàng Nhanh,20,
+ORD-00271,P00271,Bach Hoa Xanh,Xoài,5.2,64659,336226.8,Completed,Việt Nam,VNPost,2,4.9
+ORD-00273,P00273,Singapore AgriTrade,Lúa,11.5,34358,395117.0,Processing,Singapore,Logistics Nội Bộ,13,
+ORD-00275,P00275,Korea Harvest,Lúa,25.5,74673,1904161.5,Processing,Úc,FedEx,8,
+ORD-00277,P00277,Korea Harvest,Cà phê,27.3,21787,594785.1,Completed,Úc,DHL Express,14,4.7
+ORD-00279,P00279,Central Retail,Lúa,23.0,10451,240373.0,Completed,Trung Quốc,Giao Hàng Nhanh,17,4.3
+ORD-00281,P00281,Korea Harvest,Thanh long,23.4,58775,1375335.0,Completed,Úc,FedEx,18,4.8
+ORD-00283,P00283,Co.opmart,Thanh long,18.7,49839,931989.3,Processing,Việt Nam,DHL Express,3,
+ORD-00285,P00285,Tokyo Agro,Xoài,22.2,43525,966255.0,Completed,Hàn Quốc,FedEx,8,4.8
+ORD-00287,P00287,Korea Harvest,Lúa,4.1,80404,329656.4,Processing,Úc,Viettel Post,7,
+ORD-00289,P00289,Global Food Importer Inc,Sầu riêng,6.0,69598,417588.0,Completed,Nhật Bản,Giao Hàng Nhanh,20,4.2
+ORD-00291,P00291,VinMart,Lúa,7.3,54721,399463.3,Completed,Việt Nam,Giao Hàng Nhanh,2,4.1
+ORD-00293,P00293,Bach Hoa Xanh,Thanh long,36.7,73252,2688348.4,Completed,Việt Nam,Logistics Nội Bộ,5,4.7
+ORD-00295,P00295,VinMart,Lúa,25.6,49398,1264588.8,Completed,Việt Nam,VNPost,3,4.1
+ORD-00297,P00297,Global Food Importer Inc,Cà phê,45.7,57391,2622768.7,Completed,Nhật Bản,VNPost,9,4.5
+ORD-00299,P00299,Central Retail,Cà phê,29.0,36379,1054991.0,Completed,Trung Quốc,Viettel Post,17,4.9
+ORD-00301,P00301,Korea Harvest,Cà phê,5.5,16382,90101.0,Completed,Úc,Viettel Post,7,4.4
+ORD-00303,P00303,Korea Harvest,Sầu riêng,24.3,62066,1508203.8,Completed,Úc,DHL Express,21,4.2
+ORD-00305,P00305,Co.opmart,Sầu riêng,1.9,68720,130568.0,Cancelled,Việt Nam,Logistics Nội Bộ,1,
+ORD-00307,P00307,Central Retail,Thanh long,30.8,51380,1582504.0,Completed,Trung Quốc,FedEx,10,4.7
+ORD-00309,P00309,EU EcoFruit,Thanh long,27.1,31082,842322.2,Processing,Đức,DHL Express,18,
+ORD-00311,P00311,Singapore AgriTrade,Xoài,24.0,23167,556008.0,Processing,Singapore,FedEx,13,
+ORD-00313,P00313,Aeon Vietnam,Lúa,5.8,43327,251296.6,Processing,Hoa Kỳ,Logistics Nội Bộ,14,
+ORD-00315,P00315,Tokyo Agro,Cà phê,41.6,21709,903094.4,Completed,Hàn Quốc,DHL Express,13,4.7
+ORD-00317,P00317,Korea Harvest,Thanh long,11.3,75997,858766.1,Completed,Úc,Giao Hàng Nhanh,7,4.5
+ORD-00319,P00319,VinMart,Sầu riêng,11.2,42600,477120.0,Cancelled,Việt Nam,Logistics Nội Bộ,1,
+ORD-00321,P00321,Tokyo Agro,Thanh long,31.2,47718,1488801.6,Completed,Hàn Quốc,Viettel Post,15,4.7
+ORD-00323,P00323,VinMart,Cà phê,2.5,59257,148142.5,Completed,Việt Nam,VNPost,5,5.0
+ORD-00325,P00325,Tokyo Agro,Thanh long,7.1,58238,413489.8,Processing,Hàn Quốc,DHL Express,17,
+ORD-00327,P00327,Aeon Vietnam,Xoài,42.3,32554,1377034.2,Completed,Hoa Kỳ,Logistics Nội Bộ,14,4.6
+ORD-00329,P00329,Co.opmart,Xoài,8.8,49753,437826.4,Completed,Việt Nam,Logistics Nội Bộ,1,4.8
+ORD-00331,P00331,Tokyo Agro,Sầu riêng,23.6,41623,982302.8,Completed,Hàn Quốc,FedEx,19,4.3
+ORD-00333,P00333,EU EcoFruit,Lúa,20.6,15420,317652.0,Processing,Đức,Viettel Post,8,
+ORD-00335,P00335,Co.opmart,Cà phê,18.3,21094,386020.2,Completed,Việt Nam,FedEx,2,4.4
+ORD-00337,P00337,Korea Harvest,Lúa,23.8,23735,564893.0,Completed,Úc,VNPost,15,4.2
+ORD-00339,P00339,Aeon Vietnam,Lúa,38.5,73834,2842609.0,Processing,Hoa Kỳ,Viettel Post,15,
+ORD-00341,P00341,Bach Hoa Xanh,Lúa,18.1,54996,995427.6,Processing,Việt Nam,Viettel Post,3,
+ORD-00343,P00343,EU EcoFruit,Thanh long,27.3,65370,1784601.0,Processing,Đức,Logistics Nội Bộ,8,
+ORD-00345,P00345,Singapore AgriTrade,Sầu riêng,17.0,80699,1371883.0,Completed,Singapore,Giao Hàng Nhanh,15,4.4
+ORD-00347,P00347,EU EcoFruit,Xoài,14.2,83122,1180332.4,Completed,Đức,Giao Hàng Nhanh,12,4.5
+ORD-00349,P00349,Tokyo Agro,Cà phê,6.3,43745,275593.5,Completed,Hàn Quốc,FedEx,19,4.4
+ORD-00351,P00351,Singapore AgriTrade,Cà phê,28.6,81260,2324036.0,Completed,Singapore,DHL Express,10,4.5
+ORD-00353,P00353,Bach Hoa Xanh,Lúa,44.4,74352,3301228.8,Completed,Việt Nam,VNPost,4,4.4
+ORD-00355,P00355,Bach Hoa Xanh,Xoài,26.8,78161,2094714.8,Completed,Việt Nam,Viettel Post,3,4.4
+ORD-00357,P00357,Singapore AgriTrade,Sầu riêng,28.6,67420,1928212.0,Processing,Singapore,Logistics Nội Bộ,11,
+ORD-00359,P00359,Tokyo Agro,Lúa,21.1,70616,1489997.6,Processing,Hàn Quốc,FedEx,13,
+ORD-00361,P00361,Aeon Vietnam,Cà phê,38.2,21305,813851.0,Completed,Hoa Kỳ,Giao Hàng Nhanh,12,4.7
+ORD-00363,P00363,Global Food Importer Inc,Sầu riêng,24.8,66676,1653564.8,Processing,Nhật Bản,VNPost,21,
+ORD-00365,P00365,Korea Harvest,Cà phê,6.4,65960,422144.0,Processing,Úc,Viettel Post,8,
+ORD-00367,P00367,Co.opmart,Xoài,6.3,31360,197568.0,Cancelled,Việt Nam,VNPost,2,
+ORD-00369,P00369,Tokyo Agro,Sầu riêng,6.2,70731,438532.2,Completed,Hàn Quốc,VNPost,19,4.8
+ORD-00371,P00371,Aeon Vietnam,Cà phê,22.7,15267,346560.9,Processing,Hoa Kỳ,VNPost,8,
+ORD-00373,P00373,Co.opmart,Thanh long,8.9,40826,363351.4,Processing,Việt Nam,FedEx,4,
+ORD-00375,P00375,Korea Harvest,Sầu riêng,31.6,57274,1809858.4,Processing,Úc,Viettel Post,8,
+ORD-00377,P00377,Singapore AgriTrade,Lúa,29.1,79914,2325497.4,Processing,Singapore,DHL Express,16,
+ORD-00379,P00379,Bach Hoa Xanh,Sầu riêng,41.1,71927,2956199.7,Completed,Việt Nam,VNPost,2,4.7
+ORD-00381,P00381,Global Food Importer Inc,Xoài,9.0,80401,723609.0,Processing,Nhật Bản,Giao Hàng Nhanh,21,
+ORD-00383,P00383,Central Retail,Thanh long,2.8,10244,28683.2,Completed,Trung Quốc,Logistics Nội Bộ,15,4.8
+ORD-00385,P00385,Co.opmart,Sầu riêng,33.3,75616,2518012.8,Completed,Việt Nam,DHL Express,1,4.7
+ORD-00387,P00387,EU EcoFruit,Sầu riêng,35.0,80889,2831115.0,Processing,Đức,Logistics Nội Bộ,12,
+ORD-00389,P00389,VinMart,Sầu riêng,28.2,77593,2188122.6,Processing,Việt Nam,Logistics Nội Bộ,3,
+ORD-00391,P00391,Aeon Vietnam,Cà phê,6.5,34775,226037.5,Completed,Hoa Kỳ,Giao Hàng Nhanh,7,4.2
+ORD-00393,P00393,Korea Harvest,Lúa,13.8,51701,713473.8,Processing,Úc,Logistics Nội Bộ,7,
+ORD-00395,P00395,Singapore AgriTrade,Thanh long,27.8,51808,1440262.4,Processing,Singapore,Logistics Nội Bộ,12,
+ORD-00397,P00397,Aeon Vietnam,Thanh long,34.7,84492,2931872.4,Processing,Hoa Kỳ,VNPost,17,
+ORD-00399,P00399,Korea Harvest,Lúa,43.4,33243,1442746.2,Completed,Úc,FedEx,15,4.8
+ORD-00401,P00401,Global Food Importer Inc,Cà phê,28.0,45373,1270444.0,Completed,Nhật Bản,VNPost,8,5.0
+ORD-00403,P00403,Singapore AgriTrade,Lúa,9.4,44180,415292.0,Completed,Singapore,Logistics Nội Bộ,16,4.5
+ORD-00405,P00405,VinMart,Cà phê,41.3,73360,3029768.0,Completed,Việt Nam,Logistics Nội Bộ,4,4.3
+ORD-00407,P00407,EU EcoFruit,Cà phê,40.2,19840,797568.0,Completed,Đức,VNPost,17,4.3
+ORD-00409,P00409,Korea Harvest,Sầu riêng,4.7,68476,321837.2,Processing,Úc,DHL Express,18,
+ORD-00411,P00411,Co.opmart,Thanh long,22.3,30329,676336.7,Completed,Việt Nam,Viettel Post,5,4.4
+ORD-00413,P00413,Central Retail,Thanh long,22.0,27035,594770.0,Processing,Trung Quốc,DHL Express,12,
+ORD-00415,P00415,Aeon Vietnam,Lúa,17.3,60076,1039314.8,Processing,Hoa Kỳ,Viettel Post,20,
+ORD-00417,P00417,Singapore AgriTrade,Lúa,21.4,38055,814377.0,Processing,Singapore,VNPost,20,
+ORD-00419,P00419,Global Food Importer Inc,Sầu riêng,10.8,67381,727714.8,Processing,Nhật Bản,VNPost,8,
+ORD-00421,P00421,Aeon Vietnam,Sầu riêng,2.9,49030,142187.0,Completed,Hoa Kỳ,Logistics Nội Bộ,16,4.2
+ORD-00423,P00423,VinMart,Lúa,2.0,64592,129184.0,Completed,Việt Nam,Viettel Post,5,4.9
+ORD-00425,P00425,VinMart,Cà phê,8.7,39708,345459.6,Cancelled,Việt Nam,VNPost,5,
+ORD-00427,P00427,Global Food Importer Inc,Lúa,4.5,61689,277600.5,Processing,Nhật Bản,VNPost,12,
+ORD-00429,P00429,Central Retail,Xoài,29.3,67065,1965004.5,Completed,Trung Quốc,Viettel Post,18,4.9
+ORD-00431,P00431,Singapore AgriTrade,Cà phê,36.1,54774,1977341.4,Completed,Singapore,DHL Express,12,4.6
+ORD-00433,P00433,VinMart,Lúa,33.2,10043,333427.6,Completed,Việt Nam,FedEx,4,4.2
+ORD-00435,P00435,Co.opmart,Thanh long,33.8,29873,1009707.4,Processing,Việt Nam,Giao Hàng Nhanh,2,
+ORD-00437,P00437,Bach Hoa Xanh,Lúa,26.9,33486,900773.4,Completed,Việt Nam,VNPost,1,4.5
+ORD-00439,P00439,Singapore AgriTrade,Cà phê,8.6,69995,601957.0,Processing,Singapore,Giao Hàng Nhanh,13,
+ORD-00441,P00441,VinMart,Lúa,17.4,22220,386628.0,Processing,Việt Nam,Logistics Nội Bộ,1,
+ORD-00443,P00443,Global Food Importer Inc,Cà phê,14.2,16933,240448.6,Completed,Nhật Bản,DHL Express,17,4.1
+ORD-00445,P00445,Korea Harvest,Lúa,9.5,30430,289085.0,Completed,Úc,DHL Express,13,4.6
+ORD-00447,P00447,Global Food Importer Inc,Thanh long,29.1,15679,456258.9,Processing,Nhật Bản,Logistics Nội Bộ,16,
+ORD-00449,P00449,VinMart,Cà phê,2.9,78436,227464.4,Processing,Việt Nam,FedEx,2,
+ORD-00451,P00451,Bach Hoa Xanh,Thanh long,19.4,47486,921228.4,Cancelled,Việt Nam,Logistics Nội Bộ,3,
+ORD-00453,P00453,Tokyo Agro,Lúa,3.1,48907,151611.7,Completed,Hàn Quốc,Logistics Nội Bộ,14,4.3
+ORD-00455,P00455,Bach Hoa Xanh,Cà phê,14.3,69611,995437.3,Completed,Việt Nam,VNPost,2,4.2
+ORD-00457,P00457,EU EcoFruit,Sầu riêng,40.8,46773,1908338.4,Processing,Đức,Viettel Post,21,
+ORD-00459,P00459,VinMart,Xoài,23.3,46567,1085011.1,Completed,Việt Nam,VNPost,2,4.9
+ORD-00461,P00461,Tokyo Agro,Lúa,21.5,54799,1178178.5,Completed,Hàn Quốc,Logistics Nội Bộ,10,4.5
+ORD-00463,P00463,EU EcoFruit,Xoài,3.8,19420,73796.0,Processing,Đức,DHL Express,11,
+ORD-00465,P00465,Central Retail,Thanh long,15.4,16321,251343.4,Processing,Trung Quốc,DHL Express,10,
+ORD-00467,P00467,Bach Hoa Xanh,Xoài,39.5,52858,2087891.0,Completed,Việt Nam,FedEx,5,4.0
+ORD-00469,P00469,Bach Hoa Xanh,Cà phê,13.4,79596,1066586.4,Completed,Việt Nam,DHL Express,5,4.4
+ORD-00471,P00471,Korea Harvest,Thanh long,11.2,35688,399705.6,Completed,Úc,VNPost,11,4.8
+ORD-00473,P00473,Tokyo Agro,Cà phê,36.2,82177,2974807.4,Completed,Hàn Quốc,Logistics Nội Bộ,7,4.4
+ORD-00475,P00475,Korea Harvest,Thanh long,14.5,64937,941586.5,Completed,Úc,DHL Express,8,4.7
+ORD-00477,P00477,Global Food Importer Inc,Cà phê,6.1,32214,196505.4,Completed,Nhật Bản,Logistics Nội Bộ,12,4.5
+ORD-00479,P00479,Aeon Vietnam,Xoài,12.8,71222,911641.6,Processing,Hoa Kỳ,DHL Express,21,
+ORD-00481,P00481,Singapore AgriTrade,Cà phê,10.0,14069,140690.0,Completed,Singapore,FedEx,9,5.0
+ORD-00483,P00483,VinMart,Xoài,2.4,71761,172226.4,Cancelled,Việt Nam,Logistics Nội Bộ,5,
+ORD-00485,P00485,Global Food Importer Inc,Xoài,22.9,19830,454107.0,Completed,Nhật Bản,Logistics Nội Bộ,15,4.0
+ORD-00487,P00487,Aeon Vietnam,Lúa,43.0,18983,816269.0,Completed,Hoa Kỳ,DHL Express,10,4.7
+ORD-00489,P00489,Tokyo Agro,Cà phê,10.9,27393,298583.7,Completed,Hàn Quốc,DHL Express,7,4.2
+ORD-00491,P00491,Co.opmart,Xoài,1.9,77396,147052.4,Processing,Việt Nam,DHL Express,1,
+ORD-00493,P00493,Bach Hoa Xanh,Thanh long,26.4,29690,783816.0,Completed,Việt Nam,VNPost,5,4.6
+ORD-00495,P00495,Global Food Importer Inc,Sầu riêng,19.4,60972,1182856.8,Completed,Nhật Bản,VNPost,17,4.5
+ORD-00497,P00497,Central Retail,Xoài,25.7,30110,773827.0,Completed,Trung Quốc,DHL Express,9,4.9
+ORD-00499,P00499,Co.opmart,Thanh long,2.1,18277,38381.7,Processing,Việt Nam,DHL Express,1,
+ORD-00501,P00501,EU EcoFruit,Lúa,30.5,43159,1316349.5,Processing,Đức,Logistics Nội Bộ,10,
+ORD-00503,P00503,Tokyo Agro,Cà phê,23.6,38671,912635.6,Completed,Hàn Quốc,Logistics Nội Bộ,13,4.9
+ORD-00505,P00505,Central Retail,Xoài,34.1,65732,2241461.2,Processing,Trung Quốc,Viettel Post,7,
+ORD-00507,P00507,Co.opmart,Sầu riêng,1.7,16365,27820.5,Cancelled,Việt Nam,VNPost,4,
+ORD-00509,P00509,VinMart,Lúa,46.2,14662,677384.4,Completed,Việt Nam,Logistics Nội Bộ,5,4.7
+ORD-00511,P00511,Co.opmart,Sầu riêng,22.1,44552,984599.2,Completed,Việt Nam,Viettel Post,5,4.0
+ORD-00513,P00513,Aeon Vietnam,Lúa,17.7,10321,182681.7,Processing,Hoa Kỳ,Logistics Nội Bộ,14,
+ORD-00515,P00515,Tokyo Agro,Lúa,20.2,80043,1616868.6,Completed,Hàn Quốc,Viettel Post,21,4.2
+ORD-00517,P00517,Central Retail,Cà phê,14.8,54820,811336.0,Processing,Trung Quốc,Giao Hàng Nhanh,10,
+ORD-00519,P00519,Central Retail,Lúa,30.2,50445,1523439.0,Processing,Trung Quốc,VNPost,7,
+ORD-00521,P00521,Central Retail,Lúa,20.8,54328,1130022.4,Completed,Trung Quốc,Logistics Nội Bộ,21,4.6
+ORD-00523,P00523,Korea Harvest,Lúa,9.7,73882,716655.4,Completed,Úc,Giao Hàng Nhanh,11,4.0
+ORD-00525,P00525,Central Retail,Sầu riêng,32.9,54582,1795747.8,Processing,Trung Quốc,Viettel Post,21,
+ORD-00527,P00527,Singapore AgriTrade,Thanh long,18.0,63593,1144674.0,Completed,Singapore,Viettel Post,7,4.7
+ORD-00529,P00529,Bach Hoa Xanh,Thanh long,32.7,35916,1174453.2,Completed,Việt Nam,FedEx,5,4.4
+ORD-00531,P00531,Central Retail,Lúa,10.3,9667,99570.1,Completed,Trung Quốc,Giao Hàng Nhanh,11,4.3
+ORD-00533,P00533,Bach Hoa Xanh,Xoài,30.2,42243,1275738.6,Cancelled,Việt Nam,FedEx,1,
+ORD-00535,P00535,Korea Harvest,Cà phê,49.2,23535,1157922.0,Completed,Úc,Logistics Nội Bộ,16,4.3
+ORD-00537,P00537,VinMart,Xoài,4.2,71763,301404.6,Completed,Việt Nam,DHL Express,4,4.3
+ORD-00539,P00539,Bach Hoa Xanh,Xoài,1.4,24050,33670.0,Completed,Việt Nam,Logistics Nội Bộ,5,4.4
+ORD-00541,P00541,Central Retail,Lúa,13.0,76482,994266.0,Processing,Trung Quốc,FedEx,13,
+ORD-00543,P00543,Central Retail,Sầu riêng,15.3,68469,1047575.7,Processing,Trung Quốc,VNPost,14,
+ORD-00545,P00545,Global Food Importer Inc,Lúa,13.6,16427,223407.2,Processing,Nhật Bản,Giao Hàng Nhanh,10,
+ORD-00547,P00547,Aeon Vietnam,Thanh long,17.1,57541,983951.1,Completed,Hoa Kỳ,DHL Express,21,4.2
+ORD-00549,P00549,EU EcoFruit,Thanh long,5.7,8664,49384.8,Processing,Đức,Logistics Nội Bộ,7,
+ORD-00551,P00551,Singapore AgriTrade,Sầu riêng,9.2,75423,693891.6,Processing,Singapore,Logistics Nội Bộ,20,
+ORD-00553,P00553,EU EcoFruit,Cà phê,16.5,29531,487261.5,Completed,Đức,FedEx,7,4.3
+ORD-00555,P00555,Co.opmart,Cà phê,15.7,20880,327816.0,Completed,Việt Nam,Viettel Post,3,4.5
+ORD-00557,P00557,Global Food Importer Inc,Thanh long,31.6,41703,1317814.8,Processing,Nhật Bản,DHL Express,20,
+ORD-00559,P00559,VinMart,Thanh long,12.6,21630,272538.0,Completed,Việt Nam,FedEx,1,4.4
+ORD-00561,P00561,Aeon Vietnam,Xoài,24.8,84239,2089127.2,Completed,Hoa Kỳ,Viettel Post,20,4.2
+ORD-00563,P00563,Co.opmart,Xoài,23.4,42082,984718.8,Completed,Việt Nam,Logistics Nội Bộ,5,4.8
+ORD-00565,P00565,EU EcoFruit,Sầu riêng,6.3,29832,187941.6,Processing,Đức,Viettel Post,19,
+ORD-00567,P00567,Co.opmart,Xoài,34.8,73638,2562602.4,Completed,Việt Nam,Giao Hàng Nhanh,5,4.3
+ORD-00569,P00569,Central Retail,Xoài,44.9,77369,3473868.1,Completed,Trung Quốc,VNPost,8,4.8
+ORD-00571,P00571,VinMart,Xoài,33.1,68249,2259041.9,Completed,Việt Nam,Viettel Post,4,4.7
+ORD-00573,P00573,Co.opmart,Cà phê,36.6,79883,2923717.8,Completed,Việt Nam,FedEx,4,4.0
+ORD-00575,P00575,Global Food Importer Inc,Thanh long,26.2,57213,1498980.6,Processing,Nhật Bản,VNPost,7,
+ORD-00577,P00577,Global Food Importer Inc,Xoài,7.2,30890,222408.0,Processing,Nhật Bản,DHL Express,8,
+ORD-00579,P00579,Tokyo Agro,Cà phê,17.0,23982,407694.0,Completed,Hàn Quốc,Logistics Nội Bộ,10,4.4
+ORD-00581,P00581,Tokyo Agro,Cà phê,32.9,28372,933438.8,Processing,Hàn Quốc,FedEx,12,
+ORD-00583,P00583,VinMart,Sầu riêng,10.3,33707,347182.1,Completed,Việt Nam,Viettel Post,5,4.9
+ORD-00585,P00585,VinMart,Xoài,24.9,42220,1051278.0,Completed,Việt Nam,Viettel Post,3,4.8
+ORD-00587,P00587,Tokyo Agro,Sầu riêng,5.0,80300,401500.0,Completed,Hàn Quốc,Viettel Post,8,4.1
+ORD-00589,P00589,VinMart,Lúa,26.4,30650,809160.0,Completed,Việt Nam,Logistics Nội Bộ,3,4.3
+ORD-00591,P00591,VinMart,Cà phê,6.2,51636,320143.2,Processing,Việt Nam,DHL Express,5,
+ORD-00593,P00593,Central Retail,Cà phê,23.6,34781,820831.6,Completed,Trung Quốc,Giao Hàng Nhanh,17,4.7
+ORD-00595,P00595,Singapore AgriTrade,Cà phê,26.9,56838,1528942.2,Completed,Singapore,Viettel Post,12,4.6
+ORD-00597,P00597,Aeon Vietnam,Lúa,31.9,48294,1540578.6,Completed,Hoa Kỳ,VNPost,13,4.3
+ORD-00599,P00599,Singapore AgriTrade,Cà phê,28.6,71098,2033402.8,Completed,Singapore,Viettel Post,10,4.8
+ORD-00601,P00601,Korea Harvest,Thanh long,6.2,78250,485150.0,Processing,Úc,VNPost,17,
+ORD-00603,P00603,Central Retail,Xoài,17.5,37036,648130.0,Completed,Trung Quốc,VNPost,12,4.7
+ORD-00605,P00605,EU EcoFruit,Cà phê,10.3,18186,187315.8,Completed,Đức,FedEx,15,4.5
+ORD-00607,P00607,Singapore AgriTrade,Xoài,42.5,26559,1128757.5,Processing,Singapore,Giao Hàng Nhanh,13,
+ORD-00609,P00609,Co.opmart,Cà phê,37.1,53551,1986742.1,Completed,Việt Nam,Logistics Nội Bộ,5,4.2
+ORD-00611,P00611,Aeon Vietnam,Xoài,6.4,27226,174246.4,Processing,Hoa Kỳ,FedEx,18,
+ORD-00613,P00613,VinMart,Xoài,17.0,27479,467143.0,Cancelled,Việt Nam,Viettel Post,3,
+ORD-00615,P00615,Bach Hoa Xanh,Cà phê,39.2,14624,573260.8,Completed,Việt Nam,VNPost,2,4.6
+ORD-00617,P00617,Bach Hoa Xanh,Lúa,36.4,13423,488597.2,Completed,Việt Nam,VNPost,4,4.7
+ORD-00619,P00619,Central Retail,Xoài,13.3,60948,810608.4,Completed,Trung Quốc,DHL Express,11,4.2
+ORD-00621,P00621,Singapore AgriTrade,Sầu riêng,19.8,16037,317532.6,Processing,Singapore,Giao Hàng Nhanh,8,
+ORD-00623,P00623,Singapore AgriTrade,Xoài,8.8,48540,427152.0,Completed,Singapore,Logistics Nội Bộ,12,4.6
+ORD-00625,P00625,Co.opmart,Lúa,8.5,51612,438702.0,Cancelled,Việt Nam,FedEx,4,
+ORD-00627,P00627,Tokyo Agro,Thanh long,36.3,9205,334141.5,Processing,Hàn Quốc,VNPost,7,
+ORD-00629,P00629,Tokyo Agro,Cà phê,11.3,51365,580424.5,Completed,Hàn Quốc,Viettel Post,14,5.0
+ORD-00631,P00631,Tokyo Agro,Sầu riêng,34.4,82685,2844364.0,Processing,Hàn Quốc,FedEx,16,
+ORD-00633,P00633,Co.opmart,Lúa,10.0,79205,792050.0,Cancelled,Việt Nam,VNPost,3,
+ORD-00635,P00635,Central Retail,Cà phê,11.4,81801,932531.4,Processing,Trung Quốc,VNPost,10,
+ORD-00637,P00637,Aeon Vietnam,Thanh long,44.0,49325,2170300.0,Processing,Hoa Kỳ,Logistics Nội Bộ,20,
+ORD-00639,P00639,EU EcoFruit,Xoài,47.1,34704,1634558.4,Completed,Đức,DHL Express,9,4.9
+ORD-00641,P00641,Singapore AgriTrade,Sầu riêng,1.7,60961,103633.7,Completed,Singapore,DHL Express,19,4.4
+ORD-00643,P00643,Singapore AgriTrade,Sầu riêng,4.4,16430,72292.0,Completed,Singapore,VNPost,11,4.1
+ORD-00645,P00645,Global Food Importer Inc,Sầu riêng,23.4,44484,1040925.6,Completed,Nhật Bản,Logistics Nội Bộ,11,4.9
+ORD-00647,P00647,Bach Hoa Xanh,Xoài,32.1,50700,1627470.0,Cancelled,Việt Nam,Viettel Post,3,
+ORD-00649,P00649,Aeon Vietnam,Thanh long,40.0,77736,3109440.0,Processing,Hoa Kỳ,Logistics Nội Bộ,14,
+ORD-00651,P00651,Korea Harvest,Lúa,34.1,79502,2711018.2,Processing,Úc,FedEx,16,
+ORD-00653,P00653,Singapore AgriTrade,Lúa,27.1,77803,2108461.3,Processing,Singapore,VNPost,7,
+ORD-00655,P00655,EU EcoFruit,Cà phê,24.4,28123,686201.2,Completed,Đức,FedEx,13,4.1
+ORD-00657,P00657,Co.opmart,Sầu riêng,27.5,19888,546920.0,Completed,Việt Nam,DHL Express,3,4.4
+ORD-00659,P00659,VinMart,Xoài,21.9,17039,373154.1,Completed,Việt Nam,FedEx,1,4.6
+ORD-00661,P00661,Global Food Importer Inc,Xoài,23.0,12083,277909.0,Processing,Nhật Bản,VNPost,21,
+ORD-00663,P00663,VinMart,Xoài,2.6,33304,86590.4,Completed,Việt Nam,Giao Hàng Nhanh,5,4.9
+ORD-00665,P00665,Tokyo Agro,Xoài,26.2,41433,1085544.6,Completed,Hàn Quốc,DHL Express,17,4.3
+ORD-00667,P00667,Korea Harvest,Cà phê,8.2,41726,342153.2,Completed,Úc,Viettel Post,20,4.4
+ORD-00669,P00669,Central Retail,Xoài,45.6,8984,409670.4,Processing,Trung Quốc,Logistics Nội Bộ,7,
+ORD-00671,P00671,VinMart,Thanh long,2.9,19992,57976.8,Completed,Việt Nam,DHL Express,4,4.6
+ORD-00673,P00673,Korea Harvest,Lúa,22.7,25665,582595.5,Processing,Úc,Logistics Nội Bộ,10,
+ORD-00675,P00675,Central Retail,Lúa,3.5,34772,121702.0,Completed,Trung Quốc,VNPost,14,4.3
+ORD-00677,P00677,Global Food Importer Inc,Cà phê,12.7,60409,767194.3,Processing,Nhật Bản,FedEx,20,
+ORD-00679,P00679,Singapore AgriTrade,Lúa,8.3,46938,389585.4,Processing,Singapore,DHL Express,19,
+ORD-00681,P00681,VinMart,Xoài,6.8,11694,79519.2,Completed,Việt Nam,Giao Hàng Nhanh,4,4.8
+ORD-00683,P00683,Central Retail,Thanh long,7.4,29005,214637.0,Processing,Trung Quốc,FedEx,7,
+ORD-00685,P00685,Aeon Vietnam,Cà phê,7.7,46149,355347.3,Processing,Hoa Kỳ,Giao Hàng Nhanh,14,
+ORD-00687,P00687,Bach Hoa Xanh,Xoài,25.4,10998,279349.2,Completed,Việt Nam,Viettel Post,2,4.3
+ORD-00689,P00689,Aeon Vietnam,Sầu riêng,12.5,63340,791750.0,Processing,Hoa Kỳ,Logistics Nội Bộ,8,
+ORD-00691,P00691,Tokyo Agro,Xoài,5.3,49920,264576.0,Completed,Hàn Quốc,Giao Hàng Nhanh,8,5.0
+ORD-00693,P00693,Korea Harvest,Thanh long,32.6,18954,617900.4,Completed,Úc,Giao Hàng Nhanh,13,4.7
+ORD-00695,P00695,Central Retail,Thanh long,30.1,24599,740429.9,Completed,Trung Quốc,DHL Express,7,4.3
+ORD-00697,P00697,Tokyo Agro,Xoài,24.5,9251,226649.5,Completed,Hàn Quốc,Giao Hàng Nhanh,14,4.8
+ORD-00699,P00699,Co.opmart,Sầu riêng,8.0,81461,651688.0,Processing,Việt Nam,Viettel Post,2,
+ORD-00701,P00701,VinMart,Cà phê,21.1,26064,549950.4,Completed,Việt Nam,DHL Express,5,4.3
+ORD-00703,P00703,Aeon Vietnam,Xoài,26.7,46387,1238532.9,Completed,Hoa Kỳ,DHL Express,10,4.7
+ORD-00705,P00705,Global Food Importer Inc,Xoài,19.8,61945,1226511.0,Processing,Nhật Bản,Logistics Nội Bộ,9,
+ORD-00707,P00707,Korea Harvest,Xoài,2.5,13279,33197.5,Processing,Úc,Viettel Post,10,
+ORD-00709,P00709,Co.opmart,Thanh long,14.2,19747,280407.4,Cancelled,Việt Nam,Giao Hàng Nhanh,4,
+ORD-00711,P00711,Co.opmart,Sầu riêng,2.7,54698,147684.6,Cancelled,Việt Nam,FedEx,3,
+ORD-00713,P00713,Global Food Importer Inc,Cà phê,30.4,38231,1162222.4,Completed,Nhật Bản,FedEx,21,4.8
+ORD-00715,P00715,Central Retail,Sầu riêng,16.5,24557,405190.5,Processing,Trung Quốc,Logistics Nội Bộ,14,
+ORD-00717,P00717,Tokyo Agro,Xoài,18.4,22430,412712.0,Completed,Hàn Quốc,Viettel Post,13,4.5
+ORD-00719,P00719,VinMart,Thanh long,7.0,69184,484288.0,Processing,Việt Nam,DHL Express,5,
+ORD-00721,P00721,Korea Harvest,Lúa,11.6,58917,683437.2,Processing,Úc,Giao Hàng Nhanh,18,
+ORD-00723,P00723,Tokyo Agro,Sầu riêng,37.4,62354,2332039.6,Processing,Hàn Quốc,Giao Hàng Nhanh,16,
+ORD-00725,P00725,Tokyo Agro,Lúa,26.2,9132,239258.4,Processing,Hàn Quốc,DHL Express,10,
+ORD-00727,P00727,Co.opmart,Lúa,13.3,37584,499867.2,Completed,Việt Nam,Giao Hàng Nhanh,2,4.3
+ORD-00729,P00729,Singapore AgriTrade,Cà phê,37.4,12687,474493.8,Processing,Singapore,Giao Hàng Nhanh,17,
+ORD-00731,P00731,VinMart,Thanh long,18.6,32393,602509.8,Completed,Việt Nam,FedEx,5,4.9
+ORD-00733,P00733,VinMart,Sầu riêng,29.6,41660,1233136.0,Cancelled,Việt Nam,Giao Hàng Nhanh,1,
+ORD-00735,P00735,Singapore AgriTrade,Thanh long,32.6,49078,1599942.8,Completed,Singapore,VNPost,20,4.8
+ORD-00737,P00737,Central Retail,Thanh long,6.6,50124,330818.4,Completed,Trung Quốc,FedEx,18,5.0
+ORD-00739,P00739,Tokyo Agro,Sầu riêng,13.9,33622,467345.8,Processing,Hàn Quốc,VNPost,21,
+ORD-00741,P00741,Aeon Vietnam,Thanh long,12.1,71140,860794.0,Completed,Hoa Kỳ,Giao Hàng Nhanh,17,4.1
+ORD-00743,P00743,EU EcoFruit,Cà phê,8.8,37114,326603.2,Completed,Đức,Viettel Post,19,4.2
+ORD-00745,P00745,Aeon Vietnam,Xoài,20.7,33070,684549.0,Completed,Hoa Kỳ,Giao Hàng Nhanh,20,4.9
+ORD-00747,P00747,Aeon Vietnam,Lúa,2.3,80788,185812.4,Completed,Hoa Kỳ,Viettel Post,16,5.0
+ORD-00749,P00749,Co.opmart,Thanh long,18.8,71436,1342996.8,Completed,Việt Nam,Viettel Post,3,4.3
+ORD-00751,P00751,Global Food Importer Inc,Xoài,5.4,83814,452595.6,Completed,Nhật Bản,Logistics Nội Bộ,7,4.8
+ORD-00753,P00753,Tokyo Agro,Xoài,28.7,36708,1053519.6,Processing,Hàn Quốc,VNPost,17,
+ORD-00755,P00755,Aeon Vietnam,Cà phê,20.6,42010,865406.0,Processing,Hoa Kỳ,DHL Express,17,
+ORD-00757,P00757,Global Food Importer Inc,Lúa,35.2,73787,2597302.4,Completed,Nhật Bản,DHL Express,12,4.8
+ORD-00759,P00759,Central Retail,Xoài,14.9,38150,568435.0,Completed,Trung Quốc,VNPost,14,4.1
+ORD-00761,P00761,Singapore AgriTrade,Xoài,18.0,14727,265086.0,Completed,Singapore,FedEx,13,4.0
+ORD-00763,P00763,Central Retail,Lúa,8.7,20951,182273.7,Completed,Trung Quốc,VNPost,18,4.5
+ORD-00765,P00765,Global Food Importer Inc,Thanh long,37.4,48517,1814535.8,Completed,Nhật Bản,VNPost,17,4.9
+ORD-00767,P00767,Central Retail,Lúa,6.3,55503,349668.9,Completed,Trung Quốc,Logistics Nội Bộ,21,4.6
+ORD-00769,P00769,EU EcoFruit,Xoài,32.8,62313,2043866.4,Processing,Đức,Logistics Nội Bộ,9,
+ORD-00771,P00771,VinMart,Thanh long,6.0,25434,152604.0,Completed,Việt Nam,Viettel Post,4,4.9
+ORD-00773,P00773,Tokyo Agro,Sầu riêng,18.1,49652,898701.2,Processing,Hàn Quốc,Logistics Nội Bộ,17,
+ORD-00775,P00775,Singapore AgriTrade,Sầu riêng,20.1,55550,1116555.0,Processing,Singapore,Viettel Post,18,
+ORD-00777,P00777,Bach Hoa Xanh,Cà phê,14.1,22013,310383.3,Completed,Việt Nam,VNPost,5,4.7
+ORD-00779,P00779,Global Food Importer Inc,Thanh long,32.6,41142,1341229.2,Processing,Nhật Bản,VNPost,9,
+ORD-00781,P00781,Global Food Importer Inc,Xoài,13.7,58608,802929.6,Completed,Nhật Bản,Logistics Nội Bộ,14,4.5
+ORD-00783,P00783,Aeon Vietnam,Sầu riêng,19.0,39264,746016.0,Completed,Hoa Kỳ,FedEx,18,4.6
+ORD-00785,P00785,Korea Harvest,Xoài,14.1,56187,792236.7,Processing,Úc,Logistics Nội Bộ,8,
+ORD-00787,P00787,EU EcoFruit,Thanh long,10.0,54187,541870.0,Processing,Đức,Giao Hàng Nhanh,18,
+ORD-00789,P00789,Central Retail,Xoài,36.8,78634,2893731.2,Completed,Trung Quốc,VNPost,8,4.3
+ORD-00791,P00791,Co.opmart,Cà phê,35.9,83548,2999373.2,Completed,Việt Nam,Giao Hàng Nhanh,2,4.4
+ORD-00793,P00793,Global Food Importer Inc,Sầu riêng,5.0,62143,310715.0,Processing,Nhật Bản,Viettel Post,10,
+ORD-00795,P00795,Korea Harvest,Thanh long,24.5,14286,350007.0,Processing,Úc,DHL Express,16,
+ORD-00797,P00797,Aeon Vietnam,Sầu riêng,5.1,53457,272630.7,Processing,Hoa Kỳ,Viettel Post,11,
+ORD-00799,P00799,Bach Hoa Xanh,Cà phê,17.3,14369,248583.7,Cancelled,Việt Nam,Viettel Post,4,
+ORD-00801,P00801,EU EcoFruit,Xoài,36.6,19430,711138.0,Completed,Đức,DHL Express,20,4.0
+ORD-00803,P00803,Co.opmart,Lúa,44.2,84519,3735739.8,Completed,Việt Nam,VNPost,3,4.9
+ORD-00805,P00805,Korea Harvest,Cà phê,37.0,34698,1283826.0,Processing,Úc,DHL Express,15,
+ORD-00807,P00807,Bach Hoa Xanh,Xoài,21.0,41012,861252.0,Cancelled,Việt Nam,FedEx,2,
+ORD-00809,P00809,Central Retail,Cà phê,33.9,80246,2720339.4,Completed,Trung Quốc,Logistics Nội Bộ,15,4.6
+ORD-00811,P00811,Central Retail,Cà phê,14.8,21682,320893.6,Processing,Trung Quốc,FedEx,18,
+ORD-00813,P00813,Korea Harvest,Xoài,17.0,24422,415174.0,Completed,Úc,FedEx,15,4.9
+ORD-00815,P00815,Global Food Importer Inc,Lúa,39.7,57327,2275881.9,Processing,Nhật Bản,Giao Hàng Nhanh,12,
+ORD-00817,P00817,Korea Harvest,Xoài,31.4,79539,2497524.6,Processing,Úc,DHL Express,15,
+ORD-00819,P00819,Aeon Vietnam,Thanh long,24.9,28892,719410.8,Completed,Hoa Kỳ,VNPost,9,4.6
+ORD-00821,P00821,Korea Harvest,Thanh long,22.8,55358,1262162.4,Completed,Úc,Viettel Post,19,4.2
+ORD-00823,P00823,Central Retail,Lúa,1.8,57520,103536.0,Completed,Trung Quốc,FedEx,19,4.8
+ORD-00825,P00825,Central Retail,Sầu riêng,10.7,43269,462978.3,Completed,Trung Quốc,DHL Express,13,4.1
+ORD-00827,P00827,Singapore AgriTrade,Cà phê,5.2,59005,306826.0,Completed,Singapore,Logistics Nội Bộ,7,4.9
+ORD-00829,P00829,Korea Harvest,Xoài,14.1,18081,254942.1,Completed,Úc,Logistics Nội Bộ,8,4.5
+ORD-00831,P00831,Global Food Importer Inc,Thanh long,8.5,82823,703995.5,Completed,Nhật Bản,DHL Express,9,4.6
+ORD-00833,P00833,EU EcoFruit,Lúa,12.7,43531,552843.7,Processing,Đức,Viettel Post,21,
+ORD-00835,P00835,Korea Harvest,Thanh long,8.0,20877,167016.0,Processing,Úc,VNPost,18,
+ORD-00837,P00837,Co.opmart,Cà phê,47.2,72898,3440785.6,Completed,Việt Nam,Logistics Nội Bộ,3,4.0
+ORD-00839,P00839,Tokyo Agro,Sầu riêng,7.4,52678,389817.2,Processing,Hàn Quốc,Viettel Post,16,
+ORD-00841,P00841,Korea Harvest,Xoài,9.3,16721,155505.3,Completed,Úc,Giao Hàng Nhanh,8,4.7
+ORD-00843,P00843,Global Food Importer Inc,Thanh long,29.0,53922,1563738.0,Completed,Nhật Bản,FedEx,8,4.9
+ORD-00845,P00845,Bach Hoa Xanh,Xoài,16.1,77578,1249005.8,Processing,Việt Nam,VNPost,1,
+ORD-00847,P00847,Bach Hoa Xanh,Cà phê,6.1,17259,105279.9,Cancelled,Việt Nam,FedEx,3,
+ORD-00849,P00849,Global Food Importer Inc,Sầu riêng,41.8,82604,3452847.2,Completed,Nhật Bản,DHL Express,8,4.2
+ORD-00851,P00851,Aeon Vietnam,Lúa,5.1,46858,238975.8,Processing,Hoa Kỳ,Giao Hàng Nhanh,7,
+ORD-00853,P00853,Bach Hoa Xanh,Lúa,3.2,40392,129254.4,Cancelled,Việt Nam,DHL Express,2,
+ORD-00855,P00855,Central Retail,Lúa,19.3,60552,1168653.6,Completed,Trung Quốc,FedEx,8,4.3
+ORD-00857,P00857,Aeon Vietnam,Xoài,43.7,16308,712659.6,Processing,Hoa Kỳ,Viettel Post,19,
+ORD-00859,P00859,Bach Hoa Xanh,Cà phê,25.2,42967,1082768.4,Processing,Việt Nam,Viettel Post,2,
+ORD-00861,P00861,Co.opmart,Thanh long,23.5,44793,1052635.5,Processing,Việt Nam,Giao Hàng Nhanh,3,
+ORD-00863,P00863,Bach Hoa Xanh,Sầu riêng,11.6,65154,755786.4,Cancelled,Việt Nam,FedEx,4,
+ORD-00865,P00865,Central Retail,Cà phê,6.5,51256,333164.0,Processing,Trung Quốc,FedEx,19,
+ORD-00867,P00867,Korea Harvest,Thanh long,11.4,63142,719818.8,Completed,Úc,VNPost,21,4.6
+ORD-00869,P00869,Tokyo Agro,Thanh long,28.6,23459,670927.4,Processing,Hàn Quốc,Giao Hàng Nhanh,17,
+ORD-00871,P00871,EU EcoFruit,Cà phê,12.5,36858,460725.0,Processing,Đức,Logistics Nội Bộ,16,
+ORD-00873,P00873,Co.opmart,Lúa,5.3,61393,325382.9,Completed,Việt Nam,Viettel Post,2,4.1
+ORD-00875,P00875,VinMart,Thanh long,6.7,71504,479076.8,Completed,Việt Nam,Giao Hàng Nhanh,5,5.0
+ORD-00877,P00877,VinMart,Lúa,25.8,35745,922221.0,Cancelled,Việt Nam,Giao Hàng Nhanh,3,
+ORD-00879,P00879,VinMart,Cà phê,26.4,30389,802269.6,Completed,Việt Nam,Logistics Nội Bộ,2,4.1
+ORD-00881,P00881,VinMart,Cà phê,32.4,47063,1524841.2,Completed,Việt Nam,Viettel Post,3,4.5
+ORD-00883,P00883,Bach Hoa Xanh,Cà phê,18.4,54048,994483.2,Cancelled,Việt Nam,VNPost,3,
+ORD-00885,P00885,Aeon Vietnam,Sầu riêng,24.5,53803,1318173.5,Processing,Hoa Kỳ,Logistics Nội Bộ,13,
+ORD-00887,P00887,EU EcoFruit,Xoài,31.2,83057,2591378.4,Processing,Đức,Viettel Post,13,
+ORD-00889,P00889,Co.opmart,Thanh long,8.5,48015,408127.5,Completed,Việt Nam,Viettel Post,5,4.1
+ORD-00891,P00891,Co.opmart,Lúa,24.5,11977,293436.5,Completed,Việt Nam,Viettel Post,3,4.9
+ORD-00893,P00893,Bach Hoa Xanh,Thanh long,9.5,60201,571909.5,Completed,Việt Nam,DHL Express,3,4.3
+ORD-00895,P00895,Central Retail,Sầu riêng,21.0,34602,726642.0,Completed,Trung Quốc,Logistics Nội Bộ,10,4.5
+ORD-00897,P00897,Aeon Vietnam,Xoài,2.9,53600,155440.0,Completed,Hoa Kỳ,FedEx,13,4.6
+ORD-00899,P00899,Korea Harvest,Cà phê,4.6,72267,332428.2,Processing,Úc,DHL Express,12,
+ORD-00901,P00901,Korea Harvest,Xoài,1.4,59446,83224.4,Completed,Úc,Giao Hàng Nhanh,13,4.1
+ORD-00903,P00903,Bach Hoa Xanh,Lúa,40.9,25099,1026549.1,Completed,Việt Nam,Viettel Post,2,4.5
+ORD-00905,P00905,Central Retail,Xoài,10.8,50657,547095.6,Completed,Trung Quốc,FedEx,10,4.9
+ORD-00907,P00907,Global Food Importer Inc,Xoài,17.6,72498,1275964.8,Completed,Nhật Bản,FedEx,21,4.3
+ORD-00909,P00909,Central Retail,Xoài,41.8,22059,922066.2,Processing,Trung Quốc,Logistics Nội Bộ,19,
+ORD-00911,P00911,Central Retail,Xoài,25.2,77045,1941534.0,Completed,Trung Quốc,VNPost,12,4.3
+ORD-00913,P00913,Aeon Vietnam,Thanh long,8.4,39014,327717.6,Processing,Hoa Kỳ,FedEx,13,
+ORD-00915,P00915,Co.opmart,Xoài,4.8,83216,399436.8,Completed,Việt Nam,VNPost,5,4.4
+ORD-00917,P00917,Bach Hoa Xanh,Sầu riêng,13.3,57716,767622.8,Processing,Việt Nam,FedEx,3,
+ORD-00919,P00919,Tokyo Agro,Cà phê,20.4,63394,1293237.6,Completed,Hàn Quốc,Giao Hàng Nhanh,13,4.7
+ORD-00921,P00921,Bach Hoa Xanh,Thanh long,8.8,23562,207345.6,Cancelled,Việt Nam,Logistics Nội Bộ,2,
+ORD-00923,P00923,Korea Harvest,Xoài,5.9,76379,450636.1,Processing,Úc,DHL Express,21,
+ORD-00925,P00925,Singapore AgriTrade,Xoài,16.0,26714,427424.0,Completed,Singapore,Giao Hàng Nhanh,8,4.5
+ORD-00927,P00927,Aeon Vietnam,Thanh long,28.8,63958,1841990.4,Processing,Hoa Kỳ,DHL Express,12,
+ORD-00929,P00929,Co.opmart,Xoài,10.0,56259,562590.0,Processing,Việt Nam,Viettel Post,1,
+ORD-00931,P00931,Co.opmart,Thanh long,8.4,22276,187118.4,Completed,Việt Nam,Viettel Post,1,4.0
+ORD-00933,P00933,Korea Harvest,Thanh long,29.9,76061,2274223.9,Completed,Úc,VNPost,15,5.0
+ORD-00935,P00935,VinMart,Xoài,14.5,21461,311184.5,Completed,Việt Nam,VNPost,3,4.8
+ORD-00937,P00937,VinMart,Thanh long,30.0,23972,719160.0,Completed,Việt Nam,DHL Express,5,4.4
+ORD-00939,P00939,Central Retail,Cà phê,27.3,56534,1543378.2,Completed,Trung Quốc,DHL Express,10,4.3
+ORD-00941,P00941,EU EcoFruit,Cà phê,25.9,83835,2171326.5,Completed,Đức,VNPost,10,4.1
+ORD-00943,P00943,Tokyo Agro,Lúa,14.0,74235,1039290.0,Processing,Hàn Quốc,VNPost,10,
+ORD-00945,P00945,Global Food Importer Inc,Lúa,2.7,56602,152825.4,Processing,Nhật Bản,DHL Express,13,
+ORD-00947,P00947,Singapore AgriTrade,Lúa,13.0,46028,598364.0,Completed,Singapore,Logistics Nội Bộ,16,4.6
+ORD-00949,P00949,EU EcoFruit,Thanh long,18.5,54115,1001127.5,Completed,Đức,VNPost,13,4.9
+ORD-00951,P00951,Tokyo Agro,Thanh long,21.0,25675,539175.0,Completed,Hàn Quốc,VNPost,14,4.8
+ORD-00953,P00953,EU EcoFruit,Sầu riêng,19.7,30279,596496.3,Processing,Đức,Giao Hàng Nhanh,17,
+ORD-00955,P00955,Tokyo Agro,Thanh long,22.7,8389,190430.3,Completed,Hàn Quốc,DHL Express,10,4.1
+ORD-00957,P00957,Aeon Vietnam,Cà phê,19.4,55487,1076447.8,Completed,Hoa Kỳ,Viettel Post,19,5.0
+ORD-00959,P00959,Singapore AgriTrade,Cà phê,2.9,33676,97660.4,Completed,Singapore,VNPost,17,4.0
+ORD-00961,P00961,Co.opmart,Lúa,38.7,13128,508053.6,Completed,Việt Nam,VNPost,3,4.1
+ORD-00963,P00963,Korea Harvest,Xoài,27.5,84985,2337087.5,Completed,Úc,FedEx,20,4.2
+ORD-00965,P00965,Central Retail,Cà phê,27.2,67266,1829635.2,Processing,Trung Quốc,DHL Express,9,
+ORD-00967,P00967,EU EcoFruit,Thanh long,15.3,75716,1158454.8,Completed,Đức,DHL Express,13,4.9
+ORD-00969,P00969,Co.opmart,Cà phê,40.6,74938,3042482.8,Completed,Việt Nam,Giao Hàng Nhanh,2,4.6
+ORD-00971,P00971,EU EcoFruit,Xoài,14.9,62502,931279.8,Completed,Đức,DHL Express,17,4.2
+ORD-00973,P00973,VinMart,Lúa,10.6,8369,88711.4,Completed,Việt Nam,FedEx,4,4.3
+ORD-00975,P00975,Tokyo Agro,Thanh long,32.0,62183,1989856.0,Completed,Hàn Quốc,DHL Express,14,4.9
+ORD-00977,P00977,Aeon Vietnam,Cà phê,27.4,8480,232352.0,Completed,Hoa Kỳ,Viettel Post,20,4.2
+ORD-00979,P00979,Central Retail,Lúa,15.9,62538,994354.2,Completed,Trung Quốc,DHL Express,8,4.8
+ORD-00981,P00981,VinMart,Cà phê,12.5,35044,438050.0,Completed,Việt Nam,Giao Hàng Nhanh,1,4.2
+ORD-00983,P00983,Singapore AgriTrade,Cà phê,25.6,29812,763187.2,Processing,Singapore,DHL Express,12,
+ORD-00985,P00985,Korea Harvest,Thanh long,24.2,67079,1623311.8,Completed,Úc,FedEx,20,4.4
+ORD-00987,P00987,Korea Harvest,Lúa,4.8,19252,92409.6,Processing,Úc,FedEx,7,
+ORD-00989,P00989,EU EcoFruit,Cà phê,21.2,62771,1330745.2,Completed,Đức,VNPost,8,4.6
+ORD-00991,P00991,Korea Harvest,Lúa,9.6,27386,262905.6,Processing,Úc,VNPost,19,
+ORD-00993,P00993,Tokyo Agro,Xoài,24.8,56535,1402068.0,Processing,Hàn Quốc,Viettel Post,14,
+ORD-00995,P00995,Co.opmart,Thanh long,27.6,65096,1796649.6,Cancelled,Việt Nam,FedEx,5,
+ORD-00997,P00997,Singapore AgriTrade,Cà phê,33.3,45935,1529635.5,Processing,Singapore,DHL Express,14,
+ORD-00999,P00999,Bach Hoa Xanh,Thanh long,26.8,65313,1750388.4,Cancelled,Việt Nam,FedEx,2,

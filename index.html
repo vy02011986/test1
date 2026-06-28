@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart - Nền tảng Nông nghiệp Số</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+    
+    <!-- Animated Background Decoration Gradients -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Notification system -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ================= AUTH VIEW (Split Screen UI) ================= -->
+    <main id="auth-view" class="auth-container">
+        <div class="auth-wrapper">
+            <!-- Left Branding Panel -->
+            <div class="auth-brand-panel" style="background-image: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 30%, rgba(16, 185, 129, 0.8) 100%), url('smart_farm_banner.jpg'); background-size: cover; background-position: center;">
+                <div class="brand-panel-glow"></div>
+                <div class="brand-panel-content">
+                    <div class="brand-logo">
+                        <i class="fa-solid fa-leaf text-gradient"></i>
+                        <span class="logo-text text-gradient">AgriSmart</span>
+                    </div>
+                    <h2 class="brand-title">Kiến tạo tương lai nông nghiệp số Việt Nam</h2>
+                    <p class="brand-desc">Nền tảng tích hợp AI và Blockchain kết nối minh bạch Nông hộ – Doanh nghiệp – Người tiêu dùng.</p>
+                    
+                    <div class="brand-features">
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+                            <div class="feature-text">
+                                <h4>Trí tuệ nhân tạo (AI)</h4>
+                                <p>Cảnh báo dịch bệnh sớm và dự báo năng suất chuẩn xác.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fa-solid fa-cube"></i></div>
+                            <div class="feature-text">
+                                <h4>Dữ liệu Blockchain</h4>
+                                <p>Minh bạch hóa xuất xứ và số hóa nhật ký canh tác.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fa-solid fa-seedling"></i></div>
+                            <div class="feature-text">
+                                <h4>Nông nghiệp Xanh (ESG)</h4>
+                                <p>Giảm thiểu phát thải Carbon và tối ưu lượng nước tưới tiêu.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="brand-footer-text">
+                        <span><i class="fa-solid fa-shield-halved text-gold"></i> Chuẩn hóa công nghệ ESG & IoT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Form Panel -->
+            <div class="auth-form-panel">
+                <div class="auth-card">
+                    <div class="auth-card-header">
+                        <h3>Bắt đầu trải nghiệm</h3>
+                        <p class="auth-subtitle">Nhập thông tin để truy cập hệ thống phân tích</p>
+                    </div>
+
+                    <!-- Tab selector -->
+                    <div class="auth-tabs">
+                        <button class="auth-tab-btn active" onclick="switchAuthTab('login')">Đăng nhập</button>
+                        <button class="auth-tab-btn" onclick="switchAuthTab('register')">Đăng ký</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="login-username">Tên đăng nhập</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-user input-icon"></i>
+                                <input type="text" id="login-username" placeholder="admin hoặc tên của bạn..." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Mật khẩu</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-lock input-icon"></i>
+                                <input type="password" id="login-password" placeholder="Nhập mật khẩu..." required>
+                            </div>
+                        </div>
+                        <div class="forgot-pwd-hint">
+                            <i class="fa-solid fa-circle-info text-gold"></i> Tài khoản lái thử: <strong>admin</strong> / mật khẩu: <strong>admin123</strong>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span>Đăng nhập hệ thống</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label for="reg-username">Tên đăng nhập</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-user input-icon"></i>
+                                <input type="text" id="reg-username" placeholder="Tạo tài khoản..." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-email">Email liên hệ</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-envelope input-icon"></i>
+                                <input type="email" id="reg-email" placeholder="example@gmail.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Mật khẩu</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-lock input-icon"></i>
+                                <input type="password" id="reg-password" placeholder="Tối thiểu 6 ký tự..." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-role">Vai trò đăng ký</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-users-gear input-icon"></i>
+                                <select id="reg-role" required>
+                                    <option value="farmer">Nông hộ (Farmer)</option>
+                                    <option value="enterprise">Doanh nghiệp / Thu mua</option>
+                                    <option value="admin">Quản trị viên (Admin)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">
+                            <span>Tạo tài khoản mới</span>
+                            <i class="fa-solid fa-user-plus"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= DASHBOARD VIEW ================= -->
+    <div id="dashboard-view" class="dashboard-container hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-leaf text-gradient"></i>
+                <span class="logo-text text-gradient">AgriSmart</span>
+            </div>
+            
+            <div class="user-profile-widget">
+                <div class="avatar">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                </div>
+                <div class="user-info">
+                    <h4 id="user-display-name">Người dùng</h4>
+                    <span id="user-display-role" class="badge">Nông hộ</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-tab="tab-finance" onclick="switchDashboardTab('tab-finance')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Tài chính & Kinh doanh</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-yield" onclick="switchDashboardTab('tab-yield')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-wheat-awn"></i>
+                        <span>Nông sản & Sản lượng</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-ai-weather" onclick="switchDashboardTab('tab-ai-weather')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-cloud-sun-rain"></i>
+                        <span>Công nghệ AI & Thời tiết</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-supply" onclick="switchDashboardTab('tab-supply')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>Chuỗi cung ứng & Xuất khẩu</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-esg" onclick="switchDashboardTab('tab-esg')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-seedling"></i>
+                        <span>ESG & Bền vững</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-outline btn-block btn-logout" onclick="handleLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header bar for Desktop -->
+            <header class="content-header-desktop">
+                <div>
+                    <h1 id="current-tab-title">Tài chính & Kinh doanh</h1>
+                    <p class="text-muted">Hệ thống phân tích tích hợp dữ liệu AgriSmart</p>
+                </div>
+                <!-- Data status indicator -->
+                <div id="data-status-badge" class="data-status-indicator fetched">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span id="data-status-text">Kết nối dữ liệu thực (.csv)</span>
+                </div>
+            </header>
+
+            <!-- Header bar (Modified in TA HomeX PWA Style) -->
+            <header class="content-header-pwa">
+                <div class="header-pwa-user">
+                    <div class="avatar-pwa">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
+                    <div class="greeting-text">
+                        <p class="greeting-subtitle">Xin chào,</p>
+                        <h2 id="pwa-user-display" class="greeting-title">Alex Nguyen</h2>
+                    </div>
+                </div>
+                
+                <div class="header-pwa-actions">
+                    <!-- Notification Bell -->
+                    <button class="pwa-action-btn relative">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="pwa-badge-dot"></span>
+                    </button>
+                    <!-- Log out icon -->
+                    <button class="pwa-action-btn btn-pwa-logout" onclick="handleLogout()" title="Đăng xuất">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Featured Experience Hero Banner (TA HomeX Style) -->
+            <section class="pwa-featured-card" style="background-image: var(--card-overlay-vertical), url('smart_farm_banner.jpg');">
+                <span class="featured-badge">Công nghệ xanh</span>
+                <h2 class="featured-title">Canh tác Thông minh, Tiết kiệm Bền vững</h2>
+                <p class="featured-desc">Hệ thống AI cảnh báo nguy cơ dịch bệnh & kiểm soát độ ẩm đất thông qua các trạm IoT tích cực.</p>
+                <div class="featured-status-bar">
+                    <div class="status-indicator-pwa">
+                        <i class="fa-solid fa-circle-check text-success"></i>
+                        <span id="pwa-data-status">Dữ liệu Blockchain được xác thực</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Horizontal Category Navigation (TA HomeX Style) -->
+            <section class="pwa-category-nav">
+                <div class="pwa-category-list">
+                    <button class="category-btn active" data-tab-btn="tab-finance" onclick="switchDashboardTab('tab-finance')">
+                        <div class="category-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+                        <span>Kinh doanh</span>
+                    </button>
+                    <button class="category-btn" data-tab-btn="tab-yield" onclick="switchDashboardTab('tab-yield')">
+                        <div class="category-icon-wrapper"><i class="fa-solid fa-wheat-awn"></i></div>
+                        <span>Nông sản</span>
+                    </button>
+                    <button class="category-btn" data-tab-btn="tab-ai-weather" onclick="switchDashboardTab('tab-ai-weather')">
+                        <div class="category-icon-wrapper"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+                        <span>Thời tiết AI</span>
+                    </button>
+                    <button class="category-btn" data-tab-btn="tab-supply" onclick="switchDashboardTab('tab-supply')">
+                        <div class="category-icon-wrapper"><i class="fa-solid fa-truck-fast"></i></div>
+                        <span>Xuất khẩu</span>
+                    </button>
+                    <button class="category-btn" data-tab-btn="tab-esg" onclick="switchDashboardTab('tab-esg')">
+                        <div class="category-icon-wrapper"><i class="fa-solid fa-seedling"></i></div>
+                        <span>ESG</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- KPI Cards Row -->
+            <section class="kpi-grid">
+                <!-- KPI 1: Doanh thu & Lợi nhuận -->
+                <div class="kpi-card glow-revenue">
+                    <div class="kpi-card-inner">
+                        <div class="kpi-icon icon-revenue"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Doanh thu / Lợi nhuận</span>
+                            <h3 id="kpi-revenue" class="kpi-value">0 ₫</h3>
+                            <span id="kpi-profit" class="kpi-subvalue">Lợi nhuận: 0 ₫</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- KPI 2: Quy mô hệ thống -->
+                <div class="kpi-card glow-farmers">
+                    <div class="kpi-card-inner">
+                        <div class="kpi-icon icon-farmers"><i class="fa-solid fa-users"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Quy mô Hệ Thống</span>
+                            <h3 id="kpi-farmers" class="kpi-value">0 nông hộ</h3>
+                            <span class="kpi-subvalue">Hệ thống hoạt động ổn định</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- KPI 3: Chỉ số Công nghệ & ESG -->
+                <div class="kpi-card glow-tech">
+                    <div class="kpi-card-inner">
+                        <div class="kpi-icon icon-tech"><i class="fa-solid fa-microchip"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Chỉ số Công nghệ / ESG</span>
+                            <h3 id="kpi-tech" class="kpi-value">AI 93% | ESG 83</h3>
+                            <span class="kpi-subvalue"><i class="fa-solid fa-shield-halved text-gold"></i> Blockchain Verified</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Content Screens -->
+            <section class="tab-content-container">
+
+                <!-- 1. TAB FINANCIAL -->
+                <div id="tab-finance" class="tab-pane active">
+                    <div class="dashboard-grid">
+                        <div class="card col-span-2">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-chart-area"></i> Tiến độ doanh thu & Chi phí theo thời gian (2025)</h3>
+                                <p class="text-muted">Biểu đồ biểu diễn dòng tiền tổng hợp từ hoạt động sản xuất</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-finance-area"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-map-location-dot"></i> Lợi nhuận nông nghiệp theo Tỉnh</h3>
+                                <p class="text-muted">So sánh lợi nhuận tích lũy giữa các địa phương</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-finance-bar"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Finance Data Table -->
+                        <div class="card col-span-3 table-card" style="margin-top: 28px;">
+                            <div class="card-header-table">
+                                <div>
+                                    <h3><i class="fa-solid fa-file-invoice-dollar text-success"></i> Nhật ký Thu hoạch & Dòng tiền Chi tiết</h3>
+                                    <p class="text-muted">Danh sách các lô nông sản được ghi nhận doanh thu và chi phí thực tế</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                                <table class="data-table" id="table-finance-log">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã lô</th>
+                                            <th>Mã trang trại</th>
+                                            <th>Ngày ghi nhận</th>
+                                            <th>Cây trồng</th>
+                                            <th>Sản lượng (Tấn)</th>
+                                            <th>Doanh thu (VND)</th>
+                                            <th>Chi phí (VND)</th>
+                                            <th>Lợi nhuận (VND)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-finance-log-body">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TAB YIELD -->
+                <div id="tab-yield" class="tab-pane">
+                    <div class="dashboard-grid">
+                        <!-- Crop Showcase with durian image -->
+                        <div class="card col-span-2 card-premium-image" style="background-image: var(--card-overlay), url('crop_durian.jpg');">
+                            <div class="card-image-content">
+                                <span class="badge admin">Sản phẩm Tiêu biểu</span>
+                                <h3 class="crop-showcase-title">Sầu riêng Ri6 - Đắk Lắk</h3>
+                                <p class="crop-showcase-desc">Sản phẩm nông sản xuất khẩu chủ lực có tỷ lệ tăng trưởng cao nhất năm 2025, được bảo chứng nguồn gốc thông qua Blockchain và giám sát chất lượng nghiêm ngặt.</p>
+                                <div class="crop-stats-grid">
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Diện tích</span>
+                                        <span class="crop-stat-val">12.5 Ha</span>
+                                    </div>
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Năng suất TB</span>
+                                        <span class="crop-stat-val text-success">15 Tấn/Ha</span>
+                                    </div>
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Chứng nhận</span>
+                                        <span class="crop-stat-val text-gold">Global GAP</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-chart-pie"></i> Cơ cấu sản phẩm nông sản</h3>
+                                <p class="text-muted">Tỷ trọng sản lượng thu hoạch giữa các loại cây trồng</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-yield-pie"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card col-span-3">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-gauge-high"></i> Năng suất bình quan trên mỗi Hecta (Tấn/Ha)</h3>
+                                <p class="text-muted">Hiệu suất canh tác thực tế theo từng loại cây trồng chủ lực</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-yield-bar"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Yield Farmers Table -->
+                        <div class="card col-span-3 table-card" style="margin-top: 28px;">
+                            <div class="card-header-table">
+                                <div>
+                                    <h3><i class="fa-solid fa-wheat-awn text-success"></i> Hiện trạng canh tác của các Nông hộ</h3>
+                                    <p class="text-muted">Chi tiết diện tích đất và trang thiết bị công nghệ áp dụng tại trang trại thành viên</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                                <table class="data-table" id="table-yield-farmers">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã nông hộ</th>
+                                            <th>Tên nông hộ</th>
+                                            <th>Tỉnh thành</th>
+                                            <th>Cây trồng chính</th>
+                                            <th>Diện tích (Ha)</th>
+                                            <th>Doanh thu TB (Triệu VND)</th>
+                                            <th>Thiết bị IoT</th>
+                                            <th>Blockchain</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-yield-farmers-body">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. TAB AI & WEATHER -->
+                <div id="tab-ai-weather" class="tab-pane">
+                    <div class="dashboard-grid">
+                        <div class="card col-span-2">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-temperature-empty"></i> Tương quan Nhiệt độ - Độ ẩm đất từ thiết bị IoT</h3>
+                                <p class="text-muted">Theo dõi chỉ số môi trường hỗ trợ ra quyết định tưới tiêu</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-weather-line"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- AI Center with weather station image -->
+                        <div class="card card-premium-image" style="background-image: var(--card-overlay-vertical), url('ai_weather_station.jpg');">
+                            <div class="card-image-content">
+                                <span class="badge admin" style="background: rgba(6, 182, 212, 0.08); color: var(--info); border-color: rgba(6, 182, 212, 0.18);"><i class="fa-solid fa-microchip"></i> Trạm IoT Vùng</span>
+                                <h3 class="crop-showcase-title" style="font-size: 1.25rem;">Trạm Khí tượng IoT #04</h3>
+                                <p class="crop-showcase-desc" style="font-size: 0.78rem;">Phát sóng dữ liệu môi trường liên tục 5 phút/lần. Hệ thống AI đang tự động điều tiết van tưới tự động dựa trên độ ẩm đất đo được.</p>
+                                <div class="weather-mini-telemetry">
+                                    <div class="telemetry-item">
+                                        <i class="fa-solid fa-wind text-info"></i>
+                                        <span>Gió: 12 km/h</span>
+                                    </div>
+                                    <div class="telemetry-item">
+                                        <i class="fa-solid fa-droplet text-success"></i>
+                                        <span>Đất: 68%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-bug"></i> Nguy cơ sâu bệnh & Thời tiết</h3>
+                                <p class="text-muted">Đánh giá rủi ro thiên tai dịch bệnh từ mô hình AI</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-ai-risk-bar"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card col-span-2">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-compass-drafting"></i> Biên độ sai số dự báo của AI qua các mốc thời gian (%)</h3>
+                                <p class="text-muted">Độ lệch sai số dự đoán sản lượng so với thực tế</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-ai-error-line"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Weather Alert Table -->
+                        <div class="card col-span-3 table-card" style="margin-top: 28px;">
+                            <div class="card-header-table">
+                                <div>
+                                    <h3><i class="fa-solid fa-cloud-sun-rain text-success"></i> Nhật ký Cảm biến IoT & Cảnh báo Sâu bệnh</h3>
+                                    <p class="text-muted">Dữ liệu quan trắc khí tượng thời gian thực kết hợp AI phân tích nguy cơ dịch bệnh</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                                <table class="data-table" id="table-weather-log">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã cảnh báo</th>
+                                            <th>Mã trang trại</th>
+                                            <th>Ngày ghi nhận</th>
+                                            <th>Nhiệt độ (°C)</th>
+                                            <th>Độ ẩm (%)</th>
+                                            <th>Lượng mưa (mm)</th>
+                                            <th>Nguy cơ dịch bệnh</th>
+                                            <th>Cảnh báo thời tiết</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-weather-log-body">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. TAB SUPPLY CHAIN -->
+                <div id="tab-supply" class="tab-pane">
+                    <div class="dashboard-grid">
+                        <div class="card col-span-2">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-globe"></i> Thị phần Sản lượng Xuất khẩu Quốc tế (Tấn)</h3>
+                                <p class="text-muted">Phân tích sản lượng phân phối sang các thị trường quốc tế</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-export-bar"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-truck-ramp-box"></i> Hiệu năng đơn vị Logistics (Blockchain Verified)</h3>
+                                <p class="text-muted">So sánh sản lượng được vận chuyển bởi các nhà vận tải</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-logistics-pie"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Logistics Banner Card -->
+                        <div class="card col-span-2 card-premium-image" style="background-image: var(--card-overlay), url('logistics_export.jpg');">
+                            <div class="card-image-content">
+                                <span class="badge admin" style="background: rgba(16, 185, 129, 0.08); color: var(--success); border-color: rgba(16, 185, 129, 0.18);"><i class="fa-solid fa-anchor"></i> Chuỗi Cung Ứng Toàn Cầu</span>
+                                <h3 class="crop-showcase-title">Logistics Thông Minh & Xuất Khẩu Xanh</h3>
+                                <p class="crop-showcase-desc">Hệ thống AgriSmart tự động tích hợp thông tin vận chuyển thời gian thực từ các đối tác lớn (DHL, FedEx, Viettel Post...) lên Blockchain, theo dõi nhiệt độ thùng hàng container lạnh xuất khẩu đi Hoa Kỳ, Nhật Bản, Đức, Úc.</p>
+                                <div class="crop-stats-grid">
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Thời gian thông quan</span>
+                                        <span class="crop-stat-val text-success">-18% Giờ</span>
+                                    </div>
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Tỷ lệ hao hụt hàng</span>
+                                        <span class="crop-stat-val text-success">&lt; 0.5%</span>
+                                    </div>
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Xác thực Blockchain</span>
+                                        <span class="crop-stat-val text-gold">100% Lô Hàng</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blockchain Verified Tx Card -->
+                        <div class="card" id="blockchain-tx-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-cube text-gold"></i> Nhật ký Blockchain</h3>
+                                <p class="text-muted">Các lô hàng vừa được xác thực nguồn gốc</p>
+                            </div>
+                            <div class="blockchain-tx-list" id="blockchain-tx-list" style="overflow-y: auto; max-height: 240px; display: flex; flex-direction: column; gap: 12px; font-size: 0.8rem;">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                        
+                        <!-- Marketplace Orders Table -->
+                        <div class="card col-span-3 table-card" style="margin-top: 28px;">
+                            <div class="card-header-table">
+                                <div>
+                                    <h3><i class="fa-solid fa-cart-shopping text-success"></i> Quản lý Đơn hàng Marketplace & Xuất khẩu</h3>
+                                    <p class="text-muted">Danh sách đơn đặt hàng nông sản quốc tế, trạng thái vận đơn và đánh giá từ khách hàng</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                                <table class="data-table" id="table-marketplace-orders">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã đơn hàng</th>
+                                            <th>Mã lô sản xuất</th>
+                                            <th>Doanh nghiệp mua</th>
+                                            <th>Nông sản</th>
+                                            <th>Khối lượng (Tấn)</th>
+                                            <th>Giá trị (VND)</th>
+                                            <th>Quốc gia đến</th>
+                                            <th>Đơn vị Logistics</th>
+                                            <th>Trạng thái</th>
+                                            <th>Đánh giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-marketplace-orders-body">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. TAB ESG -->
+                <div id="tab-esg" class="tab-pane">
+                    <div class="dashboard-grid">
+                        <div class="card col-span-2">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-leaf"></i> Khối lượng Giảm thiểu Carbon & Tiết kiệm Nước tưới</h3>
+                                <p class="text-muted">Hiệu quả bảo vệ môi trường đạt được nhờ công nghệ tưới thông minh</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-esg-double-bar"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-award"></i> Điểm số ESG nông thôn theo Tỉnh</h3>
+                                <p class="text-muted">Đánh giá bộ tiêu chuẩn bền vững tại các vùng canh tác</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-esg-radar"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- ESG Banner Card -->
+                        <div class="card col-span-3 card-premium-image" style="background-image: var(--card-overlay), url('esg_eco_farming.jpg');">
+                            <div class="card-image-content">
+                                <span class="badge admin" style="background: rgba(245, 158, 11, 0.08); color: var(--gold); border-color: rgba(245, 158, 11, 0.18);"><i class="fa-solid fa-leaf"></i> Cam Kết Bền Vững</span>
+                                <h3 class="crop-showcase-title">Nông Nghiệp Số Xanh & Giảm Phát Thải Carbon</h3>
+                                <p class="crop-showcase-desc">Sử dụng năng lượng mặt trời vận hành hệ thống tưới nhỏ giọt thông minh kết hợp IoT. Tiết kiệm hơn 220.000 lít nước tưới mỗi Hecta và cắt giảm phát thải CO2 đạt chuẩn Net-Zero của quốc tế.</p>
+                                <div class="crop-stats-grid">
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Lượng nước tưới tiết kiệm</span>
+                                        <span class="crop-stat-val text-success">22% Tiết Kiệm</span>
+                                    </div>
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Cắt giảm Carbon CO2</span>
+                                        <span class="crop-stat-val text-success">2.3 Tấn/Ha/Năm</span>
+                                    </div>
+                                    <div class="crop-stat-box">
+                                        <span class="crop-stat-label">Chứng nhận ESG</span>
+                                        <span class="crop-stat-val text-gold">Hạng A (Green Farm)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ESG Data Table -->
+                        <div class="card col-span-3 table-card" style="margin-top: 28px;">
+                            <div class="card-header-table">
+                                <div>
+                                    <h3><i class="fa-solid fa-leaf text-success"></i> Chỉ số Bền vững ESG chi tiết từng nông hộ</h3>
+                                    <p class="text-muted">Chỉ số đo đạc giảm thải CO2, tiết kiệm nước tưới và đánh giá tuân thủ môi trường bền vững của trang trại</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                                <table class="data-table" id="table-esg-log">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã ESG</th>
+                                            <th>Mã trang trại</th>
+                                            <th>Mã lô sản xuất</th>
+                                            <th>CO2 Giảm (kg)</th>
+                                            <th>Nước tiết kiệm (m³)</th>
+                                            <th>Điểm ESG</th>
+                                            <th>Chỉ số Bền vững</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-esg-log-body">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- Mobile Fixed Bottom Navigation Bar (TA HomeX Style) -->
+    <nav class="pwa-bottom-nav">
+        <a class="pwa-nav-item active" data-nav-btn="tab-finance" onclick="switchDashboardTab('tab-finance')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+            <span class="nav-label">Tài chính</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-yield" onclick="switchDashboardTab('tab-yield')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-wheat-awn"></i></div>
+            <span class="nav-label">Sản lượng</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-ai-weather" onclick="switchDashboardTab('tab-ai-weather')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+            <span class="nav-label">Thời tiết</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-supply" onclick="switchDashboardTab('tab-supply')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-truck-fast"></i></div>
+            <span class="nav-label">Logistics</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-esg" onclick="switchDashboardTab('tab-esg')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-seedling"></i></div>
+            <span class="nav-label">ESG</span>
+        </a>
+    </nav>
+
+    <!-- Chart.js and PapaParse (CSV parser) Local Libraries -->
+    <script src="/chart.js"></script>
+    <script src="/papaparse.js"></script>
+    <!-- Custom logic app.js -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
