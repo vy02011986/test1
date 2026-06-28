@@ -759,7 +759,7 @@ select option {
     transform: translateY(-2px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.03);
 }
-.card > * {
+.card > *:not(.card-bg) {
     position: relative;
     z-index: 2;
 }
