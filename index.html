@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet.js for Interactive Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <!-- Custom Style -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -374,6 +377,16 @@
                             </div>
                         </div>
                         
+                        <!-- Regional Map showing data distribution -->
+                        <div class="card col-span-3" style="margin-top: 28px; padding: 24px;">
+                            <div class="card-header" style="margin-bottom:16px;">
+                                <h3><i class="fa-solid fa-map-location-dot"></i> Bản đồ Phân bố Vùng canh tác & Cảm biến IoT</h3>
+                                <p class="text-muted">Bản đồ vệ tinh trực quan hóa các vùng trồng trọt liên kết dữ liệu thực tế (Nhấp vào các trạm cảm biến chấm đỏ để xem thông tin chi tiết)</p>
+                            </div>
+                            <!-- Map Container Element -->
+                            <div id="map-container" style="height: 380px; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); z-index: 5; position: relative;"></div>
+                        </div>
+
                         <!-- Finance Data Table -->
                         <div class="card col-span-3 table-card" style="margin-top: 28px;">
                             <img src="logistics_export.jpg" id="bg-card-finance-log" class="card-bg" alt="Nhật ký tài chính">

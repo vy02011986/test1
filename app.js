@@ -1027,6 +1027,59 @@ class AgriSmartController {
         this.view.showToast('Đã đăng xuất khỏi hệ thống.');
     }
 
+    initRegionalMap() {
+        const container = document.getElementById('map-container');
+        if (!container || window._agriMapInstance) return;
+
+        // Center map around Southern/Central Vietnam
+        window._agriMapInstance = L.map('map-container').setView([11.5, 106.8], 7);
+
+        // Dark theme tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(window._agriMapInstance);
+
+        // List of provinces with coordinates & sample details matching our CSV data
+        const provincesData = [
+            { name: "Đắk Lắk", coords: [12.6825, 108.0382], crops: "Cà phê, Sầu riêng", acreage: "12,500 Ha", sensors: 42 },
+            { name: "Tiền Giang", coords: [10.4215, 106.2081], crops: "Thanh long, Xoài", acreage: "8,200 Ha", sensors: 28 },
+            { name: "Đồng Tháp", coords: [10.4619, 105.6980], crops: "Lúa, Xoài", acreage: "15,800 Ha", sensors: 35 },
+            { name: "An Giang", coords: [10.5186, 105.1251], crops: "Lúa thơm xuất khẩu", acreage: "22,000 Ha", sensors: 51 },
+            { name: "Lâm Đồng", coords: [11.5753, 107.8085], crops: "Rau hoa ôn đới, Cà phê", acreage: "9,500 Ha", sensors: 38 }
+        ];
+
+        provincesData.forEach(prov => {
+            // Main glowing red marker representing agricultural data presence
+            const circle = L.circleMarker(prov.coords, {
+                color: '#ef4444',
+                fillColor: '#ef4444',
+                fillOpacity: 0.8,
+                radius: 8 + (prov.sensors / 10),
+                weight: 2
+            }).addTo(window._agriMapInstance);
+
+            const popupContent = `
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; padding: 4px; line-height: 1.45;">
+                    <h4 style="margin: 0 0 6px 0; color: #16a34a; font-weight:800; font-size: 0.95rem;">📍 Tỉnh ${prov.name}</h4>
+                    <p style="margin: 0 0 4px 0; font-size: 0.78rem;"><strong>Cây trồng chủ lực:</strong> ${prov.crops}</p>
+                    <p style="margin: 0 0 4px 0; font-size: 0.78rem;"><strong>Diện tích liên kết:</strong> ${prov.acreage}</p>
+                    <p style="margin: 0; font-size: 0.78rem;"><strong>Trạm cảm biến IoT:</strong> <span style="color:#ef4444; font-weight:700;">${prov.sensors} trạm (chấm đỏ)</span></p>
+                </div>
+            `;
+            circle.bindPopup(popupContent);
+
+            // Pulsing visual ring
+            L.circleMarker(prov.coords, {
+                color: 'transparent',
+                fillColor: '#ef4444',
+                fillOpacity: 0.12,
+                radius: 18 + (prov.sensors / 8)
+            }).addTo(window._agriMapInstance);
+        });
+    }
+
     // Trình điều hướng Tabs trên Dashboard
     switchTab(tabId) {
         this.currentTab = tabId;
@@ -1119,6 +1172,9 @@ class AgriSmartController {
 
             this.view.renderFinanceCharts(monthlyRevenue, monthlyCost, provinceProfits);
             this.view.renderFinanceTable(filteredProduction);
+            
+            // Khởi tạo bản đồ vùng trồng với các chấm đỏ trạm cảm biến IoT
+            setTimeout(() => this.initRegionalMap(), 250);
         } 
         
         else if (tabId === 'tab-yield') {
