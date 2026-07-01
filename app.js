@@ -2618,5 +2618,28 @@ const _origInit = appController.init.bind(appController);
 appController.init = async function() {
     await _origInit();
     window._agriSmartModel = appController.model;
+    
+    // Khởi tạo vòng lặp tự động xoay vòng ảnh nền (slideshow) cho trang chính
+    initBackgroundSlideshow();
 };
+
+function initBackgroundSlideshow() {
+    let currentBgIndex = 1;
+    setInterval(() => {
+        const bg1 = document.querySelector('.dash-bg-image.bg-1');
+        const bg2 = document.querySelector('.dash-bg-image.bg-2');
+        const bg3 = document.querySelector('.dash-bg-image.bg-3');
+        if (!bg1 || !bg2 || !bg3) return;
+
+        bg1.classList.remove('active');
+        bg2.classList.remove('active');
+        bg3.classList.remove('active');
+
+        currentBgIndex = (currentBgIndex % 3) + 1;
+        const nextBg = document.querySelector(`.dash-bg-image.bg-${currentBgIndex}`);
+        if (nextBg) {
+            nextBg.classList.add('active');
+        }
+    }, 7000); // Tự động đổi nền mỗi 7 giây qua hiệu ứng mờ nhạt dần (cross-fade)
+}
 

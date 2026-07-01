@@ -1822,13 +1822,26 @@ select option {
 .dash-bg-image {
     position: fixed;
     inset: 0;
-    background-image: url('1.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     filter: blur(6px) brightness(0.4) saturate(0.85);
     transform: scale(1.06);
     z-index: 1;
+    opacity: 0;
+    transition: opacity 1.8s ease-in-out;
+}
+.dash-bg-image.active {
+    opacity: 1;
+}
+.dash-bg-image.bg-1 {
+    background-image: url('1.jpg');
+}
+.dash-bg-image.bg-2 {
+    background-image: url('2.jpg');
+}
+.dash-bg-image.bg-3 {
+    background-image: url('3.jpg');
 }
 .dash-bg-overlay {
     position: fixed;
