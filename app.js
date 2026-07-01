@@ -2782,18 +2782,14 @@ const ManagementModule = {
         });
     },
 
-    handleAddCTV() {
-        const name = prompt("Nhập họ tên CTV mới:");
-        if (!name) return;
-        const phone = prompt("Nhập số điện thoại CTV:");
-        const province = prompt("Nhập khu vực phụ trách (ví dụ: Đồng Tháp):", "Đồng Tháp");
+    createCTV(name, phone, province, links) {
         const id = "CTV00" + (this.ctvData.length + 1);
         this.ctvData.push({
             id: id,
             name: name,
             phone: phone || "09xxxxxxx",
-            province: province || "Đồng Tháp",
-            links: 0,
+            province: province || "Lâm Đồng",
+            links: parseInt(links) || 0,
             status: "Hoạt động"
         });
         this.renderCTV();
@@ -3043,7 +3039,18 @@ const ManagementModule = {
     }
 };
 window.ManagementModule = ManagementModule;
-window.handleAddCTV = () => ManagementModule.handleAddCTV();
+window.handleCreateCTV = (e) => {
+    e.preventDefault();
+    const name = document.getElementById("ctv-name-input").value;
+    const phone = document.getElementById("ctv-phone-input").value;
+    const province = document.getElementById("ctv-province-select").value;
+    const links = document.getElementById("ctv-links-input").value;
+    
+    ManagementModule.createCTV(name, phone, province, links);
+    
+    document.getElementById("form-create-ctv").reset();
+    alert("Đăng ký CTV mới thành công!");
+};
 window.handleCreateTask = (e) => {
     e.preventDefault();
     const title = document.getElementById("task-title-input").value;

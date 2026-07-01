@@ -529,30 +529,59 @@
 
                 <!-- ================= TAB: COLLABORATORS (Quản lý CTV) ================= -->
                 <div id="tab-ctv" class="tab-pane">
-                    <div class="card" style="padding: 24px; margin-bottom: 24px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                            <div>
+                    <div class="dashboard-grid" style="grid-template-columns: 0.8fr 1.2fr; gap: 24px; margin-bottom: 24px;">
+                        <!-- Left: Add CTV Form -->
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-user-plus"></i> Đăng ký Cộng tác viên</h3>
+                            <form id="form-create-ctv" onsubmit="handleCreateCTV(event)" style="display:flex; flex-direction:column; gap:14px;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>HỌ VÀ TÊN CTV</label>
+                                    <input type="text" id="ctv-name-input" placeholder="Ví dụ: Trần Văn Hải..." required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background: rgba(255,255,255,0.6);">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>SỐ ĐIỆN THOẠI</label>
+                                    <input type="tel" id="ctv-phone-input" placeholder="Ví dụ: 0912345678..." required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background: rgba(255,255,255,0.6);">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>TỈNH THÀNH PHỤ TRÁCH</label>
+                                    <select id="ctv-province-select" required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background:white;">
+                                        <option value="Lâm Đồng">Lâm Đồng</option>
+                                        <option value="Đắk Lắk">Đắk Lắk</option>
+                                        <option value="Tiền Giang">Tiền Giang</option>
+                                        <option value="Đồng Tháp">Đồng Tháp</option>
+                                        <option value="An Giang">An Giang</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>SỐ HỘ LIÊN KẾT (BAN ĐẦU)</label>
+                                    <input type="number" id="ctv-links-input" value="0" min="0" required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background: rgba(255,255,255,0.6);">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="margin-top:8px; padding:12px 0;">Đăng Ký CTV</button>
+                            </form>
+                        </div>
+                        <!-- Right: CTV list table -->
+                        <div class="card" style="padding: 24px;">
+                            <div style="margin-bottom:16px;">
                                 <h3 style="font-size:1.1rem; font-weight:800;"><i class="fa-solid fa-people-group"></i> Danh sách Cộng tác viên (CTV)</h3>
                                 <p class="text-muted" style="font-size:0.78rem;">Quản lý CTV liên kết thu mua & chuyển giao kỹ thuật tại các địa phương</p>
                             </div>
-                            <button class="btn btn-primary" style="font-size:0.8rem; padding:8px 16px;" onclick="handleAddCTV()">+ Thêm CTV mới</button>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Mã CTV</th>
-                                        <th>Họ & Tên</th>
-                                        <th>Số điện thoại</th>
-                                        <th>Khu vực phụ trách</th>
-                                        <th>Liên kết (Hộ)</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ctv-list-tbody">
-                                    <!-- Injected via JS -->
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã CTV</th>
+                                            <th>Họ & Tên</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Khu vực</th>
+                                            <th>Liên kết (Hộ)</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ctv-list-tbody">
+                                        <!-- Injected via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
