@@ -879,6 +879,8 @@ select option {
 .toast.toast-danger i { color: var(--danger); }
 .toast.toast-warning { border-left-color: var(--warning); }
 .toast.toast-warning i { color: var(--warning); }
+.toast.toast-info { border-left-color: var(--info); }
+.toast.toast-info i { color: var(--info); }
 
 /* ==========================================================================
    10. RESPONSIVE MEDIA QUERIES (PWA OVERHAUL FOR MOBILE)

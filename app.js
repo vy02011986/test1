@@ -6,6 +6,46 @@
    - CONTROLLER: Binds Model & View, handles user interactions and events
    ========================================================================== */
 
+// Ghi đè hàm alert mặc định bằng hệ thống Toast Notification cao cấp để tránh hiển thị "localhost says"
+window.alert = (message) => {
+    let type = 'success';
+    const msgLower = message.toLowerCase();
+    if (msgLower.includes('không đủ') || msgLower.includes('lỗi') || msgLower.includes('thất bại') || msgLower.includes('chưa') || msgLower.includes('sai')) {
+        type = 'danger';
+    } else if (msgLower.includes('từ chối') || msgLower.includes('hủy') || msgLower.includes('tạm ngưng')) {
+        type = 'warning';
+    } else if (msgLower.includes('chạy bộ') || msgLower.includes('loại bỏ') || msgLower.includes('xuất') || msgLower.includes('tải') || msgLower.includes('chuyển khoản')) {
+        type = 'info';
+    }
+    
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    let icon = 'fa-circle-check';
+    if (type === 'danger') icon = 'fa-circle-exclamation';
+    if (type === 'warning') icon = 'fa-triangle-exclamation';
+    if (type === 'info') icon = 'fa-circle-info';
+
+    toast.innerHTML = `
+        <i class="fa-solid ${icon}"></i>
+        <span>${message}</span>
+    `;
+    container.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('active'), 50);
+    setTimeout(() => {
+        toast.classList.remove('active');
+        setTimeout(() => toast.remove(), 400);
+    }, 4500);
+};
+
 // ==========================================
 // 1. MODEL (Dữ liệu & Nghiệp vụ hệ thống)
 // ==========================================
