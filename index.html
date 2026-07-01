@@ -178,9 +178,60 @@
                 </div>
             </div>
 
-            <nav class="sidebar-nav">
+            <nav class="sidebar-nav" style="max-height: calc(100vh - 220px); overflow-y: auto; padding-right: 4px;">
                 <ul>
-                    <li class="nav-item active" data-tab="tab-finance" onclick="switchDashboardTab('tab-finance')">
+                    <li class="nav-section-title" style="padding: 10px 16px 6px; font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;">QUẢN LÝ</li>
+                    <li class="nav-item active" data-tab="tab-overview" onclick="switchDashboardTab('tab-overview')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Tổng quan</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-map" onclick="switchDashboardTab('tab-map')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>Bản đồ vùng trồng</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-attendance" onclick="switchDashboardTab('tab-attendance')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-clock"></i>
+                        <span>Chấm công</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-ctv" onclick="switchDashboardTab('tab-ctv')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-people-group"></i>
+                        <span>Quản lý CTV</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-shifts" onclick="switchDashboardTab('tab-shifts')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>Ca & Sự kiện</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-tasks" onclick="switchDashboardTab('tab-tasks')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Giao việc</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-attendance-approval" onclick="switchDashboardTab('tab-attendance-approval')" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <div class="nav-item-indicator"></div>
+                            <i class="fa-solid fa-user-check"></i>
+                            <span>Duyệt công</span>
+                        </div>
+                        <span class="nav-badge" style="background:#ef4444; color:white; font-size:0.68rem; font-weight:800; padding:2px 7px; border-radius:10px; margin-right: 12px; display:inline-block; line-height:1.2;">3</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-payroll" onclick="switchDashboardTab('tab-payroll')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>Bảng lương</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-reports" onclick="switchDashboardTab('tab-reports')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-chart-simple"></i>
+                        <span>Báo cáo</span>
+                    </li>
+
+                    <li class="nav-section-title" style="padding: 16px 16px 6px; font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;">CHIẾN LƯỢC & ESG</li>
+                    <li class="nav-item" data-tab="tab-finance" onclick="switchDashboardTab('tab-finance')">
                         <div class="nav-item-indicator"></div>
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Tài chính & Kinh doanh</span>
@@ -205,15 +256,27 @@
                         <i class="fa-solid fa-seedling"></i>
                         <span>ESG & Bền vững</span>
                     </li>
-                    <li class="nav-item" data-tab="tab-data-explorer" onclick="switchDashboardTab('tab-data-explorer')">
+
+                    <li class="nav-section-title" style="padding: 16px 16px 6px; font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;">HỆ THỐNG</li>
+                    <li class="nav-item" data-tab="tab-profile" onclick="switchDashboardTab('tab-profile')">
                         <div class="nav-item-indicator"></div>
-                        <i class="fa-solid fa-database"></i>
-                        <span>Data Explorer</span>
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Tài khoản</span>
                     </li>
                     <li class="nav-item" data-tab="tab-ml-studio" onclick="switchDashboardTab('tab-ml-studio')">
                         <div class="nav-item-indicator"></div>
                         <i class="fa-solid fa-robot"></i>
-                        <span>ML Studio</span>
+                        <span>Mô hình ML</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-data-explorer" onclick="switchDashboardTab('tab-data-explorer')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-database"></i>
+                        <span>Explorer Dữ liệu</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-pre-process" onclick="switchDashboardTab('tab-pre-process')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        <span>Tiền xử lý</span>
                     </li>
                     <li class="nav-item" data-tab="tab-ai-copilot" onclick="switchDashboardTab('tab-ai-copilot')">
                         <div class="nav-item-indicator"></div>
@@ -287,7 +350,11 @@
             <!-- Horizontal Category Navigation (TA HomeX Style) -->
             <section class="pwa-category-nav">
                 <div class="pwa-category-list">
-                    <button class="category-btn active" data-tab-btn="tab-finance" onclick="switchDashboardTab('tab-finance')">
+                    <button class="category-btn active" data-tab-btn="tab-overview" onclick="switchDashboardTab('tab-overview')">
+                        <div class="category-icon-wrapper"><i class="fa-solid fa-chart-pie"></i></div>
+                        <span>Tổng quan</span>
+                    </button>
+                    <button class="category-btn" data-tab-btn="tab-finance" onclick="switchDashboardTab('tab-finance')">
                         <div class="category-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
                         <span>Kinh doanh</span>
                     </button>
@@ -310,51 +377,378 @@
                 </div>
             </section>
 
-            <!-- KPI Cards Row -->
-            <section class="kpi-grid">
-                <!-- KPI 1: Doanh thu & Lợi nhuận -->
-                <div class="kpi-card glow-revenue">
-                    <img src="crop_durian.jpg" class="kpi-card-bg" alt="Doanh thu">
-                    <div class="kpi-card-inner">
-                        <div class="kpi-icon icon-revenue"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                        <div class="kpi-info">
-                            <span class="kpi-label">Doanh thu / Lợi nhuận</span>
-                            <h3 id="kpi-revenue" class="kpi-value">0 ₫</h3>
-                            <span id="kpi-profit" class="kpi-subvalue">Lợi nhuận: 0 ₫</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- KPI 2: Quy mô hệ thống -->
-                <div class="kpi-card glow-farmers">
-                    <img src="smart_farm_banner.jpg" class="kpi-card-bg" alt="Quy mô">
-                    <div class="kpi-card-inner">
-                        <div class="kpi-icon icon-farmers"><i class="fa-solid fa-users"></i></div>
-                        <div class="kpi-info">
-                            <span class="kpi-label">Quy mô Hệ Thống</span>
-                            <h3 id="kpi-farmers" class="kpi-value">0 nông hộ</h3>
-                            <span class="kpi-subvalue">Hệ thống hoạt động ổn định</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- KPI 3: Chỉ số Công nghệ & ESG -->
-                <div class="kpi-card glow-tech">
-                    <img src="esg_eco_farming.jpg" class="kpi-card-bg" alt="ESG">
-                    <div class="kpi-card-inner">
-                        <div class="kpi-icon icon-tech"><i class="fa-solid fa-microchip"></i></div>
-                        <div class="kpi-info">
-                            <span class="kpi-label">Chỉ số Công nghệ / ESG</span>
-                            <h3 id="kpi-tech" class="kpi-value">AI 93% | ESG 83</h3>
-                            <span class="kpi-subvalue"><i class="fa-solid fa-shield-halved text-gold"></i> Blockchain Verified</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Tab Content Screens -->
             <section class="tab-content-container">
 
+                <!-- ================= TAB: OVERVIEW (Tổng quan) ================= -->
+                <div id="tab-overview" class="tab-pane active">
+                    <!-- KPI Cards Row - Di chuyển vào trong tab-overview -->
+                    <section class="kpi-grid" style="margin-bottom: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <!-- KPI 1: Doanh thu & Lợi nhuận -->
+                        <div class="kpi-card glow-revenue">
+                            <img src="crop_durian.jpg" class="kpi-card-bg" alt="Doanh thu">
+                            <div class="kpi-card-inner">
+                                <div class="kpi-icon icon-revenue"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                                <div class="kpi-info">
+                                    <span class="kpi-label">Doanh thu / Lợi nhuận</span>
+                                    <h3 id="kpi-revenue" class="kpi-value">0 ₫</h3>
+                                    <span id="kpi-profit" class="kpi-subvalue">Lợi nhuận: 0 ₫</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- KPI 2: Quy mô hệ thống -->
+                        <div class="kpi-card glow-farmers">
+                            <img src="smart_farm_banner.jpg" class="kpi-card-bg" alt="Quy mô">
+                            <div class="kpi-card-inner">
+                                <div class="kpi-icon icon-farmers"><i class="fa-solid fa-users"></i></div>
+                                <div class="kpi-info">
+                                    <span class="kpi-label">Quy mô Hệ Thống</span>
+                                    <h3 id="kpi-farmers" class="kpi-value">0 nông hộ</h3>
+                                    <span class="kpi-subvalue">Hệ thống hoạt động ổn định</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- KPI 3: Chỉ số Công nghệ & ESG -->
+                        <div class="kpi-card glow-tech">
+                            <img src="esg_eco_farming.jpg" class="kpi-card-bg" alt="ESG">
+                            <div class="kpi-card-inner">
+                                <div class="kpi-icon icon-tech"><i class="fa-solid fa-microchip"></i></div>
+                                <div class="kpi-info">
+                                    <span class="kpi-label">Chỉ số Công nghệ / ESG</span>
+                                    <h3 id="kpi-tech" class="kpi-value">AI 93% | ESG 83</h3>
+                                    <span class="kpi-subvalue"><i class="fa-solid fa-shield-halved text-gold"></i> Blockchain Verified</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                        <!-- Quick Feeds -->
+                        <div class="card" style="padding: 24px;">
+                            <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-square-poll-vertical" style="color:var(--primary)"></i>
+                                Hoạt động gần đây (AgriSmart Feeds)
+                            </h3>
+                            <div style="display:flex; flex-direction:column; gap:12px;" id="overview-feed-list">
+                                <div style="display:flex; gap:12px; border-bottom: 1px solid var(--border-color); padding-bottom:10px;">
+                                    <span style="font-size:1.1rem; color:var(--primary)">🌱</span>
+                                    <div>
+                                        <h4 style="font-size:0.82rem; font-weight:700;">Hợp tác xã Lâm Đồng thêm mới 3 lô Sầu riêng</h4>
+                                        <p style="font-size:0.72rem; color:var(--text-muted);">Cách đây 10 phút • Xác thực bởi Blockchain</p>
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:12px; border-bottom: 1px solid var(--border-color); padding-bottom:10px;">
+                                    <span style="font-size:1.1rem; color:var(--gold)">⚡</span>
+                                    <div>
+                                        <h4 style="font-size:0.82rem; font-weight:700;">Trạm IoT Đắk Lắk ghi nhận nhiệt độ tăng đột ngột</h4>
+                                        <p style="font-size:0.72rem; color:var(--text-muted);">Cách đây 1 giờ • AI phân tích cảnh báo nguy cơ sâu bệnh</p>
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:12px; padding-bottom:10px;">
+                                    <span style="font-size:1.1rem; color:var(--info)">🚚</span>
+                                    <div>
+                                        <h4 style="font-size:0.82rem; font-weight:700;">Đơn hàng xuất khẩu 15 tấn cà phê đi Châu Âu đã cảng xuất</h4>
+                                        <p style="font-size:0.72rem; color:var(--text-muted);">Cách đây 4 giờ • Logistics định vị GPS trực tiếp</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Status -->
+                        <div class="card" style="padding: 24px;">
+                            <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-server" style="color:var(--primary)"></i>
+                                Trạng thái Hạ tầng & Thiết bị
+                            </h3>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); padding:12px; border-radius:12px; backdrop-filter:blur(10px);">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block; font-weight:700;">HẠ TẦNG CLOUD</span>
+                                    <span style="font-size:0.85rem; font-weight:700; color:var(--success);">● Hoạt động 100%</span>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); padding:12px; border-radius:12px; backdrop-filter:blur(10px);">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block; font-weight:700;">TRẠM KHÍ TƯỢNG IoT</span>
+                                    <span style="font-size:0.85rem; font-weight:700; color:var(--success);">● 194 Trạm online</span>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); padding:12px; border-radius:12px; backdrop-filter:blur(10px);">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block; font-weight:700;">SMART CONTRACT</span>
+                                    <span style="font-size:0.85rem; font-weight:700; color:var(--success);">● Active (v2.1)</span>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); padding:12px; border-radius:12px; backdrop-filter:blur(10px);">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block; font-weight:700;">MÔ HÌNH DỰ BÁO AI</span>
+                                    <span style="font-size:0.85rem; font-weight:700; color:var(--success);">● R² Score: 94.6%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: REGIONAL MAP (Bản đồ vùng trồng) ================= -->
+                <div id="tab-map" class="tab-pane">
+                    <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                        <div class="card-header" style="margin-bottom:16px;">
+                            <h3><i class="fa-solid fa-map-location-dot"></i> Bản đồ Phân bố Vùng canh tác & Cảm biến IoT</h3>
+                            <p class="text-muted">Bản đồ vệ tinh trực quan hóa các vùng trồng trọt liên kết dữ liệu thực tế (Nhấp vào các trạm cảm biến chấm đỏ để xem thông tin chi tiết)</p>
+                        </div>
+                        <!-- Map Container Element -->
+                        <div id="map-container" style="height: 520px; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); z-index: 5; position: relative;"></div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: ATTENDANCE (Chấm công) ================= -->
+                <div id="tab-attendance" class="tab-pane">
+                    <div class="dashboard-grid" style="grid-template-columns: 1fr 1.2fr; gap: 24px; margin-bottom: 24px;">
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;"><i class="fa-solid fa-clock"></i> Điểm danh hôm nay</h3>
+                            <p class="text-muted" style="font-size:0.78rem; margin-bottom:16px;">Chọn trạng thái và ghi nhận giờ vào ca của nhân công nông trại</p>
+                            <div style="display:flex; flex-direction:column; gap:16px;" id="attendance-list">
+                                <!-- Will be injected via JS -->
+                            </div>
+                        </div>
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;"><i class="fa-solid fa-calendar-check"></i> Nhật ký chấm công tháng</h3>
+                            <p class="text-muted" style="font-size:0.78rem; margin-bottom:16px;">Tổng kết ngày làm việc tích lũy của nhân viên</p>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nhân viên</th>
+                                            <th>Tổng ca làm</th>
+                                            <th>Đi trễ (lần)</th>
+                                            <th>Nghỉ phép</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendance-summary-tbody">
+                                        <!-- Injected via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: COLLABORATORS (Quản lý CTV) ================= -->
+                <div id="tab-ctv" class="tab-pane">
+                    <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                            <div>
+                                <h3 style="font-size:1.1rem; font-weight:800;"><i class="fa-solid fa-people-group"></i> Danh sách Cộng tác viên (CTV)</h3>
+                                <p class="text-muted" style="font-size:0.78rem;">Quản lý CTV liên kết thu mua & chuyển giao kỹ thuật tại các địa phương</p>
+                            </div>
+                            <button class="btn btn-primary" style="font-size:0.8rem; padding:8px 16px;" onclick="handleAddCTV()">+ Thêm CTV mới</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã CTV</th>
+                                        <th>Họ & Tên</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Khu vực phụ trách</th>
+                                        <th>Liên kết (Hộ)</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ctv-list-tbody">
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: SHIFTS & EVENTS (Ca & Sự kiện) ================= -->
+                <div id="tab-shifts" class="tab-pane">
+                    <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-clock"></i> Khung ca làm việc tiêu chuẩn</h3>
+                            <div style="display:flex; flex-direction:column; gap:12px;" id="shifts-list-container">
+                                <!-- Injected via JS -->
+                            </div>
+                        </div>
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-calendar-check"></i> Các sự kiện & Lịch vụ mùa sắp tới</h3>
+                            <div style="display:flex; flex-direction:column; gap:12px;" id="events-list-container">
+                                <!-- Injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: TASKS (Giao việc) ================= -->
+                <div id="tab-tasks" class="tab-pane">
+                    <div class="dashboard-grid" style="grid-template-columns: 0.8fr 1.2fr; gap: 24px; margin-bottom: 24px;">
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-pen-to-square"></i> Giao việc mới</h3>
+                            <form id="form-create-task" onsubmit="handleCreateTask(event)" style="display:flex; flex-direction:column; gap:14px;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>TÊN CÔNG VIỆC</label>
+                                    <input type="text" id="task-title-input" placeholder="Ví dụ: Bón phân Kali đợt 2 lô A..." required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background: rgba(255,255,255,0.6);">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>GÁN CHO NHÂN VIÊN</label>
+                                    <select id="task-assignee-select" required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background:white;">
+                                        <option value="Nguyễn Văn A">Nguyễn Văn A</option>
+                                        <option value="Trần Thị B">Trần Thị B</option>
+                                        <option value="Lê Văn C">Lê Văn C</option>
+                                        <option value="Phạm Văn D">Phạm Văn D</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>HẠN CHÓT</label>
+                                    <input type="date" id="task-deadline-input" required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background: rgba(255,255,255,0.6);">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="margin-top:8px; padding:12px 0;">Giao Việc</button>
+                            </form>
+                        </div>
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-list-check"></i> Bảng phân công công việc</h3>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Công việc</th>
+                                            <th>Nhân công</th>
+                                            <th>Hạn chót</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tasks-list-tbody">
+                                        <!-- Injected via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: ATTENDANCE APPROVAL (Duyệt công) ================= -->
+                <div id="tab-attendance-approval" class="tab-pane">
+                    <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;"><i class="fa-solid fa-user-shield"></i> Danh sách yêu cầu phê duyệt công</h3>
+                        <p class="text-muted" style="font-size:0.78rem; margin-bottom:16px;">Phê duyệt công nhật của nhân viên nông trại gửi lên hệ thống</p>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nhân viên</th>
+                                        <th>Ngày đăng ký</th>
+                                        <th>Ca làm</th>
+                                        <th>Giờ công</th>
+                                        <th>Ghi chú</th>
+                                        <th style="width:180px;">Duyệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="approval-queue-tbody">
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: PAYROLL (Bảng lương) ================= -->
+                <div id="tab-payroll" class="tab-pane">
+                    <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;"><i class="fa-solid fa-sack-dollar"></i> Lương thưởng nông hộ & nhân công</h3>
+                        <p class="text-muted" style="font-size:0.78rem; margin-bottom:16px;">Lương được tính tự động dựa trên số ca hoàn thành x 250.000đ/ca</p>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nhân viên</th>
+                                        <th>Đơn giá ca</th>
+                                        <th>Số ca hoàn thành</th>
+                                        <th>Phụ cấp</th>
+                                        <th>Thực lĩnh</th>
+                                        <th>Thanh toán</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payroll-list-tbody">
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: REPORTS (Báo cáo) ================= -->
+                <div id="tab-reports" class="tab-pane">
+                    <div class="dashboard-grid" style="grid-template-columns: 1.2fr 0.8fr; gap: 24px; margin-bottom: 24px;">
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-chart-line"></i> Biểu đồ tổng hợp hiệu suất lao động</h3>
+                            <div class="chart-container" style="position:relative; height: 320px;">
+                                <canvas id="chart-reports-performance"></canvas>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:24px; display:flex; flex-direction:column; justify-content:space-between;">
+                            <div>
+                                <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-file-pdf"></i> Báo cáo PDF & Excel</h3>
+                                <p class="text-muted" style="font-size:0.8rem; line-height:1.5;">Xuất báo cáo định kỳ gửi Hợp tác xã hoặc các bên quản lý.</p>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                                <button class="btn btn-primary" onclick="alert('Đã tạo báo cáo PDF và tải về!')" style="padding:12px 0;"><i class="fa-solid fa-file-pdf"></i> Tải PDF Report</button>
+                                <button class="btn btn-secondary" onclick="alert('Đã xuất dữ liệu Excel thành công!')" style="padding:12px 0;"><i class="fa-solid fa-file-excel"></i> Tải Excel Report</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: PROFILE (Tài khoản) ================= -->
+                <div id="tab-profile" class="tab-pane">
+                    <div class="dashboard-grid" style="grid-template-columns: 0.8fr 1.2fr; gap: 24px; margin-bottom: 24px;">
+                        <div class="card" style="padding:24px; text-align:center;">
+                            <div style="width:80px; height:80px; border-radius:50%; background:var(--secondary); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin: 0 auto 16px;">
+                                <i class="fa-solid fa-user-astronaut"></i>
+                            </div>
+                            <h3 id="profile-username" style="font-size:1.2rem; font-weight:800;">Tên tài khoản</h3>
+                            <span id="profile-role" class="badge" style="margin-top:6px; font-weight:700;">Nông hộ</span>
+                            <div style="text-align:left; margin-top:24px; border-top:1px solid var(--border-color); padding-top:16px; display:flex; flex-direction:column; gap:10px; font-size:0.85rem;">
+                                <div><strong class="text-muted">Email liên hệ:</strong> <span id="profile-email">email@domain.com</span></div>
+                                <div><strong class="text-muted">Phân quyền bảo mật:</strong> <span>Mã hóa tài khoản</span></div>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-lock"></i> Đổi mật khẩu tài khoản</h3>
+                            <form onsubmit="event.preventDefault(); alert('Đã cập nhật mật khẩu thành công!')" style="display:flex; flex-direction:column; gap:12px;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>MẬT KHẨU HIỆN TẠI</label>
+                                    <input type="password" required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background:rgba(255,255,255,0.6);">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>MẬT KHẨU MỚI</label>
+                                    <input type="password" required style="padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; font-family:var(--font-family); font-size:0.85rem; background:rgba(255,255,255,0.6);">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="margin-top:8px; padding:12px 0;">Thay đổi mật khẩu</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: PRE-PROCESS (Tiền xử lý) ================= -->
+                <div id="tab-pre-process" class="tab-pane">
+                    <div class="card" style="padding:24px; margin-bottom: 24px;">
+                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;"><i class="fa-solid fa-filter"></i> Tiền xử lý Dữ liệu Nông nghiệp (Vệ sinh & Lọc nhiễu)</h3>
+                        <p class="text-muted" style="font-size:0.8rem; margin-bottom:20px;">Dành cho kỹ thuật viên cấu hình làm mịn sai số của các trạm cảm biến IoT vùng trồng</p>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                            <div style="background:rgba(255,255,255,0.5); border:1px solid var(--border-color); border-radius:12px; padding:16px;">
+                                <h4 style="font-size:0.85rem; font-weight:700; color:var(--primary); margin-bottom:8px;">Lọc nhiễu cảm biến (Kalman Filter)</h4>
+                                <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.45;">Bộ lọc Kalman khử sai số đường truyền vật lý từ trạm khí tượng.</p>
+                                <button class="btn btn-secondary" onclick="alert('Đã chạy bộ lọc Kalman, tối ưu hóa 2.3% trạm phát nhiễu!')" style="font-size:0.72rem; padding:6px 12px; margin-top:8px;">Khởi chạy lọc</button>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.5); border:1px solid var(--border-color); border-radius:12px; padding:16px;">
+                                <h4 style="font-size:0.85rem; font-weight:700; color:var(--primary); margin-bottom:8px;">Khử Outlier sản lượng (Z-Score)</h4>
+                                <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.45;">Xử lý các điểm báo cáo năng suất bất thường điền sai thông số của nông hộ.</p>
+                                <button class="btn btn-secondary" onclick="alert('Đã loại bỏ và xử lý 14 bản ghi sản lượng dị biệt!')" style="font-size:0.72rem; padding:6px 12px; margin-top:8px;">Khử Outlier</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 1. TAB FINANCIAL -->
-                <div id="tab-finance" class="tab-pane active">
+                <div id="tab-finance" class="tab-pane">
                     <div class="dashboard-grid">
                         <div class="card col-span-2">
                             <img src="money_finance.jpg" id="bg-card-revenue-progress" class="card-bg" alt="Doanh thu">
@@ -377,15 +771,7 @@
                             </div>
                         </div>
                         
-                        <!-- Regional Map showing data distribution -->
-                        <div class="card col-span-3" style="margin-top: 28px; padding: 24px;">
-                            <div class="card-header" style="margin-bottom:16px;">
-                                <h3><i class="fa-solid fa-map-location-dot"></i> Bản đồ Phân bố Vùng canh tác & Cảm biến IoT</h3>
-                                <p class="text-muted">Bản đồ vệ tinh trực quan hóa các vùng trồng trọt liên kết dữ liệu thực tế (Nhấp vào các trạm cảm biến chấm đỏ để xem thông tin chi tiết)</p>
-                            </div>
-                            <!-- Map Container Element -->
-                            <div id="map-container" style="height: 380px; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); z-index: 5; position: relative;"></div>
-                        </div>
+
 
                         <!-- Finance Data Table -->
                         <div class="card col-span-3 table-card" style="margin-top: 28px;">
@@ -1180,7 +1566,11 @@
 
     <!-- Mobile Fixed Bottom Navigation Bar (TA HomeX Style) -->
     <nav class="pwa-bottom-nav">
-        <a class="pwa-nav-item active" data-nav-btn="tab-finance" onclick="switchDashboardTab('tab-finance')">
+        <a class="pwa-nav-item active" data-nav-btn="tab-overview" onclick="switchDashboardTab('tab-overview')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-chart-pie"></i></div>
+            <span class="nav-label">Tổng quan</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-finance" onclick="switchDashboardTab('tab-finance')">
             <div class="nav-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
             <span class="nav-label">Tài chính</span>
         </a>

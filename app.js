@@ -991,8 +991,8 @@ class AgriSmartController {
         const kpis = this.model.getKPIs();
         this.view.updateKPIs(kpis);
         
-        // Điều hướng sang Tab mặc định
-        this.switchTab('tab-finance');
+        // Điều hướng sang Tab mặc định (Tổng quan)
+        this.switchTab('tab-overview');
     }
 
     login(username, password) {
@@ -2654,10 +2654,425 @@ window.selectSampleLeaf = (type) => {
 window.mlDroneTakeoff = () => AICopilot.takeoff();
 window.mlDroneLand = () => AICopilot.land();
 
+// ==========================================
+// 4. MANAGEMENT MODULE (Chấm công & Giao việc)
+// ==========================================
+const ManagementModule = {
+    attendanceData: [
+        { name: "Nguyễn Văn A", checkedIn: false, time: "--:--", status: "Chưa điểm danh", count: 22, late: 1, leave: 1 },
+        { name: "Trần Thị B", checkedIn: true, time: "07:45", status: "Đã vào ca", count: 24, late: 0, leave: 0 },
+        { name: "Lê Văn C", checkedIn: false, time: "--:--", status: "Nghỉ phép", count: 20, late: 2, leave: 2 },
+        { name: "Phạm Văn D", checkedIn: true, time: "08:15", status: "Đi trễ", count: 21, late: 3, leave: 1 }
+    ],
+    
+    ctvData: [
+        { id: "CTV001", name: "Trần Thanh Hải", phone: "0912345678", province: "Lâm Đồng", links: 12, status: "Hoạt động" },
+        { id: "CTV002", name: "Nguyễn Thị Mai", phone: "0987654321", province: "Đắk Lắk", links: 18, status: "Hoạt động" },
+        { id: "CTV003", name: "Lê Hồng Quân", phone: "0905123456", province: "Tiền Giang", links: 8, status: "Tạm ngưng" }
+    ],
+
+    shifts: [
+        { name: "Ca Sáng (Standard)", time: "06:00 - 11:30", rate: "250.000 đ", status: "Đang mở" },
+        { name: "Ca Chiều (Standard)", time: "12:30 - 18:00", rate: "250.000 đ", status: "Đang mở" },
+        { name: "Ca Tăng ca (Overtime)", time: "18:30 - 21:30", rate: "350.000 đ", status: "Mở theo mùa vụ" }
+    ],
+
+    events: [
+        { date: "02/07/2026", title: "Phun thuốc hữu cơ đợt 3", farm: "Phân khu Sầu riêng B" },
+        { date: "05/07/2026", title: "Kiểm tra dư lượng thuốc thử GlobalGAP", farm: "Vườn Cà phê A" },
+        { date: "12/07/2026", title: "Thu hoạch lúa thơm vụ Hè Thu", farm: "Cánh đồng An Giang" }
+    ],
+
+    tasks: [
+        { id: 1, title: "Bón phân hữu cơ gốc lúa", assignee: "Nguyễn Văn A", deadline: "2026-07-02", status: "Đang làm" },
+        { id: 2, title: "Làm cỏ hàng rào bao quanh vườn", assignee: "Trần Thị B", deadline: "2026-07-03", status: "Đang làm" },
+        { id: 3, title: "Vệ sinh béc phun mưa tự động", assignee: "Lê Văn C", deadline: "2026-07-01", status: "Đã xong" }
+    ],
+
+    approvals: [
+        { id: 101, name: "Nguyễn Văn A", date: "01/07/2026", shift: "Ca Sáng", hours: "5.5 giờ", note: "Làm thêm 30p dọn dẹp kho" },
+        { id: 102, name: "Trần Thị B", date: "01/07/2026", shift: "Ca Chiều", hours: "5.5 giờ", note: "Không có ghi chú" },
+        { id: 103, name: "Phạm Văn D", date: "01/07/2026", shift: "Ca Sáng", hours: "5.5 giờ", note: "Đi trễ do hư xe" }
+    ],
+
+    init() {
+        this.renderAttendance();
+        this.renderCTV();
+        this.renderShiftsEvents();
+        this.renderTasks();
+        this.renderApprovals();
+        this.renderPayroll();
+        this.renderProfile();
+        this.renderReports();
+    },
+
+    renderAttendance() {
+        const list = document.getElementById("attendance-list");
+        if (!list) return;
+        list.innerHTML = "";
+        
+        this.attendanceData.forEach((att, idx) => {
+            const item = document.createElement("div");
+            item.style = "display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.4); border:1px solid var(--border-color); padding:12px; border-radius:12px;";
+            item.innerHTML = `
+                <div>
+                    <h4 style="font-size:0.85rem; font-weight:700; color:#1e293b;">${att.name}</h4>
+                    <p style="font-size:0.72rem; color:var(--text-muted);">Giờ vào: <strong style="color:var(--primary);">${att.time}</strong> • Trạng thái: <strong>${att.status}</strong></p>
+                </div>
+                <div>
+                    <button class="btn btn-secondary" style="font-size:0.7rem; padding:6px 12px;" onclick="window.ManagementModule.toggleCheckin(${idx})">
+                        ${att.checkedIn ? "Hủy phép" : "Vào ca"}
+                    </button>
+                </div>
+            `;
+            list.appendChild(item);
+        });
+
+        // monthly summary
+        const tbody = document.getElementById("attendance-summary-tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        this.attendanceData.forEach(att => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><strong>${att.name}</strong></td>
+                <td>${att.count} ca</td>
+                <td><span style="color:#ef4444; font-weight:700;">${att.late}</span></td>
+                <td>${att.leave} ngày</td>
+                <td><span class="badge badge-success">Đang hoạt động</span></td>
+            `;
+            tbody.appendChild(row);
+        });
+    },
+
+    toggleCheckin(idx) {
+        const att = this.attendanceData[idx];
+        att.checkedIn = !att.checkedIn;
+        if (att.checkedIn) {
+            const now = new Date();
+            att.time = now.toTimeString().substring(0, 5);
+            att.status = "Đã vào ca";
+            att.count += 1;
+        } else {
+            att.time = "--:--";
+            att.status = "Chưa điểm danh";
+            att.count -= 1;
+        }
+        this.renderAttendance();
+        this.renderPayroll();
+        this.renderReports();
+    },
+
+    renderCTV() {
+        const tbody = document.getElementById("ctv-list-tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        this.ctvData.forEach(ctv => {
+            const statusClass = ctv.status === "Hoạt động" ? "badge-success" : "badge-danger";
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><code>${ctv.id}</code></td>
+                <td><strong>${ctv.name}</strong></td>
+                <td>${ctv.phone}</td>
+                <td>${ctv.province}</td>
+                <td>${ctv.links} hộ</td>
+                <td><span class="badge ${statusClass}">${ctv.status}</span></td>
+            `;
+            tbody.appendChild(row);
+        });
+    },
+
+    handleAddCTV() {
+        const name = prompt("Nhập họ tên CTV mới:");
+        if (!name) return;
+        const phone = prompt("Nhập số điện thoại CTV:");
+        const province = prompt("Nhập khu vực phụ trách (ví dụ: Đồng Tháp):", "Đồng Tháp");
+        const id = "CTV00" + (this.ctvData.length + 1);
+        this.ctvData.push({
+            id: id,
+            name: name,
+            phone: phone || "09xxxxxxx",
+            province: province || "Đồng Tháp",
+            links: 0,
+            status: "Hoạt động"
+        });
+        this.renderCTV();
+    },
+
+    renderShiftsEvents() {
+        const shiftsCont = document.getElementById("shifts-list-container");
+        if (shiftsCont) {
+            shiftsCont.innerHTML = "";
+            this.shifts.forEach(s => {
+                const item = document.createElement("div");
+                item.style = "background:rgba(255,255,255,0.4); border:1px solid var(--border-color); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;";
+                item.innerHTML = `
+                    <div>
+                        <h4 style="font-size:0.85rem; font-weight:700; color:#1e293b;">${s.name}</h4>
+                        <p style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-regular fa-clock"></i> Khung: ${s.time}</p>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="font-weight:700; color:var(--primary); font-size:0.85rem; display:block;">${s.rate}</span>
+                        <span class="badge badge-success" style="font-size:0.65rem; padding:2px 6px;">${s.status}</span>
+                    </div>
+                `;
+                shiftsCont.appendChild(item);
+            });
+        }
+
+        const eventsCont = document.getElementById("events-list-container");
+        if (eventsCont) {
+            eventsCont.innerHTML = "";
+            this.events.forEach(e => {
+                const item = document.createElement("div");
+                item.style = "background:rgba(255,255,255,0.4); border:1px solid var(--border-color); padding:12px; border-radius:12px; display:flex; gap:12px;";
+                item.innerHTML = `
+                    <div style="background:var(--primary); color:white; border-radius:8px; width:48px; height:48px; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;">
+                        <span style="font-size:0.6rem; font-weight:800; text-transform:uppercase;">Ngày</span>
+                        <span style="font-size:0.95rem; font-weight:800; line-height:1;">${e.date.split('/')[0]}</span>
+                    </div>
+                    <div>
+                        <h4 style="font-size:0.82rem; font-weight:700; color:#1e293b;">${e.title}</h4>
+                        <p style="font-size:0.72rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot"></i> ${e.farm} • Vụ: ${e.date}</p>
+                    </div>
+                `;
+                eventsCont.appendChild(item);
+            });
+        }
+    },
+
+    renderTasks() {
+        const tbody = document.getElementById("tasks-list-tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        this.tasks.forEach(t => {
+            const statusClass = t.status === "Đã xong" ? "badge-success" : "badge-warning";
+            const actionBtn = t.status === "Đang làm" 
+                ? `<button class="btn btn-secondary" style="font-size:0.7rem; padding:4px 8px;" onclick="window.ManagementModule.completeTask(${t.id})">Hoàn thành</button>` 
+                : `<i class="fa-solid fa-circle-check text-success" style="font-size:1.1rem;"></i>`;
+            
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><strong>${t.title}</strong></td>
+                <td>${t.assignee}</td>
+                <td><code>${t.deadline}</code></td>
+                <td><span class="badge ${statusClass}">${t.status}</span></td>
+                <td>${actionBtn}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    },
+
+    createTask(title, assignee, deadline) {
+        const newId = this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) + 1 : 1;
+        this.tasks.push({
+            id: newId,
+            title: title,
+            assignee: assignee,
+            deadline: deadline,
+            status: "Đang làm"
+        });
+        this.renderTasks();
+    },
+
+    completeTask(id) {
+        const task = this.tasks.find(t => t.id === id);
+        if (task) {
+            task.status = "Đã xong";
+            this.renderTasks();
+            
+            // Tự động tăng 1 ca làm việc cho nhân công khi hoàn thành công việc được giao
+            const att = this.attendanceData.find(a => a.name === task.assignee);
+            if (att) {
+                att.count += 1;
+                this.renderAttendance();
+                this.renderPayroll();
+                this.renderReports();
+            }
+        }
+    },
+
+    renderApprovals() {
+        const tbody = document.getElementById("approval-queue-tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        
+        // Cập nhật số đếm badge đỏ trên sidebar
+        const badge = document.querySelector(".nav-badge");
+        if (badge) {
+            badge.textContent = this.approvals.length;
+            badge.style.display = this.approvals.length > 0 ? "inline-block" : "none";
+        }
+
+        if (this.approvals.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;" class="text-muted">Không có yêu cầu phê duyệt công nào.</td></tr>`;
+            return;
+        }
+
+        this.approvals.forEach(app => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><strong>${app.name}</strong></td>
+                <td>${app.date}</td>
+                <td><span class="badge badge-success">${app.shift}</span></td>
+                <td>${app.hours}</td>
+                <td style="font-size:0.75rem;"><em>${app.note}</em></td>
+                <td>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn btn-primary" style="font-size:0.7rem; padding:4px 8px;" onclick="window.ManagementModule.processApproval(${app.id}, true)">Duyệt</button>
+                        <button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; border-color:#ef4444; color:#ef4444;" onclick="window.ManagementModule.processApproval(${app.id}, false)">Từ chối</button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    },
+
+    processApproval(id, isApproved) {
+        const appIdx = this.approvals.findIndex(a => a.id === id);
+        if (appIdx !== -1) {
+            const app = this.approvals[appIdx];
+            this.approvals.splice(appIdx, 1);
+            this.renderApprovals();
+            
+            if (isApproved) {
+                // Thêm ca làm việc cho nhân viên
+                const att = this.attendanceData.find(a => a.name === app.name);
+                if (att) {
+                    att.count += 1;
+                    this.renderAttendance();
+                    this.renderPayroll();
+                    this.renderReports();
+                }
+                alert(`Đã phê duyệt giờ công ca làm cho ${app.name}!`);
+            } else {
+                alert(`Đã từ chối phê duyệt cho ${app.name}.`);
+            }
+        }
+    },
+
+    renderPayroll() {
+        const tbody = document.getElementById("payroll-list-tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        
+        this.attendanceData.forEach(att => {
+            const baseRate = 250000;
+            const allowance = att.late > 2 ? 0 : 50000;
+            const earnings = (att.count * baseRate) + allowance;
+            
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><strong>${att.name}</strong></td>
+                <td>250.000 đ</td>
+                <td><strong>${att.count} ca</strong></td>
+                <td>${allowance.toLocaleString('vi-VN')} đ</td>
+                <td><strong style="color:var(--primary);">${earnings.toLocaleString('vi-VN')} đ</strong></td>
+                <td><span class="badge badge-success">Sẵn sàng</span></td>
+                <td>
+                    <button class="btn btn-secondary" style="font-size:0.7rem; padding:4px 8px;" onclick="alert('Đã chuyển khoản thực lĩnh cho ${att.name}!')">Chi trả</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    },
+
+    renderProfile() {
+        const user = window._agriSmartModel && window._agriSmartModel.currentUser;
+        if (!user) return;
+        
+        const usernameEl = document.getElementById("profile-username");
+        const roleEl = document.getElementById("profile-role");
+        const emailEl = document.getElementById("profile-email");
+        
+        if (usernameEl) usernameEl.textContent = user.username;
+        if (roleEl) {
+            roleEl.textContent = user.role === 'farmer' ? "Nông hộ" : "Quản trị viên / Hợp tác xã";
+            roleEl.className = "badge " + (user.role === 'farmer' ? "badge-success" : "badge-primary");
+        }
+        if (emailEl) emailEl.textContent = user.email || (user.username + "@agrismart.vn");
+    },
+
+    renderReports() {
+        const canvas = document.getElementById("chart-reports-performance");
+        if (!canvas) return;
+
+        // Xóa chart cũ để vẽ lại
+        if (window._agriReportsChartInstance) {
+            window._agriReportsChartInstance.destroy();
+        }
+
+        const ctx = canvas.getContext('2d');
+        window._agriReportsChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: this.attendanceData.map(a => a.name),
+                datasets: [
+                    {
+                        label: 'Số ca làm hoàn thành',
+                        data: this.attendanceData.map(a => a.count),
+                        backgroundColor: 'rgba(22, 163, 74, 0.75)',
+                        borderColor: 'rgba(22, 163, 74, 1)',
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Số lần đi trễ',
+                        data: this.attendanceData.map(a => a.late),
+                        backgroundColor: 'rgba(239, 68, 68, 0.75)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#ffffff', font: { family: 'Plus Jakarta Sans', weight: '600' } }
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { display: false } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.08)' } }
+                }
+            }
+        });
+    }
+};
+window.ManagementModule = ManagementModule;
+window.handleAddCTV = () => ManagementModule.handleAddCTV();
+window.handleCreateTask = (e) => {
+    e.preventDefault();
+    const title = document.getElementById("task-title-input").value;
+    const assignee = document.getElementById("task-assignee-select").value;
+    const deadline = document.getElementById("task-deadline-input").value;
+    ManagementModule.createTask(title, assignee, deadline);
+    document.getElementById("form-create-task").reset();
+    alert("Giao việc thành công!");
+};
+
 // Hook into switchDashboardTab to init modules when needed
 const _origSwitchTab = window.switchDashboardTab;
 window.switchDashboardTab = (tabId) => {
     _origSwitchTab(tabId);
+    
+    // Khởi chạy các widget tương ứng cho từng tab Quản lý
+    if (tabId === 'tab-overview' || tabId === 'tab-attendance' || tabId === 'tab-ctv' || 
+        tabId === 'tab-shifts' || tabId === 'tab-tasks' || tabId === 'tab-attendance-approval' || 
+        tabId === 'tab-payroll' || tabId === 'tab-reports' || tabId === 'tab-profile') {
+        setTimeout(() => ManagementModule.init(), 50);
+    }
+    
+    if (tabId === 'tab-map') {
+        setTimeout(() => {
+            if (appController.initRegionalMap) {
+                appController.initRegionalMap();
+            }
+        }, 80);
+    }
     if (tabId === 'tab-data-explorer') {
         setTimeout(() => DataExplorer.init(), 50);
     }
@@ -2674,6 +3089,9 @@ const _origInit = appController.init.bind(appController);
 appController.init = async function() {
     await _origInit();
     window._agriSmartModel = appController.model;
+    
+    // Tự động khởi tạo module quản lý & thời khóa biểu khi tải app
+    ManagementModule.init();
     
     // Khởi tạo vòng lặp tự động xoay vòng ảnh nền (slideshow) cho trang chính
     initBackgroundSlideshow();
