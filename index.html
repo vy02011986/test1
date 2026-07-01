@@ -25,6 +25,9 @@
 
     <!-- ================= AUTH VIEW (Split Screen UI) ================= -->
     <main id="auth-view" class="auth-container">
+        <!-- Full-page blurred background image (like reference site) -->
+        <div class="auth-bg-image"></div>
+        <div class="auth-bg-overlay"></div>
         <div class="auth-wrapper">
             <!-- Left Branding Panel -->
             <div class="auth-brand-panel" style="background-image: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 30%, rgba(16, 185, 129, 0.8) 100%), url('smart_farm_banner.jpg'); background-size: cover; background-position: center;">
@@ -193,6 +196,21 @@
                         <div class="nav-item-indicator"></div>
                         <i class="fa-solid fa-seedling"></i>
                         <span>ESG & Bền vững</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-data-explorer" onclick="switchDashboardTab('tab-data-explorer')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-database"></i>
+                        <span>Data Explorer</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-ml-studio" onclick="switchDashboardTab('tab-ml-studio')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-robot"></i>
+                        <span>ML Studio</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-ai-copilot" onclick="switchDashboardTab('tab-ai-copilot')">
+                        <div class="nav-item-indicator"></div>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Trợ lý AI & Drone</span>
                     </li>
                 </ul>
             </nav>
@@ -722,6 +740,423 @@
                 </div>
 
             </section>
+
+            <!-- ================= TAB: DATA EXPLORER ================= -->
+            <section id="tab-data-explorer" class="tab-pane">
+                <div class="explorer-header-bar">
+                    <div>
+                        <h2 class="explorer-title"><i class="fa-solid fa-database" style="color:var(--primary)"></i> Data Explorer</h2>
+                        <p class="text-muted" style="font-size:0.85rem; margin-top:4px;">Khám phá dữ liệu thực tế được sử dụng trong hệ thống mô hình hóa</p>
+                    </div>
+                    <div id="explorer-record-count" class="data-status-indicator fetched">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>0 bản ghi</span>
+                    </div>
+                </div>
+
+                <div class="explorer-layout">
+                    <!-- Sidebar danh mục dataset -->
+                    <div class="explorer-sidebar">
+                        <p class="explorer-cat-title">DANH MỤC DATASET</p>
+                        <div id="explorer-dataset-list" class="explorer-cat-list"></div>
+                    </div>
+
+                    <!-- Main panel -->
+                    <div class="explorer-main">
+                        <!-- Search & table -->
+                        <div class="card" style="padding:24px;">
+                            <div class="explorer-toolbar">
+                                <div>
+                                    <h3 id="explorer-dataset-name" style="font-size:1.05rem;font-weight:800;">Đang tải...</h3>
+                                    <p id="explorer-dataset-desc" class="text-muted" style="font-size:0.78rem; margin-top:2px;"></p>
+                                </div>
+                                <div class="input-icon-wrapper" style="width:260px;">
+                                    <i class="fa-solid fa-magnifying-glass input-icon"></i>
+                                    <input type="text" id="explorer-search" placeholder="Tìm kiếm dữ liệu..." style="padding:10px 16px 10px 44px; border:1px solid var(--border-color); border-radius:12px; font-family:var(--font-family); width:100%; font-size:0.88rem;">
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="margin-top:16px;">
+                                <table class="data-table" id="explorer-table">
+                                    <thead id="explorer-thead"></thead>
+                                    <tbody id="explorer-tbody"></tbody>
+                                </table>
+                            </div>
+                            <!-- Pagination -->
+                            <div id="explorer-pagination" class="explorer-pagination"></div>
+                        </div>
+
+                        <!-- Descriptive Statistics -->
+                        <div class="card" style="padding:24px; margin-top:24px;">
+                            <h3 style="font-size:1rem;font-weight:800; margin-bottom:16px;">
+                                <i class="fa-solid fa-chart-simple" style="color:var(--primary)"></i>
+                                Thống kê Mô tả (Descriptive Statistics)
+                            </h3>
+                            <div id="explorer-stats-grid" class="stats-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= TAB: ML STUDIO ================= -->
+            <section id="tab-ml-studio" class="tab-pane">
+                <div class="explorer-header-bar">
+                    <div>
+                        <h2 class="explorer-title"><i class="fa-solid fa-robot" style="color:var(--primary)"></i> ML Studio</h2>
+                        <p class="text-muted" style="font-size:0.85rem; margin-top:4px;">Tiền xử lý dữ liệu, phân tích tương quan và huấn luyện mô hình học máy</p>
+                    </div>
+                    <div class="data-status-indicator fetched">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span>Pipeline Sẵn sàng</span>
+                    </div>
+                </div>
+
+                <!-- Pipeline Steps -->
+                <div class="card" style="margin-bottom:24px; padding:28px;">
+                    <h3 style="font-size:1rem;font-weight:800; margin-bottom:20px;">
+                        <i class="fa-solid fa-arrows-spin" style="color:var(--primary)"></i>
+                        Nhật ký Tiền xử lý Dữ liệu (Data Processing Pipeline)
+                    </h3>
+                    <div class="pipeline-steps">
+                        <div class="pipeline-step">
+                            <div class="pipeline-dot"></div>
+                            <div>
+                                <h4>1. Ghép nối & Liên kết (Data Joining)</h4>
+                                <p>Đồng bộ hóa 8 bảng dữ liệu gốc theo các khóa ngoại: <code>Farm_ID</code>, <code>Farmer_ID</code>, và <code>Production_ID</code>.</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="pipeline-dot"></div>
+                            <div>
+                                <h4>2. Khử khuyết & Làm sạch (Null Value Imputation)</h4>
+                                <p>Phát hiện cột trống và thực hiện Median-Imputation dựa trên nhóm <code>Crop</code> để tránh phân phối bị lệch.</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="pipeline-dot"></div>
+                            <div>
+                                <h4>3. Mã hóa Danh mục (Categorical Encoding)</h4>
+                                <p>Mã hóa biến danh mục <code>Crop</code>, <code>Province</code> thành Label Encoding hoặc One-Hot Encoding.</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="pipeline-dot"></div>
+                            <div>
+                                <h4>4. Phân tách Dữ liệu (Train-Test Split 80/20)</h4>
+                                <p>Xáo trộn ngẫu nhiên và phân tách 80% Huấn luyện / 20% Kiểm thử để tránh Overfitting.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; margin-bottom:24px;">
+                    <!-- Feature Scaling -->
+                    <div class="card" style="padding:24px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+                            <div>
+                                <h3 style="font-size:1rem;font-weight:800;">
+                                    <i class="fa-solid fa-sliders" style="color:var(--primary)"></i>
+                                    Feature Scaling Sandbox
+                                </h3>
+                                <p class="text-muted" style="font-size:0.78rem;">Chuẩn hóa biến số trước khi đưa vào ML</p>
+                            </div>
+                            <div class="ml-toggle-group">
+                                <button id="btn-scaler-minmax" class="ml-toggle active" onclick="mlSetScaler('minmax')">MinMax</button>
+                                <button id="btn-scaler-standard" class="ml-toggle" onclick="mlSetScaler('standard')">Z-Score</button>
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                            <div class="scaling-panel">
+                                <h5 class="scaling-label">Dữ liệu gốc</h5>
+                                <div id="ml-raw-data" class="scaling-data"></div>
+                            </div>
+                            <div class="scaling-panel scaled">
+                                <h5 class="scaling-label" style="color:var(--primary)">Sau chuẩn hóa</h5>
+                                <div id="ml-scaled-data" class="scaling-data"></div>
+                            </div>
+                        </div>
+                        <p id="ml-scaler-desc" class="ml-note"></p>
+                    </div>
+
+                    <!-- Label Encoding -->
+                    <div class="card" style="padding:24px;">
+                        <h3 style="font-size:1rem;font-weight:800; margin-bottom:16px;">
+                            <i class="fa-solid fa-tags" style="color:var(--primary)"></i>
+                            Mã hóa biến phân loại (Label Encoding)
+                        </h3>
+                        <div id="ml-encoding-list" class="encoding-list"></div>
+                        <div class="ml-note" style="margin-top:16px;">
+                            <i class="fa-solid fa-circle-info" style="color:var(--info)"></i>
+                            <strong>One-Hot Encoding:</strong> Lúa → [1,0,0,0,0] | Cà phê → [0,1,0,0,0] | Sầu riêng → [0,0,1,0,0]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pearson Correlation Matrix -->
+                <div class="card" style="padding:28px; margin-bottom:24px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                        <div>
+                            <h3 style="font-size:1rem;font-weight:800;">
+                                <i class="fa-solid fa-table-cells" style="color:var(--primary)"></i>
+                                Ma trận Tương quan Pearson
+                            </h3>
+                            <p class="text-muted" style="font-size:0.78rem;">Phân tích mối quan hệ tuyến tính giữa các biến số</p>
+                        </div>
+                        <div class="ml-toggle-group">
+                            <button id="btn-corr-finance" class="ml-toggle active" onclick="mlSetCorrGroup('finance')">Nhóm Tài chính</button>
+                            <button id="btn-corr-env" class="ml-toggle" onclick="mlSetCorrGroup('env')">Nhóm Môi trường</button>
+                        </div>
+                    </div>
+                    <div id="ml-corr-matrix" class="corr-matrix-container"></div>
+                    <div class="corr-legend">
+                        <span><span class="corr-dot" style="background:#2563eb;"></span>Tương quan dương cao (&gt;0.7)</span>
+                        <span><span class="corr-dot" style="background:#e5e7eb;"></span>Tương quan yếu (~0)</span>
+                        <span><span class="corr-dot" style="background:#dc2626;"></span>Tương quan âm (&lt;-0.4)</span>
+                    </div>
+                </div>
+
+                <!-- ML Model Training -->
+                <div class="card" style="padding:28px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:24px;">
+                        <div>
+                            <h3 style="font-size:1rem;font-weight:800;">
+                                <i class="fa-solid fa-brain" style="color:var(--primary)"></i>
+                                Huấn luyện Mô hình ML (Model Training)
+                            </h3>
+                            <p class="text-muted" style="font-size:0.78rem;">Chọn mô hình, cấu hình và chạy huấn luyện trên dữ liệu thực</p>
+                        </div>
+                        <button id="btn-run-ml" class="btn btn-primary" onclick="mlRunModel()" style="padding:12px 24px; font-size:0.88rem;">
+                            <i class="fa-solid fa-play"></i> Chạy Huấn luyện
+                        </button>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:24px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>MÔ HÌNH</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-robot input-icon"></i>
+                                <select id="ml-model-select" style="padding:12px 16px 12px 44px; border:1px solid var(--border-color); border-radius:12px; font-family:var(--font-family); width:100%; font-size:0.88rem; background:white;">
+                                    <option value="linear">Linear Regression</option>
+                                    <option value="tree">Decision Tree</option>
+                                    <option value="forest">Random Forest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>BIẾN MỤC TIÊU</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-bullseye input-icon"></i>
+                                <select id="ml-target-select" style="padding:12px 16px 12px 44px; border:1px solid var(--border-color); border-radius:12px; font-family:var(--font-family); width:100%; font-size:0.88rem; background:white;">
+                                    <option value="Profit_VND">Profit_VND (Lợi nhuận)</option>
+                                    <option value="ESG_Score">ESG_Score (Điểm ESG)</option>
+                                    <option value="AI_Prediction_Accuracy">AI Accuracy (%)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>TỈ LỆ TRAIN/TEST</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-split input-icon"></i>
+                                <select id="ml-split-select" style="padding:12px 16px 12px 44px; border:1px solid var(--border-color); border-radius:12px; font-family:var(--font-family); width:100%; font-size:0.88rem; background:white;">
+                                    <option value="0.2">80% Train / 20% Test</option>
+                                    <option value="0.3">70% Train / 30% Test</option>
+                                    <option value="0.1">90% Train / 10% Test</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Training progress -->
+                    <div id="ml-training-progress" style="display:none; margin-bottom:20px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                            <span style="font-size:0.85rem; font-weight:700;">Đang huấn luyện...</span>
+                            <span id="ml-progress-pct" style="font-size:0.85rem; color:var(--primary); font-weight:700;">0%</span>
+                        </div>
+                        <div style="height:8px; background:#f1f5f9; border-radius:10px; overflow:hidden;">
+                            <div id="ml-progress-bar" style="height:100%; width:0%; background:linear-gradient(90deg, var(--primary), #22c55e); border-radius:10px; transition:width 0.3s ease;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div id="ml-results" style="display:none;">
+                        <div class="ml-results-grid" id="ml-metrics-grid"></div>
+                        <div class="dashboard-grid" style="grid-template-columns: 1fr 1.2fr; gap: 20px; margin-top: 24px;">
+                            <div>
+                                <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:12px;">Feature Importance</h4>
+                                <div id="ml-feature-importance" class="feature-importance-list"></div>
+                            </div>
+                            <div>
+                                <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:12px;">Biểu đồ So sánh Thực tế vs Dự đoán (15 mẫu đầu)</h4>
+                                <div class="chart-container" style="position: relative; height: 220px; background: rgba(255,255,255,0.4); border-radius: 12px; padding: 10px; border: 1px solid var(--border-color);">
+                                    <canvas id="chart-ml-predictions"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top:24px;">
+                            <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:12px;">So sánh Thực tế vs Dự đoán (10 mẫu đầu tiên)</h4>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead><tr><th>#</th><th>Thực tế</th><th>Dự đoán</th><th>Sai lệch</th></tr></thead>
+                                    <tbody id="ml-predictions-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= TAB: AI ASSISTANT & DRONE ================= -->
+            <section id="tab-ai-copilot" class="tab-pane">
+                <div class="explorer-header-bar">
+                    <div>
+                        <h2 class="explorer-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary)"></i> Trợ lý AI & Điều phối Drone</h2>
+                        <p class="text-muted" style="font-size:0.85rem; margin-top:4px;">Tương tác với trợ lý số nông nghiệp, chẩn đoán bệnh cây trồng bằng AI và điều phối thiết bị bay khảo sát</p>
+                    </div>
+                    <div class="data-status-indicator fetched">
+                        <i class="fa-solid fa-signal"></i>
+                        <span>Hệ thống Trực tuyến</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid" style="grid-template-columns: 1.1fr 0.9fr; gap: 24px; margin-bottom: 24px;">
+                    <!-- AI Copilot Chatbox -->
+                    <div class="card" style="padding: 24px; display: flex; flex-direction: column; height: 600px;">
+                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-comments" style="color:var(--primary)"></i>
+                            AI Copilot Nông nghiệp
+                        </h3>
+                        <div id="ai-chat-messages" style="flex: 1; overflow-y: auto; padding: 12px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px;">
+                            <!-- Welcome messages will be injected dynamically -->
+                        </div>
+                        <!-- Suggestions -->
+                        <div style="margin-bottom: 12px;">
+                            <p style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">GỢI Ý CÂU HỎI:</p>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="chat-suggestions">
+                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-radius: 20px; font-family:var(--font-family);" onclick="sendSuggestedMessage('Giải thích dữ liệu cảm biến đất hiện tại của tôi?')">Giải thích cảm biến đất</button>
+                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-radius: 20px; font-family:var(--font-family);" onclick="sendSuggestedMessage('Lịch gieo trồng sầu riêng hiệu quả?')">Lịch gieo sầu riêng</button>
+                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-radius: 20px; font-family:var(--font-family);" onclick="sendSuggestedMessage('Làm thế nào để trị bệnh rỉ sắt ở cà phê?')">Trị bệnh rỉ sắt cà phê</button>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="ai-chat-input" placeholder="Hỏi trợ lý AI về kỹ thuật gieo trồng, bón phân, sâu bệnh..." style="flex: 1; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 12px; font-family: var(--font-family); font-size: 0.88rem;">
+                            <button id="btn-chat-send" class="btn btn-primary" style="padding: 0 20px; border-radius: 12px;" onclick="handleChatSend()">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Disease Diagnosis & Drone Monitoring -->
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <!-- Computer Vision: Disease Diagnosis -->
+                        <div class="card" style="padding: 24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-eye" style="color:var(--primary)"></i>
+                                Nhận diện Sâu bệnh bằng AI (Computer Vision)
+                            </h3>
+                            <p class="text-muted" style="font-size:0.78rem; margin-bottom:16px;">Tải lên ảnh lá cây bị bệnh hoặc chọn từ ảnh mẫu thực tế để AI tiến hành quét bệnh</p>
+                            
+                            <!-- Sample selection -->
+                            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:16px;">
+                                <div class="sample-leaf-card" onclick="selectSampleLeaf('rice')">
+                                    <div style="height: 60px; background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.5)), url('2.jpg') center/cover; border-radius:8px; position:relative; overflow:hidden; border:1px solid var(--border-color); cursor:pointer;">
+                                        <span style="position:absolute; bottom:4px; left:4px; font-size:0.65rem; padding:2px 6px; background:rgba(0,0,0,0.6); color:white; border-radius:4px; font-weight:bold;">Lúa đốm lá</span>
+                                    </div>
+                                </div>
+                                <div class="sample-leaf-card" onclick="selectSampleLeaf('coffee')">
+                                    <div style="height: 60px; background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.5)), url('3.jpg') center/cover; border-radius:8px; position:relative; overflow:hidden; border:1px solid var(--border-color); cursor:pointer;">
+                                        <span style="position:absolute; bottom:4px; left:4px; font-size:0.65rem; padding:2px 6px; background:rgba(0,0,0,0.6); color:white; border-radius:4px; font-weight:bold;">Cà phê rỉ sắt</span>
+                                    </div>
+                                </div>
+                                <div class="sample-leaf-card" onclick="selectSampleLeaf('durian')">
+                                    <div style="height: 60px; background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.5)), url('1.jpg') center/cover; border-radius:8px; position:relative; overflow:hidden; border:1px solid var(--border-color); cursor:pointer;">
+                                        <span style="position:absolute; bottom:4px; left:4px; font-size:0.65rem; padding:2px 6px; background:rgba(0,0,0,0.6); color:white; border-radius:4px; font-weight:bold;">Sầu riêng cháy lá</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upload Box / Drag & Drop -->
+                            <div id="disease-upload-box" style="border: 2px dashed rgba(22, 163, 74, 0.3); border-radius: 12px; padding: 24px; text-align: center; background: rgba(22, 163, 74, 0.02); cursor: pointer; position: relative;" onclick="document.getElementById('disease-file-input').click()">
+                                <i class="fa-solid fa-cloud-arrow-up" style="font-size:2rem; color:var(--primary); margin-bottom:8px;"></i>
+                                <h4 style="font-size:0.85rem; font-weight:700;">Nhấn hoặc kéo ảnh lá cây vào đây để chẩn đoán</h4>
+                                <p style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">Hỗ trợ định dạng JPG, PNG tối đa 5MB</p>
+                                <input type="file" id="disease-file-input" style="display:none;" accept="image/*">
+                            </div>
+
+                            <!-- Scan Animation Progress -->
+                            <div id="disease-scan-progress" style="display:none; margin-top:20px; text-align:center;">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.75rem; font-weight:700;">
+                                    <span>AI đang phân tích đốm vàng & cấu trúc lá...</span>
+                                    <span id="scan-progress-pct">0%</span>
+                                </div>
+                                <div style="height:6px; background:#e2e8f0; border-radius:10px; overflow:hidden; position:relative;">
+                                    <div id="scan-progress-bar" style="height:100%; width:0%; background:linear-gradient(90deg, var(--primary), #d97706); border-radius:10px; transition: width 0.1s ease;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Scan Result Card -->
+                            <div id="disease-result-card" style="display:none; margin-top:20px; padding:16px; border-radius:12px; border:1px solid rgba(22, 163, 74, 0.2); background:rgba(255, 255, 255, 0.7); display:flex; flex-direction:column; gap:12px; backdrop-filter:blur(10px);">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <h4 id="disease-name" style="font-size:0.95rem; font-weight:800; color:var(--primary);">Bệnh Rỉ Sắt Cà Phê</h4>
+                                    <span id="disease-confidence" class="badge" style="background:var(--secondary); color:var(--primary); font-weight:800;">Độ tin cậy: 94.2%</span>
+                                </div>
+                                <div style="border-top:1px solid var(--border-color); padding-top:10px;">
+                                    <h5 style="font-size:0.78rem; font-weight:800; color:var(--text-primary); margin-bottom:4px;">Nguyên nhân chính:</h5>
+                                    <p id="disease-cause" style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;"></p>
+                                </div>
+                                <div style="border-top:1px solid var(--border-color); padding-top:10px;">
+                                    <h5 style="font-size:0.78rem; font-weight:800; color:var(--text-primary); margin-bottom:4px;">Hướng xử lý kỹ thuật:</h5>
+                                    <p id="disease-treatment" style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Drone Control Center -->
+                        <div class="card" style="padding: 24px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-paper-plane" style="color:var(--primary)"></i>
+                                Điều phối Drone giám sát (Drone Monitoring)
+                            </h3>
+                            <p class="text-muted" style="font-size:0.78rem; margin-bottom:16px;">Theo dõi thiết bị bay tự động quét tọa độ hồng ngoại và phun thuốc bảo vệ sinh học ở các phân khu</p>
+
+                            <!-- Drone Telemetry Grid -->
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;">
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); border-radius:12px; padding:12px;">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block;">TRẠNG THÁI FLIGHT-BOT</span>
+                                    <strong id="drone-status-txt" style="font-size:0.85rem; color:var(--text-muted);">Đang ở trạm sạc</strong>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); border-radius:12px; padding:12px;">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block;">PIN THIẾT BỊ</span>
+                                    <strong id="drone-battery" style="font-size:0.85rem; color:var(--gold);">100%</strong>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); border-radius:12px; padding:12px;">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block;">KHU VỰC KHẢO SÁT</span>
+                                    <strong id="drone-coverage" style="font-size:0.85rem;">Phân khu A-C (0 ha)</strong>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.4); border:1px solid var(--border-color); border-radius:12px; padding:12px;">
+                                    <span class="text-muted" style="font-size:0.7rem; display:block;">TỌA ĐỘ BAY</span>
+                                    <strong id="drone-coords" style="font-size:0.85rem;">[10.7629, 106.6821]</strong>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Canvas showing drone flight grid -->
+                            <div style="position:relative; background:#0a1714; height:180px; border-radius:12px; overflow:hidden; border:1px solid rgba(22, 163, 74, 0.2); margin-bottom:16px;">
+                                <canvas id="drone-flight-canvas" style="width:100%; height:100%; display:block;"></canvas>
+                                <!-- Custom Scanline effect -->
+                                <div style="position:absolute; inset:0; background:linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(22, 163, 74, 0.05), rgba(22, 163, 74, 0.02), rgba(22, 163, 74, 0.05)); background-size:100% 4px, 6px 100%; pointer-events:none;"></div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div style="display:flex; gap:10px;">
+                                <button id="btn-drone-takeoff" class="btn btn-primary" style="flex:1; padding:10px 0; font-size:0.8rem;" onclick="mlDroneTakeoff()">
+                                    Cất cánh giám sát
+                                </button>
+                                <button id="btn-drone-land" class="btn btn-danger" style="padding:10px 16px; font-size:0.8rem;" onclick="mlDroneLand()" disabled>
+                                    Hạ cánh gấp
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -746,6 +1181,18 @@
         <a class="pwa-nav-item" data-nav-btn="tab-esg" onclick="switchDashboardTab('tab-esg')">
             <div class="nav-icon-wrapper"><i class="fa-solid fa-seedling"></i></div>
             <span class="nav-label">ESG</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-data-explorer" onclick="switchDashboardTab('tab-data-explorer')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-database"></i></div>
+            <span class="nav-label">Data</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-ml-studio" onclick="switchDashboardTab('tab-ml-studio')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-robot"></i></div>
+            <span class="nav-label">ML</span>
+        </a>
+        <a class="pwa-nav-item" data-nav-btn="tab-ai-copilot" onclick="switchDashboardTab('tab-ai-copilot')">
+            <div class="nav-icon-wrapper"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <span class="nav-label">Trợ lý AI</span>
         </a>
     </nav>
 

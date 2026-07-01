@@ -97,9 +97,9 @@ class AgriSmartModel {
 
     // Đọc dữ liệu CSV và tính toán dự phòng
     async loadCSVData() {
-        const fetchFile = async (filename) => {
-            const response = await fetch(`./data/${filename}`);
-            if (!response.ok) throw new Error(`Không thể đọc file ${filename}`);
+        const fetchFile = async (filePath) => {
+            const response = await fetch(`./${filePath}`);
+            if (!response.ok) throw new Error(`Không thể đọc file ${filePath}`);
             const text = await response.text();
             return new Promise((resolve) => {
                 Papa.parse(text, {
@@ -113,9 +113,9 @@ class AgriSmartModel {
 
         try {
             const [farmers, farms, production, blockchain, esg, marketplace, weather, monthlySummary] = await Promise.all([
-                fetchFile('farmers.csv'),
-                fetchFile('farms.csv'),
-                fetchFile('production.csv'),
+                fetchFile('data/farmers.csv'),
+                fetchFile('data/farms.csv'),
+                fetchFile('data/production.csv'),
                 fetchFile('blockchain.csv'),
                 fetchFile('esg.csv'),
                 fetchFile('marketplace.csv'),
@@ -1528,3 +1528,1095 @@ if (document.readyState === 'loading') {
 } else {
     appController.init();
 }
+
+// =============================================================================
+// DATA EXPLORER MODULE
+// =============================================================================
+const DataExplorer = (() => {
+    const DATASETS = [
+        { id: 'farmers',   name: '1. Nông hộ (Farmers)',        icon: 'fa-users',          desc: 'Cơ sở dữ liệu nông hộ liên kết hệ thống' },
+        { id: 'farms',     name: '2. Trang trại (Farms)',        icon: 'fa-tractor',        desc: 'Giám sát thông số kỹ thuật trang trại' },
+        { id: 'production',name: '3. Sản lượng (Production)',    icon: 'fa-wheat-awn',      desc: 'Dữ liệu thu hoạch và sản xuất' },
+        { id: 'blockchain',name: '4. Blockchain',                icon: 'fa-cube',           desc: 'Giao dịch xác thực chuỗi khối' },
+        { id: 'esg',       name: '5. ESG & Bền vững',            icon: 'fa-seedling',       desc: 'Chỉ số phát thải carbon và ESG' },
+        { id: 'marketplace',name:'6. Thị trường (Marketplace)',  icon: 'fa-store',          desc: 'Đơn hàng và giao dịch xuất khẩu' },
+        { id: 'weather',   name: '7. Thời tiết (Weather)',        icon: 'fa-cloud-sun-rain', desc: 'Dữ liệu cảm biến khí tượng IoT' },
+        { id: 'monthlySummary', name: '8. Báo cáo Tháng',       icon: 'fa-chart-bar',      desc: 'Tổng hợp phân tích theo tháng' },
+    ];
+
+    let currentDatasetId = 'farmers';
+    let currentPage = 1;
+    const PAGE_SIZE = 10;
+    let searchQuery = '';
+    let sortKey = null;
+    let sortDir = 'asc';
+
+    function getModel() {
+        return appModel;
+    }
+
+    function getDataset(id) {
+        const m = getModel();
+        if (!m) return [];
+        const map = {
+            farmers: m.data.farmers,
+            farms: m.data.farms,
+            production: m.data.production,
+            blockchain: m.data.blockchain,
+            esg: m.data.esg,
+            marketplace: m.data.marketplace,
+            weather: m.data.weather,
+            monthlySummary: m.data.monthlySummary,
+        };
+        return map[id] || [];
+    }
+
+    function buildSidebar() {
+        const list = document.getElementById('explorer-dataset-list');
+        if (!list) return;
+        list.innerHTML = DATASETS.map(ds => `
+            <button class="explorer-cat-btn ${ds.id === currentDatasetId ? 'active' : ''}" 
+                    onclick="DataExplorer.selectDataset('${ds.id}')">
+                <i class="fa-solid ${ds.icon}"></i>
+                <span>${ds.name}</span>
+            </button>
+        `).join('');
+    }
+
+    function getFilteredSorted(data) {
+        let rows = [...data];
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            rows = rows.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q)));
+        }
+        if (sortKey) {
+            rows.sort((a, b) => {
+                const va = a[sortKey], vb = b[sortKey];
+                if (va == null) return 1;
+                if (vb == null) return -1;
+                const na = typeof va === 'number', nb = typeof vb === 'number';
+                if (na && nb) return sortDir === 'asc' ? va - vb : vb - va;
+                return sortDir === 'asc' ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+            });
+        }
+        return rows;
+    }
+
+    function renderTable(data) {
+        if (!data.length) {
+            document.getElementById('explorer-thead').innerHTML = '';
+            document.getElementById('explorer-tbody').innerHTML = '<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-muted);">Không có dữ liệu</td></tr>';
+            return;
+        }
+        const keys = Object.keys(data[0]);
+        // Header
+        document.getElementById('explorer-thead').innerHTML = `<tr>${keys.map(k => `
+            <th style="cursor:pointer; user-select:none; white-space:nowrap;" onclick="DataExplorer.sortBy('${k}')">
+                ${k} ${sortKey === k ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+            </th>`).join('')}</tr>`;
+
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageData = data.slice(start, start + PAGE_SIZE);
+        document.getElementById('explorer-tbody').innerHTML = pageData.map(row => `
+            <tr>${keys.map(k => {
+                const v = row[k];
+                if (typeof v === 'boolean') return `<td><span style="padding:2px 8px;border-radius:20px;font-size:0.72rem;font-weight:700;background:${v ? 'rgba(22,163,74,0.08)' : 'rgba(239,68,68,0.08)'};color:${v ? 'var(--success)' : 'var(--danger)'}">${v ? 'Có' : 'Không'}</span></td>`;
+                if (typeof v === 'number' && (String(k).toLowerCase().includes('vnd') || String(k).toLowerCase().includes('revenue') || String(k).toLowerCase().includes('profit') || String(k).toLowerCase().includes('cost')))
+                    return `<td style="font-family:'Courier New',monospace;font-weight:700;color:var(--info);font-size:0.8rem;">${Math.round(v).toLocaleString('vi-VN')}</td>`;
+                return `<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${v ?? '—'}</td>`;
+            }).join('')}</tr>`).join('');
+    }
+
+    function renderPagination(total) {
+        const totalPages = Math.ceil(total / PAGE_SIZE);
+        const el = document.getElementById('explorer-pagination');
+        if (!el) return;
+        if (totalPages <= 1) { el.innerHTML = `<span class="pagination-info">Tổng ${total} bản ghi</span>`; return; }
+        
+        let btns = '';
+        for (let i = 1; i <= Math.min(totalPages, 7); i++) {
+            btns += `<button class="page-btn ${i === currentPage ? 'active-page' : ''}" onclick="DataExplorer.goPage(${i})">${i}</button>`;
+        }
+        if (totalPages > 7) btns += `<span style="align-self:center;color:var(--text-muted)">...</span><button class="page-btn ${currentPage === totalPages ? 'active-page' : ''}" onclick="DataExplorer.goPage(${totalPages})">${totalPages}</button>`;
+        
+        el.innerHTML = `
+            <span class="pagination-info">Trang ${currentPage}/${totalPages} · Tổng ${total} bản ghi</span>
+            <div class="pagination-btns">
+                <button class="page-btn" onclick="DataExplorer.goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Trước</button>
+                ${btns}
+                <button class="page-btn" onclick="DataExplorer.goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Sau →</button>
+            </div>`;
+    }
+
+    function computeStats(data) {
+        if (!data.length) return {};
+        const numericKeys = Object.keys(data[0]).filter(k => typeof data[0][k] === 'number');
+        const stats = {};
+        numericKeys.forEach(k => {
+            const vals = data.map(r => r[k]).filter(v => v != null && !isNaN(v));
+            if (!vals.length) return;
+            const n = vals.length;
+            const sum = vals.reduce((a, b) => a + b, 0);
+            const mean = sum / n;
+            const sorted = [...vals].sort((a, b) => a - b);
+            const median = n % 2 === 0 ? (sorted[n/2-1] + sorted[n/2]) / 2 : sorted[Math.floor(n/2)];
+            const variance = vals.reduce((a, v) => a + Math.pow(v - mean, 2), 0) / n;
+            stats[k] = { count: n, mean, median, min: sorted[0], max: sorted[n-1], stdDev: Math.sqrt(variance) };
+        });
+        return stats;
+    }
+
+    function renderStats(stats) {
+        const grid = document.getElementById('explorer-stats-grid');
+        if (!grid) return;
+        const entries = Object.entries(stats);
+        if (!entries.length) { grid.innerHTML = '<p class="text-muted" style="font-size:0.85rem;">Không có biến số nào để thống kê.</p>'; return; }
+
+        const isVND = k => k.toLowerCase().includes('vnd') || k.toLowerCase().includes('revenue') || k.toLowerCase().includes('profit') || k.toLowerCase().includes('cost');
+        const fmt = (k, v) => {
+            if (isVND(k)) return (v / 1e6).toFixed(2) + ' Tr';
+            return Number(v.toFixed(3)).toLocaleString('vi-VN');
+        };
+
+        grid.innerHTML = entries.slice(0, 12).map(([k, s]) => `
+            <div class="stat-card">
+                <h4 title="${k}">${k}</h4>
+                <div class="stat-row"><span>N (mẫu):</span><span>${s.count}</span></div>
+                <div class="stat-row highlight"><span>Trung bình (μ):</span><span>${fmt(k, s.mean)}</span></div>
+                <div class="stat-row"><span>Trung vị:</span><span>${fmt(k, s.median)}</span></div>
+                <div class="stat-row"><span>Min:</span><span>${fmt(k, s.min)}</span></div>
+                <div class="stat-row"><span>Max:</span><span>${fmt(k, s.max)}</span></div>
+                <div class="stat-row"><span>Std (σ):</span><span>${fmt(k, s.stdDev)}</span></div>
+            </div>`).join('');
+    }
+
+    function render() {
+        buildSidebar();
+        const raw = getDataset(currentDatasetId);
+        const ds = DATASETS.find(d => d.id === currentDatasetId);
+
+        document.getElementById('explorer-dataset-name').textContent = ds?.name || '';
+        document.getElementById('explorer-dataset-desc').textContent = `${ds?.desc || ''} — Tổng ${raw.length} bản ghi`;
+
+        // Update counter badge
+        const badge = document.getElementById('explorer-record-count');
+        if (badge) badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${raw.length.toLocaleString('vi-VN')} bản ghi</span>`;
+
+        const filtered = getFilteredSorted(raw);
+        renderTable(filtered);
+        renderPagination(filtered.length);
+        renderStats(computeStats(raw));
+    }
+
+    // Public API
+    return {
+        init() {
+            render();
+            const search = document.getElementById('explorer-search');
+            if (search) {
+                search.addEventListener('input', e => {
+                    searchQuery = e.target.value;
+                    currentPage = 1;
+                    render();
+                });
+            }
+        },
+        selectDataset(id) {
+            currentDatasetId = id;
+            currentPage = 1;
+            searchQuery = '';
+            sortKey = null;
+            const s = document.getElementById('explorer-search');
+            if (s) s.value = '';
+            render();
+        },
+        sortBy(key) {
+            if (sortKey === key) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            else { sortKey = key; sortDir = 'asc'; }
+            render();
+        },
+        goPage(p) {
+            const data = getFilteredSorted(getDataset(currentDatasetId));
+            const totalPages = Math.ceil(data.length / PAGE_SIZE);
+            if (p < 1 || p > totalPages) return;
+            currentPage = p;
+            render();
+        }
+    };
+})();
+window.DataExplorer = DataExplorer;
+
+
+// =============================================================================
+// ML STUDIO MODULE
+// =============================================================================
+const MLStudio = (() => {
+    let scalerType = 'minmax';
+    let corrGroup = 'finance';
+    let predictionChart = null;
+
+    function getModel() { return appModel; }
+
+    // --- Feature Scaling ---
+    function applyMinMax(vals) {
+        const mn = Math.min(...vals), mx = Math.max(...vals);
+        return vals.map(v => mx === mn ? 0 : (v - mn) / (mx - mn));
+    }
+    function applyZScore(vals) {
+        const n = vals.length;
+        const mean = vals.reduce((a,b) => a+b, 0) / n;
+        const std = Math.sqrt(vals.reduce((a,v) => a + Math.pow(v-mean,2), 0) / n) || 1;
+        return vals.map(v => (v - mean) / std);
+    }
+
+    function renderScaling() {
+        const m = getModel();
+        if (!m) return;
+        const prod = m.data.production.slice(0, 6);
+        const raw = prod.map(p => ({ id: p.Production_ID, qty: p.Quantity_Ton, profit: p.Profit_VND }));
+
+        const qtyVals = raw.map(r => r.qty);
+        const profitVals = raw.map(r => r.profit);
+        const scaleFn = scalerType === 'minmax' ? applyMinMax : applyZScore;
+        const scaledQty = scaleFn(qtyVals);
+        const scaledProfit = scaleFn(profitVals);
+
+        const rawEl = document.getElementById('ml-raw-data');
+        const scaledEl = document.getElementById('ml-scaled-data');
+        if (!rawEl || !scaledEl) return;
+
+        rawEl.innerHTML = raw.map(r => `
+            <div class="scaling-row">
+                <span>${r.id}</span>
+                <span>${r.qty.toFixed(1)}T | ${(r.profit/1e6).toFixed(1)}Tr</span>
+            </div>`).join('');
+
+        scaledEl.innerHTML = raw.map((r, i) => `
+            <div class="scaling-row">
+                <span>${r.id}</span>
+                <span>${scaledQty[i].toFixed(4)} | ${scaledProfit[i].toFixed(4)}</span>
+            </div>`).join('');
+
+        const desc = document.getElementById('ml-scaler-desc');
+        if (desc) {
+            desc.innerHTML = scalerType === 'minmax'
+                ? '<i class="fa-solid fa-circle-info" style="color:var(--info)"></i> <span><strong>Min-Max Scaling:</strong> Công thức <code style="background:rgba(2,132,199,0.08);padding:1px 5px;border-radius:4px;">(x - min) / (max - min)</code> → đưa giá trị về khoảng [0, 1]. Phù hợp cho mạng nơ-ron, K-Means, KNN.</span>'
+                : '<i class="fa-solid fa-circle-info" style="color:var(--info)"></i> <span><strong>Z-Score (Standard):</strong> Công thức <code style="background:rgba(2,132,199,0.08);padding:1px 5px;border-radius:4px;">(x - μ) / σ</code> → mean=0, std=1. Phù hợp cho Linear/Logistic Regression, PCA.</span>';
+        }
+    }
+
+    // --- Label Encoding ---
+    function renderEncoding() {
+        const crops = ['Thanh long', 'Cà phê', 'Lúa', 'Xoài', 'Sầu riêng'];
+        const el = document.getElementById('ml-encoding-list');
+        if (!el) return;
+        el.innerHTML = crops.map((c, i) => `
+            <div class="encoding-row">
+                <span class="enc-original">${c}</span>
+                <span class="enc-arrow">➔</span>
+                <span class="encoding-badge">${i}</span>
+            </div>`).join('');
+    }
+
+    // --- Pearson Correlation ---
+    function pearson(a, b) {
+        const n = a.length;
+        if (!n) return 0;
+        const ma = a.reduce((x,y)=>x+y,0)/n, mb = b.reduce((x,y)=>x+y,0)/n;
+        const num = a.reduce((s,v,i) => s + (v-ma)*(b[i]-mb), 0);
+        const da = Math.sqrt(a.reduce((s,v)=>s+Math.pow(v-ma,2),0));
+        const db = Math.sqrt(b.reduce((s,v)=>s+Math.pow(v-mb,2),0));
+        return da*db === 0 ? 0 : num / (da*db);
+    }
+
+    function corrColor(v) {
+        // positive: blue shades; negative: red shades; near 0: gray
+        if (v >= 0.99) return { bg: '#1e40af', color: '#fff' };
+        if (v >= 0.7)  return { bg: '#2563eb', color: '#fff' };
+        if (v >= 0.4)  return { bg: '#93c5fd', color: '#1e40af' };
+        if (v >= 0.1)  return { bg: '#dbeafe', color: '#1e40af' };
+        if (v >= -0.1) return { bg: '#f3f4f6', color: '#6b7280' };
+        if (v >= -0.4) return { bg: '#fecaca', color: '#991b1b' };
+        if (v >= -0.7) return { bg: '#f87171', color: '#fff' };
+        return { bg: '#dc2626', color: '#fff' };
+    }
+
+    function renderCorrMatrix() {
+        const m = getModel();
+        if (!m) return;
+        const container = document.getElementById('ml-corr-matrix');
+        if (!container) return;
+
+        const FINANCE = ['Quantity_Ton', 'Unit_Price_VND', 'Revenue_VND', 'Cost_VND', 'Profit_VND', 'ESG_Score'];
+        const ENV = ['Temperature_C', 'Humidity_Percent', 'Rainfall_mm', 'Disease_Risk_Num'];
+        
+        let keys, data;
+        if (corrGroup === 'finance') {
+            keys = FINANCE;
+            data = m.data.production.filter(p => FINANCE.every(k => typeof p[k] === 'number'));
+        } else {
+            // Build weather numeric data
+            const weatherData = m.data.weather.map(w => ({
+                Temperature_C: w.Temperature_C,
+                Humidity_Percent: w.Humidity_Percent || w['Humidity_%'] || 0,
+                Rainfall_mm: w.Rainfall_mm || 0,
+                Disease_Risk_Num: w.Disease_Risk === 'High' ? 2 : w.Disease_Risk === 'Medium' ? 1 : 0
+            }));
+            keys = ENV;
+            data = weatherData;
+        }
+
+        if (!data.length) { container.innerHTML = '<p class="text-muted">Không đủ dữ liệu</p>'; return; }
+
+        const cols = keys.length;
+        // Compute matrix
+        const matrix = keys.map(r => keys.map(c => {
+            if (r === c) return 1;
+            const va = data.map(row => Number(row[r])).filter(v => !isNaN(v));
+            const vb = data.map(row => Number(row[c])).filter(v => !isNaN(v));
+            const len = Math.min(va.length, vb.length);
+            return Number(pearson(va.slice(0, len), vb.slice(0, len)).toFixed(3));
+        }));
+
+        const shortKey = k => k.split('_')[0];
+
+        // Build grid HTML: (cols+1) columns
+        container.innerHTML = `
+        <div class="corr-matrix" style="grid-template-columns: 100px repeat(${cols}, 68px);">
+            <div class="corr-header-cell"></div>
+            ${keys.map(k => `<div class="corr-header-cell" title="${k}">${shortKey(k)}</div>`).join('')}
+            ${keys.map((r, ri) => `
+                <div class="corr-row-label" title="${r}">${shortKey(r)}</div>
+                ${keys.map((c, ci) => {
+                    const v = matrix[ri][ci];
+                    const { bg, color } = corrColor(v);
+                    return `<div class="corr-cell" style="background:${bg};color:${color};" title="${r} ↔ ${c}: ${v}">${v.toFixed(2)}</div>`;
+                }).join('')}
+            `).join('')}
+        </div>`;
+    }
+
+    // --- ML Models ---
+    class LinearRegression {
+        constructor() { this.weights = []; this.bias = 0; }
+        fit(X, y, epochs = 500, lr = 0.001) {
+            const n = X.length, p = X[0].length;
+            this.weights = new Array(p).fill(0).map(() => (Math.random() - 0.5) * 0.1);
+            this.bias = 0;
+            for (let e = 0; e < epochs; e++) {
+                let dw = new Array(p).fill(0), db = 0;
+                for (let i = 0; i < n; i++) {
+                    const pred = this.predict(X[i]);
+                    const err = pred - y[i];
+                    for (let j = 0; j < p; j++) dw[j] += err * X[i][j];
+                    db += err;
+                }
+                for (let j = 0; j < p; j++) this.weights[j] -= lr * dw[j] / n;
+                this.bias -= lr * db / n;
+            }
+        }
+        predict(x) { return this.bias + x.reduce((s, v, i) => s + v * (this.weights[i] || 0), 0); }
+        importance() { const s = this.weights.reduce((a,w) => a+Math.abs(w), 0) || 1; return this.weights.map(w => Math.abs(w)/s); }
+    }
+
+    class SimpleTree {
+        constructor(maxDepth = 5) { this.root = null; this.maxDepth = maxDepth; }
+        fit(X, y) { this.root = this._build(X, y, 0); }
+        _build(X, y, depth) {
+            if (!X.length || depth >= this.maxDepth) return { leaf: true, val: y.reduce((a,b)=>a+b,0)/y.length||0 };
+            let bestGain = -Infinity, bestFeat, bestThresh, leftX, leftY, rightX, rightY;
+            const p = X[0].length;
+            for (let f = 0; f < p; f++) {
+                const vals = [...new Set(X.map(x=>x[f]))].slice(0, 10);
+                for (const thresh of vals) {
+                    const li = [], ri = [];
+                    X.forEach((x,i) => (x[f] <= thresh ? li : ri).push(i));
+                    if (!li.length || !ri.length) continue;
+                    const lv = li.map(i=>y[i]), rv = ri.map(i=>y[i]);
+                    const gain = this._var(y) - (li.length/X.length)*this._var(lv) - (ri.length/X.length)*this._var(rv);
+                    if (gain > bestGain) { bestGain = gain; bestFeat = f; bestThresh = thresh; leftX = li.map(i=>X[i]); leftY = lv; rightX = ri.map(i=>X[i]); rightY = rv; }
+                }
+            }
+            if (bestFeat === undefined) return { leaf: true, val: y.reduce((a,b)=>a+b,0)/y.length||0 };
+            return { feat: bestFeat, thresh: bestThresh, left: this._build(leftX, leftY, depth+1), right: this._build(rightX, rightY, depth+1) };
+        }
+        _var(arr) { const m = arr.reduce((a,b)=>a+b,0)/arr.length; return arr.reduce((s,v)=>s+Math.pow(v-m,2),0)/arr.length; }
+        predict(x) { let n = this.root; while (!n.leaf) n = x[n.feat] <= n.thresh ? n.left : n.right; return n.val; }
+    }
+
+    class RandomForest {
+        constructor(n = 12) { this.trees = []; this.n = n; this.featImportance = {}; }
+        fit(X, y, featNames) {
+            this.trees = [];
+            this.featImportance = {};
+            featNames.forEach(f => this.featImportance[f] = 0);
+            for (let t = 0; t < this.n; t++) {
+                // Bootstrap sample
+                const idx = Array.from({length: X.length}, () => Math.floor(Math.random()*X.length));
+                const bX = idx.map(i => X[i]), bY = idx.map(i => y[i]);
+                // Random feature subset
+                const fCount = Math.max(1, Math.floor(Math.sqrt(X[0].length)));
+                const fIdx = [...Array(X[0].length).keys()].sort(()=>Math.random()-0.5).slice(0, fCount);
+                const subX = bX.map(x => fIdx.map(f => x[f]));
+                const tree = new SimpleTree(6);
+                tree.fit(subX, bY);
+                this.trees.push({ tree, fIdx });
+                fIdx.forEach(f => { this.featImportance[featNames[f]] = (this.featImportance[featNames[f]] || 0) + 1/this.n; });
+            }
+            const tot = Object.values(this.featImportance).reduce((a,b)=>a+b, 0) || 1;
+            Object.keys(this.featImportance).forEach(k => this.featImportance[k] /= tot);
+        }
+        predict(x) {
+            const preds = this.trees.map(({tree, fIdx}) => tree.predict(fIdx.map(f => x[f])));
+            return preds.reduce((a,b)=>a+b,0)/preds.length;
+        }
+        importance() { return this.featImportance; }
+    }
+
+    function trainTestSplit(X, y, testRatio) {
+        const idx = Array.from({length: X.length}, (_,i)=>i).sort(()=>Math.random()-0.5);
+        const testCount = Math.floor(X.length * testRatio);
+        const testIdx = idx.slice(0, testCount);
+        const trainIdx = idx.slice(testCount);
+        return {
+            trainX: trainIdx.map(i=>X[i]), trainY: trainIdx.map(i=>y[i]),
+            testX: testIdx.map(i=>X[i]), testY: testIdx.map(i=>y[i]),
+            testOrigIdx: testIdx
+        };
+    }
+
+    function normalize(vals) {
+        const mn = Math.min(...vals), mx = Math.max(...vals);
+        return mx === mn ? vals.map(()=>0) : vals.map(v=>(v-mn)/(mx-mn));
+    }
+
+    function metrics(actual, predicted) {
+        const n = actual.length;
+        const mae = actual.reduce((s,v,i)=>s+Math.abs(v-predicted[i]),0)/n;
+        const mse = actual.reduce((s,v,i)=>s+Math.pow(v-predicted[i],2),0)/n;
+        const rmse = Math.sqrt(mse);
+        const mean = actual.reduce((a,b)=>a+b,0)/n;
+        const ss_tot = actual.reduce((s,v)=>s+Math.pow(v-mean,2),0);
+        const ss_res = actual.reduce((s,v,i)=>s+Math.pow(v-predicted[i],2),0);
+        const r2 = ss_tot === 0 ? 1 : 1 - ss_res/ss_tot;
+        return { mae, mse, rmse, r2 };
+    }
+
+    function renderResults(m, preds, testY, featNames, featImportance, targetKey) {
+        document.getElementById('ml-training-progress').style.display = 'none';
+        document.getElementById('ml-results').style.display = 'block';
+
+        const isVND = targetKey.includes('VND') || targetKey.includes('revenue') || targetKey.includes('profit');
+        const fmt = v => isVND ? (v/1e6).toFixed(2) + ' Tr' : Number(v.toFixed(3)).toLocaleString('vi-VN');
+
+        // Metrics
+        document.getElementById('ml-metrics-grid').innerHTML = `
+            <div class="ml-metric-card"><div class="metric-label">R² Score</div><div class="metric-value">${m.r2.toFixed(4)}</div><div class="metric-sub">Độ khớp mô hình</div></div>
+            <div class="ml-metric-card rmse"><div class="metric-label">RMSE</div><div class="metric-value">${isVND?(m.rmse/1e6).toFixed(1)+'M':m.rmse.toFixed(3)}</div><div class="metric-sub">Căn bình phương sai số</div></div>
+            <div class="ml-metric-card mae"><div class="metric-label">MAE</div><div class="metric-value">${isVND?(m.mae/1e6).toFixed(1)+'M':m.mae.toFixed(3)}</div><div class="metric-sub">Sai số tuyệt đối trung bình</div></div>
+            <div class="ml-metric-card mse"><div class="metric-label">MSE</div><div class="metric-value">${isVND?(m.mse/1e12).toFixed(2)+'T²':m.mse.toFixed(4)}</div><div class="metric-sub">Bình phương sai số TB</div></div>`;
+
+        // Feature importance
+        const fiEl = document.getElementById('ml-feature-importance');
+        if (featImportance && fiEl) {
+            const sorted = Object.entries(featImportance).sort((a,b)=>b[1]-a[1]).slice(0,8);
+            const maxImp = sorted[0]?.[1] || 1;
+            fiEl.innerHTML = sorted.map(([name, imp]) => `
+                <div class="fi-row">
+                    <span class="fi-label" title="${name}">${name}</span>
+                    <div class="fi-bar-wrapper"><div class="fi-bar" style="width:${(imp/maxImp*100).toFixed(1)}%"></div></div>
+                    <span class="fi-pct">${(imp*100).toFixed(1)}%</span>
+                </div>`).join('');
+        }
+
+        // Draw Chart.js comparison chart
+        const chartCanvas = document.getElementById('chart-ml-predictions');
+        if (chartCanvas) {
+            const ctx = chartCanvas.getContext('2d');
+            if (predictionChart) {
+                predictionChart.destroy();
+            }
+
+            const sampleCount = 15;
+            const chartLabels = Array.from({length: Math.min(testY.length, sampleCount)}, (_, i) => `#${i+1}`);
+            const actualData = testY.slice(0, sampleCount);
+            const predictedData = preds.slice(0, sampleCount);
+
+            predictionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [
+                        {
+                            label: 'Thực tế',
+                            data: actualData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 4
+                        },
+                        {
+                            label: 'Dự đoán',
+                            data: predictedData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' },
+                                boxWidth: 12
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return isVND ? (value/1e6).toFixed(0) + 'M' : value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Predictions table
+        document.getElementById('ml-predictions-tbody').innerHTML = testY.slice(0,10).map((actual, i) => {
+            const pred = preds[i];
+            const diff = actual - pred;
+            const pct = actual !== 0 ? Math.abs(diff/actual*100).toFixed(1) : '—';
+            const good = Math.abs(diff/Math.max(Math.abs(actual),1)) < 0.2;
+            return `<tr>
+                <td>${i+1}</td>
+                <td style="font-weight:700;">${fmt(actual)}</td>
+                <td style="color:var(--primary);font-weight:700;">${fmt(pred)}</td>
+                <td><span style="padding:2px 8px;border-radius:20px;font-size:0.72rem;font-weight:700;background:${good?'rgba(22,163,74,0.08)':'rgba(239,68,68,0.08)'};color:${good?'var(--success)':'var(--danger)'}">
+                    ${diff>=0?'+':''}${fmt(diff)} (${pct}%)
+                </span></td>
+            </tr>`;
+        }).join('');
+    }
+
+    async function runModel() {
+        const m = getModel();
+        if (!m) return;
+
+        const modelType = document.getElementById('ml-model-select').value;
+        const targetKey = document.getElementById('ml-target-select').value;
+        const testRatio = parseFloat(document.getElementById('ml-split-select').value);
+
+        const FEAT_KEYS = ['Quantity_Ton', 'Unit_Price_VND', 'ESG_Score', 'AI_Prediction_Accuracy'];
+        const available = FEAT_KEYS.filter(k => k !== targetKey);
+
+        const rawData = m.data.production.filter(p =>
+            available.every(k => typeof p[k] === 'number') && typeof p[targetKey] === 'number'
+        );
+        if (rawData.length < 20) { alert('Không đủ dữ liệu để huấn luyện!'); return; }
+
+        // Show progress
+        document.getElementById('ml-training-progress').style.display = 'block';
+        document.getElementById('ml-results').style.display = 'none';
+        document.getElementById('btn-run-ml').disabled = true;
+
+        // Normalize features
+        const normedCols = available.map(k => {
+            const vals = rawData.map(r => r[k]);
+            return normalize(vals);
+        });
+        const X = rawData.map((_, i) => available.map((_, fi) => normedCols[fi][i]));
+        const y = rawData.map(r => r[targetKey]);
+
+        // Animate progress
+        let progress = 0;
+        const progressBar = document.getElementById('ml-progress-bar');
+        const progressPct = document.getElementById('ml-progress-pct');
+        const animProgress = (target) => new Promise(res => {
+            const step = () => {
+                progress = Math.min(progress + 2, target);
+                progressBar.style.width = progress + '%';
+                progressPct.textContent = progress + '%';
+                if (progress < target) requestAnimationFrame(step);
+                else res();
+            };
+            requestAnimationFrame(step);
+        });
+
+        await animProgress(30);
+        const { trainX, trainY, testX, testY } = trainTestSplit(X, y, testRatio);
+        await animProgress(60);
+
+        let model, predictions, featImportance;
+        if (modelType === 'linear') {
+            model = new LinearRegression();
+            model.fit(trainX, trainY, 800, 0.005);
+            predictions = testX.map(x => model.predict(x));
+            const imp = model.importance();
+            featImportance = Object.fromEntries(available.map((k, i) => [k, imp[i] || 0]));
+        } else if (modelType === 'tree') {
+            model = new SimpleTree(6);
+            model.fit(trainX, trainY);
+            predictions = testX.map(x => model.predict(x));
+            featImportance = Object.fromEntries(available.map((k, i) => [k, 1/available.length]));
+        } else {
+            model = new RandomForest(15);
+            model.fit(trainX, trainY, available);
+            predictions = testX.map(x => model.predict(x));
+            featImportance = model.importance();
+        }
+
+        await animProgress(100);
+        const m2 = metrics(testY, predictions);
+
+        // Small delay for UX
+        await new Promise(res => setTimeout(res, 300));
+        document.getElementById('btn-run-ml').disabled = false;
+        renderResults(m2, predictions, testY, available, featImportance, targetKey);
+    }
+
+    return {
+        init() {
+            renderScaling();
+            renderEncoding();
+            renderCorrMatrix();
+        },
+        setScaler(type) {
+            scalerType = type;
+            document.querySelectorAll('#btn-scaler-minmax, #btn-scaler-standard').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-scaler-${type === 'minmax' ? 'minmax' : 'standard'}`).classList.add('active');
+            renderScaling();
+        },
+        setCorrGroup(group) {
+            corrGroup = group;
+            document.querySelectorAll('#btn-corr-finance, #btn-corr-env').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-corr-${group === 'finance' ? 'finance' : 'env'}`).classList.add('active');
+            renderCorrMatrix();
+        },
+        runModel
+    };
+})();
+window.MLStudio = MLStudio;
+
+// Global bridge functions
+window.mlSetScaler = (t) => MLStudio.setScaler(t);
+window.mlSetCorrGroup = (g) => MLStudio.setCorrGroup(g);
+window.mlRunModel = () => MLStudio.runModel();
+
+// ==========================================================================
+// 8. AI COPILOT & DRONE COORDINATION MODULE
+// ==========================================================================
+const AICopilot = (() => {
+    let initialized = false;
+    let isDroneFlying = false;
+    let droneInterval = null;
+    let droneX = 80;
+    let droneY = 60;
+    let droneTargetX = 120;
+    let droneTargetY = 80;
+    let droneBattery = 100;
+    let droneCoverage = 0;
+    let canvas = null;
+    let ctx = null;
+    
+    // Disease data from Chapter 3.3.2
+    const diseaseData = {
+        rice: {
+            name: "Bệnh Đốm Lá Lúa (Cercospora oryzae)",
+            confidence: "92.8%",
+            cause: "Do nấm Cercospora oryzae gây ra, thường phát sinh mạnh ở điều kiện độ ẩm cao (>85%), bón thừa đạm (Nitrogen), ruộng quá dày che bóng hoặc hệ thống thoát nước kém.",
+            treatment: "Cắt giảm ngay lượng phân đạm bón vào, tăng cường kali. Phun các chế phẩm sinh học trị nấm gốc đồng (Copper hydroxide) hoặc Trichoderma để khống chế vết bệnh loang rộng. Vụ sau chú ý sạ thưa."
+        },
+        coffee: {
+            name: "Bệnh Rỉ Sắt Cà Phê (Hemileia vastatrix)",
+            confidence: "95.6%",
+            cause: "Do bào tử nấm Hemileia vastatrix ký sinh, phát tán mạnh qua gió và sương ẩm nhiệt đới. Biến đổi khí hậu khiến nhiệt độ ban đêm ấm hơn làm bào tử nấm nảy mầm nhanh kỷ lục.",
+            treatment: "Thu gom và tiêu hủy toàn bộ các cành lá nhiễm bệnh. Phun thuốc trừ nấm sinh học chứa hoạt chất Bacillus subtilis hoặc đồng sulfat định kỳ. Ghép cải tạo bằng dòng cà phê TRS1 kháng rỉ sắt tốt hơn."
+        },
+        durian: {
+            name: "Bệnh Cháy Lá Sầu Riêng (Phytophthora palmivora)",
+            confidence: "94.1%",
+            cause: "Nấm Phytophthora palmivora tấn công trong mùa mưa dầm hoặc ẩm độ đất quá bão hòa kéo dài (>90%). Nước đọng xung quanh gốc tạo điều kiện cho bào tử bơi bám vào rễ và cổ rễ.",
+            treatment: "Xới phá váng, khơi rãnh thoát nước sâu quanh vườn, không để đọng nước. Bôi vôi quét quanh gốc cây từ 1m trở xuống. Sử dụng phân bón lá chứa lân phosphonate để tăng cường kháng thể chủ động cho cây."
+        }
+    };
+
+    function init() {
+        setupChatbot();
+        setupDroneCanvas();
+        setupFileEvents();
+        
+        // Loop map drawing
+        if (!initialized) {
+            initialized = true;
+            setInterval(() => {
+                if (canvas && ctx) {
+                    drawDroneMap();
+                }
+            }, 100);
+        }
+    }
+
+    function setupChatbot() {
+        const chatBox = document.getElementById('ai-chat-messages');
+        if (!chatBox) return;
+        
+        chatBox.innerHTML = '';
+        addMessage("assistant", "Xin chào! Tôi là Trợ lý AI nông nghiệp AgriSmart. 🌾 Tôi được xây dựng theo định hướng công nghệ tại Chương 3 của luận văn kinh doanh số. Tôi có thể giải thích dữ liệu cảm biến IoT, lập lịch gieo trồng hoặc hướng dẫn trị sâu bệnh cho bạn. Bạn cần tôi giúp gì?");
+    }
+
+    function addMessage(sender, text) {
+        const chatBox = document.getElementById('ai-chat-messages');
+        if (!chatBox) return;
+
+        const meta = document.createElement('div');
+        meta.className = `chat-meta ${sender === 'user' ? 'user-meta' : 'assistant-meta'}`;
+        const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        meta.innerHTML = `<span style="font-weight:700;">${sender === 'user' ? 'Bạn' : 'AgriSmart AI'}</span> • <span>${timeStr}</span>`;
+        chatBox.appendChild(meta);
+
+        const bubble = document.createElement('div');
+        bubble.className = `chat-message ${sender}`;
+        bubble.innerHTML = `<p>${text}</p>`;
+        chatBox.appendChild(bubble);
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function addTypingIndicator() {
+        const chatBox = document.getElementById('ai-chat-messages');
+        if (!chatBox) return null;
+
+        const id = 'typing-' + Date.now();
+        
+        const meta = document.createElement('div');
+        meta.id = id + '-meta';
+        meta.className = 'chat-meta assistant-meta';
+        meta.innerHTML = `<span style="font-weight:700;">AgriSmart AI</span> • <span>Đang gõ...</span>`;
+        chatBox.appendChild(meta);
+
+        const bubble = document.createElement('div');
+        bubble.id = id;
+        bubble.className = 'chat-message assistant';
+        bubble.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+        chatBox.appendChild(bubble);
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return id;
+    }
+
+    function removeTypingIndicator(id) {
+        const el = document.getElementById(id);
+        const meta = document.getElementById(id + '-meta');
+        if (el) el.remove();
+        if (meta) meta.remove();
+    }
+
+    function handleSend(text) {
+        if (!text || !text.trim()) return;
+        const msg = text.trim();
+        addMessage("user", msg);
+
+        const typingId = addTypingIndicator();
+
+        setTimeout(() => {
+            removeTypingIndicator(typingId);
+            const reply = getAIResponse(msg);
+            addMessage("assistant", reply);
+        }, 1100);
+    }
+
+    function getAIResponse(msg) {
+        const lower = msg.toLowerCase();
+        
+        if (lower.includes('cảm biến') || lower.includes('độ ẩm') || lower.includes('nhiệt độ')) {
+            const tempEl = document.getElementById('telemetry-temp');
+            const humEl = document.getElementById('telemetry-humidity');
+            const temp = tempEl ? tempEl.textContent : '28.5°C';
+            const hum = humEl ? humEl.textContent : '70%';
+            return `Dữ liệu cảm biến trạm IoT đo được hiện tại: <strong>Nhiệt độ không khí là ${temp}</strong> và <strong>Độ ẩm đạt ${hum}</strong>. Chỉ số này nằm ở ngưỡng lý tưởng. Bạn không cần tưới thêm nước lúc này.`;
+        }
+
+        if (lower.includes('sầu riêng') && (lower.includes('lịch') || lower.includes('canh tác') || lower.includes('gieo'))) {
+            return `Theo phân tích trong Chương 3.3.9 của đề tài, sầu riêng cần:<br>
+            - <strong>Xuống giống:</strong> Đầu mùa mưa (Tháng 4-5) để tận dụng nước trời.<br>
+            - <strong>Tạo bông:</strong> Cuối mùa mưa (Tháng 11-12) qua việc xiết nước.<br>
+            - <strong>Ngưỡng tưới:</strong> Duy trì độ ẩm đất từ 50-65% bằng vòi tưới nhỏ giọt tự động.`;
+        }
+
+        if (lower.includes('rỉ sắt') || lower.includes('cà phê')) {
+            return `<strong>Bệnh Rỉ Sắt Cà Phê:</strong> do nấm <i>Hemileia vastatrix</i> gây hại mặt dưới lá. Phương pháp chẩn đoán & điều trị:<br>
+            - Phun dung dịch Boocđô 1% (Copper sulfate) hoặc chế phẩm Trichoderma để cô lập ổ nấm.<br>
+            - Cắt tỉa cành tăm để vườn nhận đủ ánh sáng trực tiếp, ngăn sương đọng lâu.`;
+        }
+
+        if (lower.includes('lúa') || lower.includes('đốm lá')) {
+            return `<strong>Bệnh Đốm Lá Lúa:</strong> do nấm <i>Cercospora oryzae</i>. Điều trị bằng cách giảm bón phân đạm, bón thêm phân Kali. Phun ngừa bằng sản phẩm chứa gốc Đồng sinh học vào sáng sớm.`;
+        }
+
+        return `Tôi đã ghi nhận câu hỏi về "<i>${msg}</i>". Theo mô hình kinh doanh số AgriSmart (Chương 3.3), bạn nên kết hợp giám sát camera hồng ngoại từ Drone và theo dõi chỉ số độ ẩm cảm biến IoT đất hàng ngày để tối ưu quy trình IPM.`;
+    }
+
+    function runDiagnosis(type) {
+        const data = diseaseData[type];
+        if (!data) return;
+
+        const resultCard = document.getElementById('disease-result-card');
+        const uploadBox = document.getElementById('disease-upload-box');
+        const progressBox = document.getElementById('disease-scan-progress');
+        const progressBar = document.getElementById('scan-progress-bar');
+        const progressPct = document.getElementById('scan-progress-pct');
+
+        resultCard.style.display = 'none';
+        progressBox.style.display = 'block';
+        uploadBox.style.opacity = '0.5';
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = progress + '%';
+            progressPct.textContent = progress + '%';
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    document.getElementById('disease-name').innerHTML = `${data.name}`;
+                    document.getElementById('disease-confidence').textContent = `Độ tin cậy: ${data.confidence}`;
+                    document.getElementById('disease-cause').innerHTML = data.cause;
+                    document.getElementById('disease-treatment').innerHTML = data.treatment;
+
+                    progressBox.style.display = 'none';
+                    resultCard.style.display = 'flex';
+                    uploadBox.style.opacity = '1';
+                }, 300);
+            }
+        }, 120);
+    }
+
+    function setupFileEvents() {
+        const fileInput = document.getElementById('disease-file-input');
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    const types = ['rice', 'coffee', 'durian'];
+                    const randType = types[Math.floor(Math.random() * types.length)];
+                    runDiagnosis(randType);
+                }
+            });
+        }
+    }
+
+    function setupDroneCanvas() {
+        canvas = document.getElementById('drone-flight-canvas');
+        if (!canvas) return;
+        ctx = canvas.getContext('2d');
+        
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+    }
+
+    function drawDroneMap() {
+        if (!ctx || !canvas) return;
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.fillStyle = '#061311';
+        ctx.fillRect(0, 0, w, h);
+
+        // Radar grid
+        ctx.strokeStyle = 'rgba(22, 163, 74, 0.15)';
+        ctx.lineWidth = 1;
+        
+        for (let x = 0; x < w; x += 30) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, h);
+            ctx.stroke();
+        }
+        for (let y = 0; y < h; y += 30) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(w, y);
+            ctx.stroke();
+        }
+
+        // Green zones (Farms)
+        ctx.fillStyle = 'rgba(22, 163, 74, 0.08)';
+        ctx.fillRect(30, 20, 90, 50); // A
+        ctx.fillStyle = 'rgba(217, 119, 6, 0.06)';
+        ctx.fillRect(150, 30, 110, 60); // B
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.06)';
+        ctx.fillRect(50, 90, 80, 50); // C
+
+        ctx.font = '800 8px "Plus Jakarta Sans"';
+        ctx.fillStyle = 'rgba(22, 163, 74, 0.6)';
+        ctx.fillText("PHÂN KHU A (LÚA)", 35, 32);
+        ctx.fillStyle = 'rgba(217, 119, 6, 0.6)';
+        ctx.fillText("PHÂN KHU B (CÀ PHÊ)", 155, 42);
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.6)';
+        ctx.fillText("PHÂN KHU C (SẦU RIÊNG)", 55, 102);
+
+        // Target point
+        if (isDroneFlying) {
+            ctx.beginPath();
+            ctx.arc(droneTargetX, droneTargetY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.4)';
+            ctx.fill();
+            ctx.strokeStyle = '#ef4444';
+            ctx.stroke();
+        }
+
+        // Drone
+        ctx.save();
+        ctx.translate(droneX, droneY);
+        
+        ctx.beginPath();
+        ctx.arc(0, 0, 12 + Math.sin(Date.now() / 150) * 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(22, 163, 74, 0.25)';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(0, -6);
+        ctx.lineTo(6, 6);
+        ctx.lineTo(-6, 6);
+        ctx.closePath();
+        ctx.fillStyle = '#22c55e';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
+    function updateFlight() {
+        if (!isDroneFlying) return;
+
+        const dx = droneTargetX - droneX;
+        const dy = droneTargetY - droneY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist > 3) {
+            droneX += (dx / dist) * 1.5;
+            droneY += (dy / dist) * 1.5;
+        } else {
+            droneTargetX = 30 + Math.random() * (canvas.width - 60);
+            droneTargetY = 20 + Math.random() * (canvas.height - 40);
+        }
+
+        droneBattery -= 0.04;
+        if (droneBattery <= 0) {
+            droneBattery = 0;
+            landDrone();
+        }
+
+        droneCoverage += 0.012;
+
+        document.getElementById('drone-battery').textContent = `${Math.floor(droneBattery)}%`;
+        document.getElementById('drone-coverage').textContent = `Phân khu A-C (${droneCoverage.toFixed(2)} ha)`;
+        
+        const lat = (10.7629 + (droneY - 80) * 0.0001).toFixed(5);
+        const lng = (106.6821 + (droneX - 120) * 0.0001).toFixed(5);
+        document.getElementById('drone-coords').textContent = `[${lat}, ${lng}]`;
+    }
+
+    function takeoffDrone() {
+        if (isDroneFlying) return;
+        isDroneFlying = true;
+        
+        document.getElementById('drone-status-txt').textContent = "Đang khảo sát vùng trồng...";
+        document.getElementById('drone-status-txt').style.color = "var(--primary)";
+        
+        document.getElementById('btn-drone-takeoff').disabled = true;
+        document.getElementById('btn-drone-land').disabled = false;
+
+        droneInterval = setInterval(updateFlight, 40);
+    }
+
+    function landDrone() {
+        if (!isDroneFlying) return;
+        isDroneFlying = false;
+        clearInterval(droneInterval);
+        
+        document.getElementById('drone-status-txt').textContent = droneBattery <= 0 ? "Hết pin - Đang sạc" : "Đã đáp về trạm sạc";
+        document.getElementById('drone-status-txt').style.color = "var(--text-muted)";
+        
+        document.getElementById('btn-drone-takeoff').disabled = false;
+        document.getElementById('btn-drone-land').disabled = true;
+
+        if (droneBattery <= 0) {
+            setTimeout(() => {
+                droneBattery = 100;
+                document.getElementById('drone-battery').textContent = "100%";
+            }, 6000);
+        }
+    }
+
+    return {
+        init,
+        sendMessage: handleSend,
+        runDiagnosis,
+        takeoff: takeoffDrone,
+        land: landDrone
+    };
+})();
+window.AICopilot = AICopilot;
+
+// Global triggers
+window.sendSuggestedMessage = (msg) => {
+    document.getElementById('ai-chat-input').value = msg;
+    AICopilot.sendMessage(msg);
+    document.getElementById('ai-chat-input').value = '';
+};
+window.handleChatSend = () => {
+    const input = document.getElementById('ai-chat-input');
+    AICopilot.sendMessage(input.value);
+    input.value = '';
+};
+window.selectSampleLeaf = (type) => {
+    document.querySelectorAll('.sample-leaf-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    AICopilot.runDiagnosis(type);
+};
+window.mlDroneTakeoff = () => AICopilot.takeoff();
+window.mlDroneLand = () => AICopilot.land();
+
+// Hook into switchDashboardTab to init modules when needed
+const _origSwitchTab = window.switchDashboardTab;
+window.switchDashboardTab = (tabId) => {
+    _origSwitchTab(tabId);
+    if (tabId === 'tab-data-explorer') {
+        setTimeout(() => DataExplorer.init(), 50);
+    }
+    if (tabId === 'tab-ml-studio') {
+        setTimeout(() => MLStudio.init(), 50);
+    }
+    if (tabId === 'tab-ai-copilot') {
+        setTimeout(() => AICopilot.init(), 50);
+    }
+};
+
+// Expose model globally so modules can access it
+const _origInit = appController.init.bind(appController);
+appController.init = async function() {
+    await _origInit();
+    window._agriSmartModel = appController.model;
+};
+
