@@ -1030,8 +1030,74 @@ class AgriSmartController {
         const kpis = this.model.getKPIs();
         this.view.updateKPIs(kpis);
         
+        // Áp dụng cấu hình phân quyền người dùng lên Sidebar & Navigation
+        this.applyRolePermissions(user.role);
+        
         // Điều hướng sang Tab mặc định (Tổng quan)
         this.switchTab('tab-overview');
+    }
+
+    applyRolePermissions(role) {
+        // Danh sách quyền truy cập tab cho từng vai trò người dùng
+        const ROLE_PERMISSIONS = {
+            admin: ['tab-overview', 'tab-map', 'tab-attendance', 'tab-ctv', 'tab-shifts', 'tab-tasks', 'tab-attendance-approval', 'tab-payroll', 'tab-reports', 'tab-finance', 'tab-yield', 'tab-ai-weather', 'tab-supply', 'tab-esg', 'tab-profile', 'tab-ml-studio', 'tab-data-explorer', 'tab-pre-process', 'tab-ai-copilot'],
+            enterprise: ['tab-overview', 'tab-map', 'tab-finance', 'tab-yield', 'tab-ai-weather', 'tab-supply', 'tab-esg', 'tab-profile', 'tab-data-explorer', 'tab-ml-studio'],
+            farmer: ['tab-overview', 'tab-shifts', 'tab-profile', 'tab-ai-weather', 'tab-ai-copilot']
+        };
+
+        const allowedTabs = ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS['farmer'];
+        
+        // 1. Phân quyền thanh Sidebar chính
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            const tabId = item.getAttribute('data-tab');
+            if (allowedTabs.includes(tabId)) {
+                item.classList.remove('role-restricted');
+            } else {
+                item.classList.add('role-restricted');
+            }
+        });
+        
+        // 2. Phân quyền thanh điều hướng ngang PWA (Category Buttons)
+        const catBtns = document.querySelectorAll('.category-btn');
+        catBtns.forEach(btn => {
+            const tabId = btn.getAttribute('data-tab-btn');
+            if (allowedTabs.includes(tabId)) {
+                btn.classList.remove('role-restricted');
+            } else {
+                btn.classList.add('role-restricted');
+            }
+        });
+        
+        // 3. Phân quyền thanh điều hướng dưới đáy PWA (Mobile Bottom Nav)
+        const bottomNavs = document.querySelectorAll('.pwa-nav-item');
+        bottomNavs.forEach(nav => {
+            const tabId = nav.getAttribute('data-nav-btn');
+            if (allowedTabs.includes(tabId)) {
+                nav.classList.remove('role-restricted');
+            } else {
+                nav.classList.add('role-restricted');
+            }
+        });
+
+        // 4. Tự động ẩn các nhãn đề mục danh mục nếu tất cả các phần tử con của đề mục đó bị ẩn
+        const sectionTitles = document.querySelectorAll('.nav-section-title');
+        sectionTitles.forEach(title => {
+            let sibling = title.nextElementSibling;
+            let hasVisibleChild = false;
+            while (sibling && !sibling.classList.contains('nav-section-title')) {
+                if (sibling.classList.contains('nav-item') && !sibling.classList.contains('role-restricted')) {
+                    hasVisibleChild = true;
+                    break;
+                }
+                sibling = sibling.nextElementSibling;
+            }
+            if (hasVisibleChild) {
+                title.classList.remove('role-restricted');
+            } else {
+                title.classList.add('role-restricted');
+            }
+        });
     }
 
     async login(username, password) {
