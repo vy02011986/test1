@@ -196,6 +196,19 @@ module.exports = async (req, res) => {
                 return res.status(200).json({ status: 'success', users: safeUsers });
             }
             return res.status(404).json({ status: 'error', message: 'Tài khoản không tồn tại.' });
+        // 3.3 ENDPOINT: Sửa đổi thông tin tài khoản (Cho Admin)
+        if (endpoint === '/auth/users/edit' && req.method === 'POST') {
+            const { username, email, role, password } = req.body;
+            const user = inMemoryDB.users.find(u => u.username === username);
+            if (!user) {
+                return res.status(404).json({ status: 'error', message: 'Tài khoản không tồn tại.' });
+            }
+            if (email) user.email = email;
+            if (role) user.role = role;
+            if (password) user.password = password;
+            
+            const safeUsers = inMemoryDB.users.map(u => ({ username: u.username, email: u.email, role: u.role }));
+            return res.status(200).json({ status: 'success', users: safeUsers });
         }
 
         // 4. ENDPOINT: Điểm danh (Chấm công)

@@ -757,8 +757,48 @@
 
                         <!-- Giao diện Quản lý Tất cả Tài khoản (Dành riêng cho Admin) -->
                         <div class="card" id="profile-admin-users-container" style="padding:24px; display:none;">
-                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;"><i class="fa-solid fa-users-gear"></i> Quản lý Tài khoản Hệ thống</h3>
-                            <p class="text-muted" style="font-size:0.75rem; margin-bottom:16px;">Danh sách tất cả tài khoản người dùng đang hoạt động trong hệ thống AgriSmart.</p>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                                <div>
+                                    <h3 style="font-size:1.1rem; font-weight:800;"><i class="fa-solid fa-users-gear"></i> Quản lý Tài khoản Hệ thống</h3>
+                                    <p class="text-muted" style="font-size:0.75rem;">Danh sách tất cả tài khoản người dùng đang hoạt động trong hệ thống AgriSmart.</p>
+                                </div>
+                                <button class="btn btn-primary" onclick="window.ManagementModule.toggleAddUserForm()" style="font-size:0.75rem; padding:8px 12px; margin-left:auto; display:flex; align-items:center; gap:6px;">
+                                    <i class="fa-solid fa-user-plus"></i> Thêm tài khoản
+                                </button>
+                            </div>
+
+                            <!-- Form Thêm / Sửa Tài khoản (Ẩn/Hiện động) -->
+                            <div id="admin-user-form-card" style="display:none; background:rgba(255,255,255,0.45); border:1px solid var(--border-color); padding:16px; border-radius:12px; margin-bottom:16px;">
+                                <h4 id="admin-user-form-title" style="font-size:0.85rem; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:6px;">Thêm tài khoản mới</h4>
+                                <form id="admin-user-edit-form" onsubmit="window.ManagementModule.handleAdminUserFormSubmit(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                                    <input type="hidden" id="admin-user-mode" value="add"> <!-- add hoặc edit -->
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label style="font-size:0.65rem;">TÊN TÀI KHOẢN</label>
+                                        <input type="text" id="admin-user-username" required style="padding:8px 12px; border:1px solid var(--border-color); border-radius:8px; font-size:0.8rem; background:rgba(255,255,255,0.6);">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label style="font-size:0.65rem;">EMAIL</label>
+                                        <input type="email" id="admin-user-email" required style="padding:8px 12px; border:1px solid var(--border-color); border-radius:8px; font-size:0.8rem; background:rgba(255,255,255,0.6);">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label style="font-size:0.65rem;">VAI TRÒ</label>
+                                        <select id="admin-user-role" required style="padding:8px 12px; border:1px solid var(--border-color); border-radius:8px; font-size:0.8rem; background:rgba(255,255,255,0.6); font-family:inherit;">
+                                            <option value="farmer">Nông hộ (Farmer)</option>
+                                            <option value="enterprise">Doanh nghiệp / Thu mua</option>
+                                            <option value="admin">Quản trị viên (Admin)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label id="admin-user-password-label" style="font-size:0.65rem;">MẬT KHẨU</label>
+                                        <input type="password" id="admin-user-password" style="padding:8px 12px; border:1px solid var(--border-color); border-radius:8px; font-size:0.8rem; background:rgba(255,255,255,0.6);">
+                                    </div>
+                                    <div style="grid-column: span 2; display:flex; gap:10px; justify-content:flex-end; margin-top:8px;">
+                                        <button type="button" class="btn btn-outline" onclick="window.ManagementModule.hideAdminUserForm()" style="font-size:0.75rem; padding:8px 14px;">Hủy</button>
+                                        <button type="submit" class="btn btn-primary" style="font-size:0.75rem; padding:8px 14px;">Lưu tài khoản</button>
+                                    </div>
+                                </form>
+                            </div>
+
                             <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
                                 <table class="data-table">
                                     <thead>

@@ -430,7 +430,7 @@ class AgriSmartView {
 
         let roleText = 'Nông hộ';
         if (user.role === 'enterprise') roleText = 'Doanh nghiệp / Thu mua';
-        if (user.role === 'admin' || user.role === 'htx') roleText = 'Quản trị viên / Hợp tác xã';
+        if (user.role === 'admin' || user.role === 'htx') roleText = 'Quản trị viên';
         
         const roleBadge = document.getElementById('user-display-role');
         roleBadge.textContent = roleText;
@@ -3174,7 +3174,7 @@ const ManagementModule = {
         if (usernameEl) usernameEl.textContent = user.username;
         if (roleEl) {
             let roleLabel = "Nông hộ";
-            if (user.role === 'admin' || user.role === 'htx') roleLabel = "Quản trị viên / Hợp tác xã";
+            if (user.role === 'admin' || user.role === 'htx') roleLabel = "Quản trị viên";
             else if (user.role === 'enterprise') roleLabel = "Doanh nghiệp / Thu mua";
             roleEl.textContent = roleLabel;
             roleEl.className = "badge " + (user.role === 'farmer' ? "badge-success" : "badge-primary");
@@ -3221,14 +3221,21 @@ const ManagementModule = {
                     
                     const isDeletable = u.username !== 'admin' && u.username !== (window._agriSmartModel && window._agriSmartModel.currentUser.username);
                     const actionBtn = isDeletable
-                        ? `<button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; border-color:#ef4444; color:#ef4444; transition: all 0.3s ease;" onclick="window.ManagementModule.handleDeleteClick(this, '${u.username}')">Xóa tài khoản</button>`
-                        : `<span class="text-muted" style="font-size:0.7rem; font-style:italic;">Không thể xóa</span>`;
+                        ? `<button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; border-color:#ef4444; color:#ef4444; transition: all 0.3s ease;" onclick="window.ManagementModule.handleDeleteClick(this, '${u.username}')">Xóa</button>`
+                        : `<span class="text-muted" style="font-size:0.7rem; font-style:italic;">Hệ thống</span>`;
+                    
+                    const editBtn = `<button class="btn btn-primary" style="font-size:0.7rem; padding:4px 8px; margin-right:6px;" onclick="window.ManagementModule.showEditUserForm('${u.username}', '${u.email || ''}', '${u.role}')">Sửa</button>`;
                     
                     row.innerHTML = `
                         <td><strong>${u.username}</strong></td>
                         <td><code>${u.email || (u.username + "@agrismart.vn")}</code></td>
                         <td><span class="badge ${badgeClass}">${roleLabel}</span></td>
-                        <td>${actionBtn}</td>
+                        <td>
+                            <div style="display:flex; align-items:center;">
+                                ${editBtn}
+                                ${actionBtn}
+                            </div>
+                        </td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -3239,6 +3246,110 @@ const ManagementModule = {
         }
     },
 
+    toggleAddUserForm() {
+        const formCard = document.getElementById("admin-user-form-card");
+        if (!formCard) return;
+        
+        formCard.style.display = "block";
+        document.getElementById("admin-user-form-title").innerHTML = `<i class="fa-solid fa-user-plus"></i> Thêm tài khoản mới`;
+        document.getElementById("admin-user-mode").value = "add";
+        
+        const usernameInput = document.getElementById("admin-user-username");
+        usernameInput.value = "";
+        usernameInput.disabled = false;
+        
+        document.getElementById("admin-user-email").value = "";
+        document.getElementById("admin-user-role").value = "farmer";
+        
+        const pwdInput = document.getElementById("admin-user-password");
+        pwdInput.value = "";
+        pwdInput.required = true;
+        document.getElementById("admin-user-password-label").textContent = "MẬT KHẨU";
+        
+        usernameInput.focus();
+    },
+
+    hideAdminUserForm() {
+        const formCard = document.getElementById("admin-user-form-card");
+        if (formCard) formCard.style.display = "none";
+    },
+
+    showEditUserForm(username, email, role) {
+        const formCard = document.getElementById("admin-user-form-card");
+        if (!formCard) return;
+        
+        formCard.style.display = "block";
+        document.getElementById("admin-user-form-title").innerHTML = `<i class="fa-solid fa-user-pen"></i> Chỉnh sửa tài khoản: <span style="color:var(--primary); font-weight:800; margin-left:4px;">${username}</span>`;
+        document.getElementById("admin-user-mode").value = "edit";
+        
+        const usernameInput = document.getElementById("admin-user-username");
+        usernameInput.value = username;
+        usernameInput.disabled = true; // Không được sửa username khóa chính
+        
+        document.getElementById("admin-user-email").value = email;
+        document.getElementById("admin-user-role").value = role === 'htx' ? 'admin' : role;
+        
+        const pwdInput = document.getElementById("admin-user-password");
+        pwdInput.value = "";
+        pwdInput.required = false; // Khi sửa không bắt buộc nhập mật khẩu mới
+        document.getElementById("admin-user-password-label").textContent = "MẬT KHẨU MỚI (ĐỂ TRỐNG NẾU KHÔNG ĐỔI)";
+        
+        document.getElementById("admin-user-email").focus();
+    },
+
+    async handleAdminUserFormSubmit(event) {
+        event.preventDefault();
+        
+        const mode = document.getElementById("admin-user-mode").value;
+        const username = document.getElementById("admin-user-username").value;
+        const email = document.getElementById("admin-user-email").value;
+        const role = document.getElementById("admin-user-role").value;
+        const password = document.getElementById("admin-user-password").value;
+        
+        try {
+            if (mode === "add") {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, role })
+                });
+                const res = await response.json();
+                if (res.status === 'success') {
+                    alert(`Đã thêm tài khoản "${username}" thành công!`);
+                    this.hideAdminUserForm();
+                    this.fetchAndRenderAdminUsers();
+                } else {
+                    alert(res.message || "Không thể thêm tài khoản.");
+                }
+            } else if (mode === "edit") {
+                const response = await fetch('/api/auth/users/edit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, role, password })
+                });
+                const res = await response.json();
+                if (res.status === 'success') {
+                    alert(`Đã cập nhật thông tin tài khoản "${username}" thành công!`);
+                    this.hideAdminUserForm();
+                    this.fetchAndRenderAdminUsers();
+                    
+                    // Nếu sửa chính mình, đồng bộ nhanh thông tin hiển thị
+                    if (username === (window._agriSmartModel && window._agriSmartModel.currentUser.username)) {
+                        const updatedUser = { username, email, role };
+                        window._agriSmartModel.currentUser = updatedUser;
+                        appController.view.updateUserProfile(updatedUser);
+                        this.renderProfile();
+                    }
+                } else {
+                    alert(res.message || "Không thể chỉnh sửa tài khoản.");
+                }
+            }
+        } catch (e) {
+            console.error("User form submit failed:", e);
+            alert("Lỗi kết nối tới máy chủ.");
+        }
+    },
+
     handleDeleteClick(btn, username) {
         if (btn.dataset.confirmed === "true") {
             this.deleteUser(username);
@@ -3246,14 +3357,14 @@ const ManagementModule = {
             btn.dataset.confirmed = "true";
             btn.style.backgroundColor = "#ef4444";
             btn.style.color = "#ffffff";
-            btn.textContent = "Xác nhận xóa?";
+            btn.textContent = "Xác nhận?";
             
             setTimeout(() => {
                 if (btn && btn.dataset.confirmed === "true") {
                     btn.dataset.confirmed = "false";
                     btn.style.backgroundColor = "transparent";
                     btn.style.color = "#ef4444";
-                    btn.textContent = "Xóa tài khoản";
+                    btn.textContent = "Xóa";
                 }
             }, 3000);
         }
