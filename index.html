@@ -739,7 +739,8 @@
                                 <div><strong class="text-muted">Phân quyền bảo mật:</strong> <span>Mã hóa tài khoản</span></div>
                             </div>
                         </div>
-                        <div class="card" style="padding:24px;">
+                        <!-- Giao diện đổi mật khẩu (Dành cho các vai trò khác) -->
+                        <div class="card" id="profile-change-pwd-container" style="padding:24px;">
                             <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-lock"></i> Đổi mật khẩu tài khoản</h3>
                             <form onsubmit="event.preventDefault(); alert('Đã cập nhật mật khẩu thành công!')" style="display:flex; flex-direction:column; gap:12px;">
                                 <div class="form-group" style="margin-bottom:0;">
@@ -752,6 +753,27 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary" style="margin-top:8px; padding:12px 0;">Thay đổi mật khẩu</button>
                             </form>
+                        </div>
+
+                        <!-- Giao diện Quản lý Tất cả Tài khoản (Dành riêng cho Admin) -->
+                        <div class="card" id="profile-admin-users-container" style="padding:24px; display:none;">
+                            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;"><i class="fa-solid fa-users-gear"></i> Quản lý Tài khoản Hệ thống</h3>
+                            <p class="text-muted" style="font-size:0.75rem; margin-bottom:16px;">Danh sách tất cả tài khoản người dùng đang hoạt động trong hệ thống AgriSmart.</p>
+                            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên tài khoản</th>
+                                            <th>Email</th>
+                                            <th>Vai trò</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-users-list-tbody">
+                                        <!-- Danh sách tài khoản hiển thị tại đây -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -177,6 +177,27 @@ module.exports = async (req, res) => {
             return res.status(201).json({ status: 'success', user: newUser });
         }
 
+        // 3.1 ENDPOINT: Lấy danh sách tất cả tài khoản (Cho Admin quản trị)
+        if (endpoint === '/auth/users' && req.method === 'GET') {
+            const safeUsers = inMemoryDB.users.map(u => ({ username: u.username, email: u.email, role: u.role }));
+            return res.status(200).json({ status: 'success', users: safeUsers });
+        }
+
+        // 3.2 ENDPOINT: Xóa tài khoản (Cho Admin)
+        if (endpoint === '/auth/users/delete' && req.method === 'POST') {
+            const { username } = req.body;
+            if (username === 'admin') {
+                return res.status(400).json({ status: 'error', message: 'Không thể xóa tài khoản Admin mặc định!' });
+            }
+            const userIdx = inMemoryDB.users.findIndex(u => u.username === username);
+            if (userIdx !== -1) {
+                inMemoryDB.users.splice(userIdx, 1);
+                const safeUsers = inMemoryDB.users.map(u => ({ username: u.username, email: u.email, role: u.role }));
+                return res.status(200).json({ status: 'success', users: safeUsers });
+            }
+            return res.status(404).json({ status: 'error', message: 'Tài khoản không tồn tại.' });
+        }
+
         // 4. ENDPOINT: Điểm danh (Chấm công)
         if (endpoint === '/management/attendance/toggle' && req.method === 'POST') {
             const { employeeIndex } = req.body;

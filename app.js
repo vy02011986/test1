@@ -3179,10 +3179,110 @@ const ManagementModule = {
         
         if (usernameEl) usernameEl.textContent = user.username;
         if (roleEl) {
-            roleEl.textContent = user.role === 'farmer' ? "Nông hộ" : "Quản trị viên / Hợp tác xã";
+            let roleLabel = "Nông hộ";
+            if (user.role === 'admin' || user.role === 'htx') roleLabel = "Quản trị viên / Hợp tác xã";
+            else if (user.role === 'enterprise') roleLabel = "Doanh nghiệp / Thu mua";
+            roleEl.textContent = roleLabel;
             roleEl.className = "badge " + (user.role === 'farmer' ? "badge-success" : "badge-primary");
         }
         if (emailEl) emailEl.textContent = user.email || (user.username + "@agrismart.vn");
+
+        // Phân quyền hiển thị tính năng của tab Profile
+        const isSystemAdmin = user.role === 'admin' || user.role === 'htx';
+        const changePwdContainer = document.getElementById("profile-change-pwd-container");
+        const adminUsersContainer = document.getElementById("profile-admin-users-container");
+
+        if (isSystemAdmin) {
+            if (changePwdContainer) changePwdContainer.style.display = "none";
+            if (adminUsersContainer) adminUsersContainer.style.display = "block";
+            this.fetchAndRenderAdminUsers();
+        } else {
+            if (changePwdContainer) changePwdContainer.style.display = "block";
+            if (adminUsersContainer) adminUsersContainer.style.display = "none";
+        }
+    },
+
+    async fetchAndRenderAdminUsers() {
+        const tbody = document.getElementById("admin-users-list-tbody");
+        if (!tbody) return;
+        
+        try {
+            const response = await fetch('/api/auth/users');
+            const res = await response.json();
+            
+            if (res.status === 'success') {
+                tbody.innerHTML = "";
+                res.users.forEach(u => {
+                    const row = document.createElement("tr");
+                    
+                    let roleLabel = "Nông hộ";
+                    let badgeClass = "badge-success";
+                    if (u.role === 'admin' || u.role === 'htx') {
+                        roleLabel = "Quản trị viên";
+                        badgeClass = "badge-primary";
+                    } else if (u.role === 'enterprise') {
+                        roleLabel = "Doanh nghiệp";
+                        badgeClass = "badge-info";
+                    }
+                    
+                    const isDeletable = u.username !== 'admin' && u.username !== (window._agriSmartModel && window._agriSmartModel.currentUser.username);
+                    const actionBtn = isDeletable
+                        ? `<button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; border-color:#ef4444; color:#ef4444; transition: all 0.3s ease;" onclick="window.ManagementModule.handleDeleteClick(this, '${u.username}')">Xóa tài khoản</button>`
+                        : `<span class="text-muted" style="font-size:0.7rem; font-style:italic;">Không thể xóa</span>`;
+                    
+                    row.innerHTML = `
+                        <td><strong>${u.username}</strong></td>
+                        <td><code>${u.email || (u.username + "@agrismart.vn")}</code></td>
+                        <td><span class="badge ${badgeClass}">${roleLabel}</span></td>
+                        <td>${actionBtn}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        } catch (err) {
+            console.error("Failed to fetch users list for admin:", err);
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;" class="text-muted">Không thể kết nối API danh sách người dùng.</td></tr>`;
+        }
+    },
+
+    handleDeleteClick(btn, username) {
+        if (btn.dataset.confirmed === "true") {
+            this.deleteUser(username);
+        } else {
+            btn.dataset.confirmed = "true";
+            btn.style.backgroundColor = "#ef4444";
+            btn.style.color = "#ffffff";
+            btn.textContent = "Xác nhận xóa?";
+            
+            setTimeout(() => {
+                if (btn && btn.dataset.confirmed === "true") {
+                    btn.dataset.confirmed = "false";
+                    btn.style.backgroundColor = "transparent";
+                    btn.style.color = "#ef4444";
+                    btn.textContent = "Xóa tài khoản";
+                }
+            }, 3000);
+        }
+    },
+
+    async deleteUser(username) {
+        try {
+            const response = await fetch('/api/auth/users/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                alert(`Đã xóa tài khoản "${username}" thành công!`);
+                this.fetchAndRenderAdminUsers();
+            } else {
+                alert(res.message || "Không thể xóa tài khoản.");
+            }
+        } catch (e) {
+            console.error("Delete user failed:", e);
+            alert("Lỗi khi kết nối tới máy chủ.");
+        }
     },
 
     renderReports() {
