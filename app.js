@@ -97,28 +97,32 @@ class AgriSmartModel {
         return users;
     }
 
-    registerUser(username, email, password, role) {
-        const users = this.getUsers();
-        if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-            throw new Error('Tên đăng nhập này đã tồn tại!');
+    async registerUser(username, email, password, role) {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password, role })
+        });
+        const res = await response.json();
+        if (res.status === 'error') {
+            throw new Error(res.message);
         }
-        const newUser = { username, password, role, email };
-        users.push(newUser);
-        try {
-            localStorage.setItem('agrismart_users', JSON.stringify(users));
-        } catch (e) {
-            console.error('Failed to save user to localStorage:', e);
-        }
-        return newUser;
+        return res.user;
     }
 
-    authenticateUser(username, password) {
-        const users = this.getUsers();
-        const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-        if (!user) throw new Error('Tên đăng nhập hoặc mật khẩu không đúng!');
-        this.currentUser = user;
-        localStorage.setItem('agrismart_session', JSON.stringify(user));
-        return user;
+    async authenticateUser(username, password) {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        const res = await response.json();
+        if (res.status === 'error') {
+            throw new Error(res.message);
+        }
+        this.currentUser = res.user;
+        localStorage.setItem('agrismart_session', JSON.stringify(res.user));
+        return res.user;
     }
 
     clearSession() {
@@ -135,44 +139,39 @@ class AgriSmartModel {
         return null;
     }
 
-    // Đọc dữ liệu CSV và tính toán dự phòng
+    // Đọc dữ liệu từ Serverless API Backend
     async loadCSVData() {
-        const fetchFile = async (filePath) => {
-            const response = await fetch(`./${filePath}`);
-            if (!response.ok) throw new Error(`Không thể đọc file ${filePath}`);
-            const text = await response.text();
-            return new Promise((resolve) => {
-                Papa.parse(text, {
-                    header: true,
-                    dynamicTyping: true,
-                    skipEmptyLines: true,
-                    complete: (results) => resolve(results.data)
-                });
-            });
-        };
-
         try {
-            const [farmers, farms, production, blockchain, esg, marketplace, weather, monthlySummary] = await Promise.all([
-                fetchFile('data/farmers.csv'),
-                fetchFile('data/farms.csv'),
-                fetchFile('data/production.csv'),
-                fetchFile('blockchain.csv'),
-                fetchFile('esg.csv'),
-                fetchFile('marketplace.csv'),
-                fetchFile('weather.csv'),
-                fetchFile('monthly_summary.csv')
-            ]);
-            this.data.farmers = farmers;
-            this.data.farms = farms;
-            this.data.production = production;
-            this.data.blockchain = blockchain;
-            this.data.esg = esg;
-            this.data.marketplace = marketplace;
-            this.data.weather = weather;
-            this.data.monthlySummary = monthlySummary;
-            this.isUsingMockData = false;
+            const response = await fetch('/api/data');
+            if (!response.ok) throw new Error('Không thể tải dữ liệu từ API');
+            const res = await response.json();
+            
+            if (res.status === 'success') {
+                this.data.farmers = res.data.farmers;
+                this.data.farms = res.data.farms;
+                this.data.production = res.data.production;
+                this.data.blockchain = res.data.blockchain;
+                this.data.esg = res.data.esg;
+                this.data.marketplace = res.data.marketplace;
+                this.data.weather = res.data.weather;
+                this.data.monthlySummary = res.data.monthlySummary;
+                
+                // Đồng bộ hóa trạng thái Chấm công & Giao việc từ Server về Client
+                if (res.data.management && window.ManagementModule) {
+                    window.ManagementModule.attendanceData = res.data.management.attendance;
+                    window.ManagementModule.ctvData = res.data.management.ctvs;
+                    window.ManagementModule.shifts = res.data.management.shifts;
+                    window.ManagementModule.events = res.data.management.events;
+                    window.ManagementModule.tasks = res.data.management.tasks;
+                    window.ManagementModule.approvals = res.data.management.approvals;
+                }
+                
+                this.isUsingMockData = false;
+            } else {
+                throw new Error(res.message || 'Lỗi không xác định');
+            }
         } catch (error) {
-            console.warn('Sử dụng dữ liệu giả lập (CORS block/Thiếu tệp CSV).', error);
+            console.warn('Lỗi kết nối API Backend, sử dụng dữ liệu giả lập dự phòng.', error);
             this.loadMockData();
             this.isUsingMockData = true;
         }
@@ -1035,22 +1034,22 @@ class AgriSmartController {
         this.switchTab('tab-overview');
     }
 
-    login(username, password) {
+    async login(username, password) {
         try {
-            const user = this.model.authenticateUser(username, password);
+            const user = await this.model.authenticateUser(username, password);
             this.handleSuccessfulLogin(user);
         } catch (error) {
             this.view.showToast(error.message, 'danger');
         }
     }
 
-    register(username, email, password, role) {
+    async register(username, email, password, role) {
         try {
-            this.model.registerUser(username, email, password, role);
+            await this.model.registerUser(username, email, password, role);
             this.view.showToast('Đăng ký tài khoản thành công! Đang tự động đăng nhập...');
             
             // Auto login after successful registration
-            const user = this.model.authenticateUser(username, password);
+            const user = await this.model.authenticateUser(username, password);
             this.handleSuccessfulLogin(user);
             
             // Reset register form for next usage
@@ -2785,22 +2784,40 @@ const ManagementModule = {
         });
     },
 
-    toggleCheckin(idx) {
-        const att = this.attendanceData[idx];
-        att.checkedIn = !att.checkedIn;
-        if (att.checkedIn) {
-            const now = new Date();
-            att.time = now.toTimeString().substring(0, 5);
-            att.status = "Đã vào ca";
-            att.count += 1;
-        } else {
-            att.time = "--:--";
-            att.status = "Chưa điểm danh";
-            att.count -= 1;
+    async toggleCheckin(idx) {
+        try {
+            const response = await fetch('/api/management/attendance/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ employeeIndex: idx })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                this.attendanceData = res.attendance;
+                this.renderAttendance();
+                this.renderPayroll();
+                this.renderReports();
+            } else {
+                throw new Error(res.message);
+            }
+        } catch (e) {
+            console.error('Attendance toggle failed, falling back to local.', e);
+            const att = this.attendanceData[idx];
+            att.checkedIn = !att.checkedIn;
+            if (att.checkedIn) {
+                const now = new Date();
+                att.time = now.toTimeString().substring(0, 5);
+                att.status = "Đã vào ca";
+                att.count += 1;
+            } else {
+                att.time = "--:--";
+                att.status = "Chưa điểm danh";
+                att.count -= 1;
+            }
+            this.renderAttendance();
+            this.renderPayroll();
+            this.renderReports();
         }
-        this.renderAttendance();
-        this.renderPayroll();
-        this.renderReports();
     },
 
     renderCTV() {
@@ -2822,17 +2839,33 @@ const ManagementModule = {
         });
     },
 
-    createCTV(name, phone, province, links) {
-        const id = "CTV00" + (this.ctvData.length + 1);
-        this.ctvData.push({
-            id: id,
-            name: name,
-            phone: phone || "09xxxxxxx",
-            province: province || "Lâm Đồng",
-            links: parseInt(links) || 0,
-            status: "Hoạt động"
-        });
-        this.renderCTV();
+    async createCTV(name, phone, province, links) {
+        try {
+            const response = await fetch('/api/management/ctvs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, province, links })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                this.ctvData = res.ctvs;
+                this.renderCTV();
+            } else {
+                throw new Error(res.message);
+            }
+        } catch (e) {
+            console.error('Create CTV failed, falling back to local.', e);
+            const id = "CTV00" + (this.ctvData.length + 1);
+            this.ctvData.push({
+                id: id,
+                name: name,
+                phone: phone || "09xxxxxxx",
+                province: province || "Lâm Đồng",
+                links: parseInt(links) || 0,
+                status: "Hoạt động"
+            });
+            this.renderCTV();
+        }
     },
 
     renderShiftsEvents() {
@@ -2899,31 +2932,67 @@ const ManagementModule = {
         });
     },
 
-    createTask(title, assignee, deadline) {
-        const newId = this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) + 1 : 1;
-        this.tasks.push({
-            id: newId,
-            title: title,
-            assignee: assignee,
-            deadline: deadline,
-            status: "Đang làm"
-        });
-        this.renderTasks();
+    async createTask(title, assignee, deadline) {
+        try {
+            const response = await fetch('/api/management/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, assignee, deadline })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                this.tasks = res.tasks;
+                this.renderTasks();
+            } else {
+                throw new Error(res.message);
+            }
+        } catch (e) {
+            console.error('Create task failed, falling back to local.', e);
+            const newId = this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) + 1 : 1;
+            this.tasks.push({
+                id: newId,
+                title: title,
+                assignee: assignee,
+                deadline: deadline,
+                status: "Đang làm"
+            });
+            this.renderTasks();
+        }
     },
 
-    completeTask(id) {
-        const task = this.tasks.find(t => t.id === id);
-        if (task) {
-            task.status = "Đã xong";
-            this.renderTasks();
-            
-            // Tự động tăng 1 ca làm việc cho nhân công khi hoàn thành công việc được giao
-            const att = this.attendanceData.find(a => a.name === task.assignee);
-            if (att) {
-                att.count += 1;
+    async completeTask(id) {
+        try {
+            const response = await fetch('/api/management/tasks/complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ taskId: id })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                this.tasks = res.tasks;
+                this.attendanceData = res.attendance;
+                this.renderTasks();
                 this.renderAttendance();
                 this.renderPayroll();
                 this.renderReports();
+            } else {
+                throw new Error(res.message);
+            }
+        } catch (e) {
+            console.error('Complete task failed, falling back to local.', e);
+            const task = this.tasks.find(t => t.id === id);
+            if (task) {
+                task.status = "Đã xong";
+                this.renderTasks();
+                
+                // Tự động tăng 1 ca làm việc cho nhân công khi hoàn thành công việc được giao
+                const att = this.attendanceData.find(a => a.name === task.assignee);
+                if (att) {
+                    att.count += 1;
+                    this.renderAttendance();
+                    this.renderPayroll();
+                    this.renderReports();
+                }
             }
         }
     },
@@ -2964,25 +3033,46 @@ const ManagementModule = {
         });
     },
 
-    processApproval(id, isApproved) {
-        const appIdx = this.approvals.findIndex(a => a.id === id);
-        if (appIdx !== -1) {
-            const app = this.approvals[appIdx];
-            this.approvals.splice(appIdx, 1);
-            this.renderApprovals();
-            
-            if (isApproved) {
-                // Thêm ca làm việc cho nhân viên
-                const att = this.attendanceData.find(a => a.name === app.name);
-                if (att) {
-                    att.count += 1;
-                    this.renderAttendance();
-                    this.renderPayroll();
-                    this.renderReports();
-                }
-                alert(`Đã phê duyệt giờ công ca làm cho ${app.name}!`);
+    async processApproval(id, isApproved) {
+        try {
+            const response = await fetch('/api/management/approvals/process', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ approvalId: id, isApproved })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                this.approvals = res.approvals;
+                this.attendanceData = res.attendance;
+                this.renderApprovals();
+                this.renderAttendance();
+                this.renderPayroll();
+                this.renderReports();
+                alert(isApproved ? `Đã phê duyệt giờ công thành công!` : `Đã từ chối phê duyệt.`);
             } else {
-                alert(`Đã từ chối phê duyệt cho ${app.name}.`);
+                throw new Error(res.message);
+            }
+        } catch (e) {
+            console.error('Process approval failed, falling back to local.', e);
+            const appIdx = this.approvals.findIndex(a => a.id === id);
+            if (appIdx !== -1) {
+                const app = this.approvals[appIdx];
+                this.approvals.splice(appIdx, 1);
+                this.renderApprovals();
+                
+                if (isApproved) {
+                    // Thêm ca làm việc cho nhân viên
+                    const att = this.attendanceData.find(a => a.name === app.name);
+                    if (att) {
+                        att.count += 1;
+                        this.renderAttendance();
+                        this.renderPayroll();
+                        this.renderReports();
+                    }
+                    alert(`Đã phê duyệt giờ công ca làm cho ${app.name}!`);
+                } else {
+                    alert(`Đã từ chối phê duyệt cho ${app.name}.`);
+                }
             }
         }
     },
