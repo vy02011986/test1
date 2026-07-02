@@ -1682,14 +1682,7 @@ window.handleRegister = (event) => {
     appController.register(u, e, p, r);
 };
 
-// Bootstrap app safely checking document readyState
-if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', () => {
-        appController.init();
-    });
-} else {
-    appController.init();
-}
+
 
 // =============================================================================
 // DATA EXPLORER MODULE
@@ -3419,5 +3412,14 @@ function initBackgroundSlideshow() {
             nextBg.classList.add('active');
         }
     }, 7000); // Tự động đổi nền mỗi 7 giây qua hiệu ứng mờ nhạt dần (cross-fade)
+}
+
+// Bootstrap app safely checking document readyState after all modules and overrides are declared
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', () => {
+        appController.init();
+    });
+} else {
+    appController.init();
 }
 
