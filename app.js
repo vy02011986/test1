@@ -429,8 +429,8 @@ class AgriSmartView {
         if (pwaUserDisplay) pwaUserDisplay.textContent = user.username;
 
         let roleText = 'Nông hộ';
-        if (user.role === 'enterprise') roleText = 'Doanh nghiệp';
-        if (user.role === 'admin') roleText = 'Quản trị viên';
+        if (user.role === 'enterprise') roleText = 'Doanh nghiệp / Thu mua';
+        if (user.role === 'admin' || user.role === 'htx') roleText = 'Quản trị viên / Hợp tác xã';
         
         const roleBadge = document.getElementById('user-display-role');
         roleBadge.textContent = roleText;
@@ -3391,8 +3391,8 @@ window.switchDashboardTab = (tabId) => {
 // Expose model globally so modules can access it
 const _origInit = appController.init.bind(appController);
 appController.init = async function() {
-    await _origInit();
     window._agriSmartModel = appController.model;
+    await _origInit();
     
     // Tự động khởi tạo module quản lý & thời khóa biểu khi tải app
     ManagementModule.init();
