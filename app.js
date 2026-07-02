@@ -1038,6 +1038,7 @@ class AgriSmartController {
     }
 
     applyRolePermissions(role) {
+        if (role === 'htx') role = 'admin';
         // Danh sách quyền truy cập tab cho từng vai trò người dùng
         const ROLE_PERMISSIONS = {
             admin: ['tab-overview', 'tab-map', 'tab-attendance', 'tab-ctv', 'tab-shifts', 'tab-tasks', 'tab-attendance-approval', 'tab-payroll', 'tab-reports', 'tab-finance', 'tab-yield', 'tab-ai-weather', 'tab-supply', 'tab-esg', 'tab-profile', 'tab-ml-studio', 'tab-data-explorer', 'tab-pre-process', 'tab-ai-copilot'],
