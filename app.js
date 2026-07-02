@@ -98,31 +98,55 @@ class AgriSmartModel {
     }
 
     async registerUser(username, email, password, role) {
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, password, role })
-        });
-        const res = await response.json();
-        if (res.status === 'error') {
-            throw new Error(res.message);
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password, role })
+            });
+            if (!response.ok) throw new Error("API Offline");
+            const res = await response.json();
+            if (res.status === 'error') {
+                throw new Error(res.message);
+            }
+            return res.user;
+        } catch (e) {
+            console.warn("Register user failed on API, falling back to localStorage:", e);
+            const users = this.getUsers();
+            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                throw new Error('Tên đăng nhập này đã tồn tại!');
+            }
+            const newUser = { username, password, role, email };
+            users.push(newUser);
+            localStorage.setItem('agrismart_users', JSON.stringify(users));
+            return newUser;
         }
-        return res.user;
     }
 
     async authenticateUser(username, password) {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        const res = await response.json();
-        if (res.status === 'error') {
-            throw new Error(res.message);
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            if (!response.ok) throw new Error("API Offline");
+            const res = await response.json();
+            if (res.status === 'error') {
+                throw new Error(res.message);
+            }
+            this.currentUser = res.user;
+            localStorage.setItem('agrismart_session', JSON.stringify(res.user));
+            return res.user;
+        } catch (e) {
+            console.warn("Authentication failed on API, falling back to localStorage:", e);
+            const users = this.getUsers();
+            const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+            if (!user) throw new Error('Tên đăng nhập hoặc mật khẩu không đúng!');
+            this.currentUser = user;
+            localStorage.setItem('agrismart_session', JSON.stringify(user));
+            return user;
         }
-        this.currentUser = res.user;
-        localStorage.setItem('agrismart_session', JSON.stringify(res.user));
-        return res.user;
     }
 
     clearSession() {
@@ -3202,48 +3226,60 @@ const ManagementModule = {
         
         try {
             const response = await fetch('/api/auth/users');
+            if (!response.ok) throw new Error("API Offline");
             const res = await response.json();
             
             if (res.status === 'success') {
-                tbody.innerHTML = "";
-                res.users.forEach(u => {
-                    const row = document.createElement("tr");
-                    
-                    let roleLabel = "Nông hộ";
-                    let badgeClass = "badge-success";
-                    if (u.role === 'admin' || u.role === 'htx') {
-                        roleLabel = "Quản trị viên";
-                        badgeClass = "badge-primary";
-                    } else if (u.role === 'enterprise') {
-                        roleLabel = "Doanh nghiệp";
-                        badgeClass = "badge-info";
-                    }
-                    
-                    const isDeletable = u.username !== 'admin' && u.username !== (window._agriSmartModel && window._agriSmartModel.currentUser.username);
-                    const actionBtn = isDeletable
-                        ? `<button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; border-color:#ef4444; color:#ef4444; transition: all 0.3s ease;" onclick="window.ManagementModule.handleDeleteClick(this, '${u.username}')">Xóa</button>`
-                        : `<span class="text-muted" style="font-size:0.7rem; font-style:italic;">Hệ thống</span>`;
-                    
-                    const editBtn = `<button class="btn btn-primary" style="font-size:0.7rem; padding:4px 8px; margin-right:6px;" onclick="window.ManagementModule.showEditUserForm('${u.username}', '${u.email || ''}', '${u.role}')">Sửa</button>`;
-                    
-                    row.innerHTML = `
-                        <td><strong>${u.username}</strong></td>
-                        <td><code>${u.email || (u.username + "@agrismart.vn")}</code></td>
-                        <td><span class="badge ${badgeClass}">${roleLabel}</span></td>
-                        <td>
-                            <div style="display:flex; align-items:center;">
-                                ${editBtn}
-                                ${actionBtn}
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
+                this.renderUserRows(res.users);
             }
         } catch (err) {
-            console.error("Failed to fetch users list for admin:", err);
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;" class="text-muted">Không thể kết nối API danh sách người dùng.</td></tr>`;
+            console.warn("Failed to fetch users list for admin from API, falling back to localStorage:", err);
+            let localUsers = JSON.parse(localStorage.getItem('agrismart_users')) || [
+                { username: "admin", email: "admin@agrismart.vn", role: "htx" },
+                { username: "farmer", email: "farmer@agrismart.vn", role: "farmer" }
+            ];
+            this.renderUserRows(localUsers);
         }
+    },
+
+    renderUserRows(users) {
+        const tbody = document.getElementById("admin-users-list-tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        
+        users.forEach(u => {
+            const row = document.createElement("tr");
+            
+            let roleLabel = "Nông hộ";
+            let badgeClass = "badge-success";
+            if (u.role === 'admin' || u.role === 'htx') {
+                roleLabel = "Quản trị viên";
+                badgeClass = "badge-primary";
+            } else if (u.role === 'enterprise') {
+                roleLabel = "Doanh nghiệp";
+                badgeClass = "badge-info";
+            }
+            
+            const isDeletable = u.username !== 'admin' && u.username !== (window._agriSmartModel && window._agriSmartModel.currentUser.username);
+            const actionBtn = isDeletable
+                ? `<button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; border-color:#ef4444; color:#ef4444; transition: all 0.3s ease;" onclick="window.ManagementModule.handleDeleteClick(this, '${u.username}')">Xóa</button>`
+                : `<span class="text-muted" style="font-size:0.7rem; font-style:italic;">Hệ thống</span>`;
+            
+            const editBtn = `<button class="btn btn-primary" style="font-size:0.7rem; padding:4px 8px; margin-right:6px;" onclick="window.ManagementModule.showEditUserForm('${u.username}', '${u.email || ''}', '${u.role}')">Sửa</button>`;
+            
+            row.innerHTML = `
+                <td><strong>${u.username}</strong></td>
+                <td><code>${u.email || (u.username + "@agrismart.vn")}</code></td>
+                <td><span class="badge ${badgeClass}">${roleLabel}</span></td>
+                <td>
+                    <div style="display:flex; align-items:center;">
+                        ${editBtn}
+                        ${actionBtn}
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
     },
 
     toggleAddUserForm() {
@@ -3313,6 +3349,7 @@ const ManagementModule = {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password, role })
                 });
+                if (!response.ok) throw new Error("API Offline");
                 const res = await response.json();
                 if (res.status === 'success') {
                     alert(`Đã thêm tài khoản "${username}" thành công!`);
@@ -3327,13 +3364,13 @@ const ManagementModule = {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, role, password })
                 });
+                if (!response.ok) throw new Error("API Offline");
                 const res = await response.json();
                 if (res.status === 'success') {
                     alert(`Đã cập nhật thông tin tài khoản "${username}" thành công!`);
                     this.hideAdminUserForm();
                     this.fetchAndRenderAdminUsers();
                     
-                    // Nếu sửa chính mình, đồng bộ nhanh thông tin hiển thị
                     if (username === (window._agriSmartModel && window._agriSmartModel.currentUser.username)) {
                         const updatedUser = { username, email, role };
                         window._agriSmartModel.currentUser = updatedUser;
@@ -3345,8 +3382,42 @@ const ManagementModule = {
                 }
             }
         } catch (e) {
-            console.error("User form submit failed:", e);
-            alert("Lỗi kết nối tới máy chủ.");
+            console.warn("API offline, executing user operation via localStorage fallback:", e);
+            let localUsers = JSON.parse(localStorage.getItem('agrismart_users')) || [
+                { username: "admin", email: "admin@agrismart.vn", password: "123", role: "htx" },
+                { username: "farmer", email: "farmer@agrismart.vn", password: "123", role: "farmer" }
+            ];
+            
+            if (mode === "add") {
+                if (localUsers.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                    alert("Tên tài khoản đã tồn tại!");
+                    return;
+                }
+                const newUser = { username, email, password: password || "123", role };
+                localUsers.push(newUser);
+                localStorage.setItem('agrismart_users', JSON.stringify(localUsers));
+                alert(`Đã thêm tài khoản "${username}" thành công (Offline)!`);
+            } else if (mode === "edit") {
+                const user = localUsers.find(u => u.username === username);
+                if (user) {
+                    user.email = email;
+                    user.role = role;
+                    if (password) user.password = password;
+                    localStorage.setItem('agrismart_users', JSON.stringify(localUsers));
+                    alert(`Đã cập nhật thông tin tài khoản "${username}" thành công (Offline)!`);
+                    
+                    if (username === (window._agriSmartModel && window._agriSmartModel.currentUser.username)) {
+                        const updatedUser = { username, email, role };
+                        window._agriSmartModel.currentUser = updatedUser;
+                        appController.view.updateUserProfile(updatedUser);
+                        this.renderProfile();
+                    }
+                } else {
+                    alert("Tài khoản không tồn tại.");
+                }
+            }
+            this.hideAdminUserForm();
+            this.fetchAndRenderAdminUsers();
         }
     },
 
@@ -3377,6 +3448,7 @@ const ManagementModule = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username })
             });
+            if (!response.ok) throw new Error("API Offline");
             const res = await response.json();
             if (res.status === 'success') {
                 alert(`Đã xóa tài khoản "${username}" thành công!`);
@@ -3385,8 +3457,20 @@ const ManagementModule = {
                 alert(res.message || "Không thể xóa tài khoản.");
             }
         } catch (e) {
-            console.error("Delete user failed:", e);
-            alert("Lỗi khi kết nối tới máy chủ.");
+            console.warn("Delete user failed on server API, falling back to localStorage:", e);
+            let localUsers = JSON.parse(localStorage.getItem('agrismart_users')) || [
+                { username: "admin", email: "admin@agrismart.vn", password: "123", role: "htx" },
+                { username: "farmer", email: "farmer@agrismart.vn", password: "123", role: "farmer" }
+            ];
+            const userIdx = localUsers.findIndex(u => u.username === username);
+            if (userIdx !== -1) {
+                localUsers.splice(userIdx, 1);
+                localStorage.setItem('agrismart_users', JSON.stringify(localUsers));
+                alert(`Đã xóa tài khoản "${username}" thành công (Offline)!`);
+                this.fetchAndRenderAdminUsers();
+            } else {
+                alert("Tài khoản không tồn tại.");
+            }
         }
     },
 
